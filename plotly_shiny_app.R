@@ -144,7 +144,7 @@ server <- function(input, output) {
     
     
     sql     <- glue('SELECT * ',
-                    'FROM `{project}.{dataset}.{table}` ','', paste0("WHERE d_821247024 = '197316935' ") , 'LIMIT 500')
+                    'FROM `{project}.{dataset}.{table}` ','', paste0("WHERE d_821247024 = '197316935' ") , 'LIMIT 9000')
     
     # Authenticate to BigQuery
     bigrquery::bq_auth()
@@ -224,7 +224,8 @@ server <- function(input, output) {
     a$survey_only_number <- a$number_participants.y
     all <- merge(a, blood_only_by_date, by = "date")
     all$blood_only_number <- all$number_participants 
-    print("merged")
+    print(colnames(all))
+    all$date <- as.Date(all$date)
     #merge all types together 
     
     ######################################################################
@@ -241,12 +242,14 @@ server <- function(input, output) {
     #        axis.line = element_line(linewidth = 0.2),
     #        axis.text.x = element_text(hjust = 0.5,size = 8, face = "bold"),  plot.title = element_text(hjust = 0.5,size = 12, face = "bold"))})
     output$plot5 <- renderPlotly({
-      plot_ly(all, x=~date, y = ~verified_no_activities_number, name = "verified no activities", type = 'scatter', mode = 'lines')%>% 
-        add_trace(y = ~survey_only_number, name = "survey only", type = 'scatter', mode = 'lines')%>%
-        add_trace(y = ~blood_only_number, name = "blood only", type = 'scatter', mode = 'lines')
+      plot_ly(all, x=~date, y = ~survey_only_number, name = "survey only", type = 'scatter', mode = 'lines')
+         # add_trace(y = ~verified_no_activities_number, name = "verified no activities", type = 'scatter', mode = 'lines')%>%
+        #  add_trace(y = ~blood_only_number, name = "blood only", type = 'scatter', mode = 'lines')
     })
     
   }
+  
+  
   #plot6
   {
     project <- 'nih-nci-dceg-connect-prod-6d04'
@@ -329,7 +332,9 @@ server <- function(input, output) {
       plot_ly(all, x=~date, y = ~white_participants, name = "White", type = 'scatter', mode = 'lines')%>% 
         add_trace(y = ~other_participants, name = "Other", type = 'scatter', mode = 'lines')%>%
         add_trace(y = ~unknown_participants, name = "Unknown", type = 'scatter', mode = 'lines')%>%
-        layout()
+        layout(title = "Race of Verified Participants by Verification Week",
+               yaxis = list(title = "Number of Verified Participants"),
+               xaxis = list(title = "Date"))
     })
     
   }
@@ -443,9 +448,10 @@ server <- function(input, output) {
     #    add_trace(y = ~unknown_participants, name = "Unknown", type = 'scatter', mode = 'lines')
     #})
     output$plot7 <- renderPlot({
-      plot(x = a$date, y = a$num_40_45, type = 'l', ylim = c(0,125), ylab = "Number of Verified Participants", xlab = "Date")
+      plot(x = a$date, y = a$num_40_45, type = 'l', ylim = c(0,55), ylab = "Number of Verified Participants", xlab = "Date", main = "Number of Verified Participants by Age")
       lines(x = a$date, y = a$num_46_50, col = "red")
       lines(x = a$date, y = a$num_51_55, col = "blue")
+      lines(x = a$date, y = a$num_56_60, col = "green")
     })
     
   }
