@@ -37,8 +37,7 @@ ui <- dashboardPage(
       tabItem(tabName = "dashboard",
               fluidRow(
                 box(plotOutput("plot1", height = 450)),
-                box(plotOutput("plot2", height = 450)),
-              #  box(plotOutput("plot3", height = 250)),
+                box(plotOutput("plot2", height = 450))
               )
       ),
       
@@ -64,7 +63,6 @@ server <- function(input, output) {
   tb      <- bigrquery::bq_project_query(project, query=sql)
   data    <- bigrquery::bq_table_download(tb, 
                                           bigint="integer64")
-  print("data downloaded from gcp")
 }
   #plot1
   {
@@ -124,7 +122,7 @@ server <- function(input, output) {
     ######################################################################
     #week date
     weekDate <- as.Date(cut(Sys.Date(), "week"))
-    output$plot1 <- renderPlot({plot(x=all$date, y = all$white_participants, type = 'l', ylim = c(0,300), col = 1, ylab = "Number of Verified Participants", xlab = "Activity Completion Date", main = "Verified Participants by Activity")
+    output$plot1 <- renderPlot({plot(x=all$date, y = all$white_participants, type = 'l', ylim = c(0,300), col = 1, ylab = "Number of Verified Participants", xlab = "Activity Completion Date", main = "Verified Participants by Race")
       lines(x = all$date, y = all$other_participants, type = 'l', col = 2)
       lines(x = all$date, y = all$unknown_participants, type = 'l', col = 3)
       legend(x = "topleft", legend = c("White", "Other", "Unknown"), col = c(1,2,3), lty = c(1,1,1), lwd = 2)})
@@ -154,7 +152,6 @@ server <- function(input, output) {
     })
     
   }
-
 }
 
 shinyApp(ui, server)
