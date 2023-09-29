@@ -35,7 +35,8 @@ ui <- dashboardPage(
               fluidRow(
                 box(plotlyOutput("plot1", height = 450)),
                 box(plotlyOutput("plot2", height = 450)),
-                box(plotOutput("plot3", height =450))
+                box(plotOutput("plot3", height =450)),
+                box(plotlyOutput("plot4", height =450))
               )
       ),
       
@@ -185,7 +186,6 @@ server <- function(input, output) {
     
   })
   
-  #plot3
   output$plot3 <- renderPlot({
     dt_all_races_summary=readRDS("/Users/sansalerj/Desktop/rshiny_app/race_summary_data.rds")
     library(RColorBrewer)
@@ -216,6 +216,9 @@ server <- function(input, output) {
       coord_polar(theta = "y") +   theme_void() 
     race_M1plot
   })
+  
+  source("/Users/sansalerj/Desktop/recreating jing plot/activities_plot.R")
+  output$plot4 <- renderPlotly({activities_plot()})
   
 }
 
