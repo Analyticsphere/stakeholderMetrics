@@ -1,9 +1,26 @@
 #recreating jing plot from here: https://github.com/jeannewu/BiospecimenMetrics_Connect_SAS/blob/main/Connect_invites_activities_plot_08292023.Rmd
 #outputplot <- "~/Documents/Connect_projects/Biospecimen_Feb2022/Mia_requests/ConnectPlots/"
-activities_plot<- function(){
+activities_plot<- function(data){
 options(knitr.table.format = "latex")
 currentDate <- Sys.Date()-2
 library(expss)
+library(shinydashboard)
+library(bigrquery)
+library(glue)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(tidyr)
+library(magrittr)
+library(lubridate)
+library(purrr)
+library(reshape2)
+library(forcats)
+library(ggrepel)
+library(stringr)
+
 
 #defining the variables that will be pulled from GCP
 modules <- c("d_100767870","d_949302066","d_536735468","d_663265240","d_976570371","d_517311251","d_832139544","d_264644252","d_770257102")
@@ -27,16 +44,14 @@ billing <- "nih-nci-dceg-connect-prod-6d04" ##project and billing should be cons
 #d_512820379 !=  '486306141', where d_512820379 = recruitment type and 486306141 = active
 #d_821247024 != '922622075', where d_821247024 = indicator of match verification after creation of user profile,
 #and 922622075 = duplicate
-query <-  eval(parse(text=paste("bq_project_query(project, query=\"SELECT", select,"FROM  `nih-nci-dceg-connect-prod-6d04.FlatConnect.participants_JP` Where d_512820379 != '180583933' and (d_512820379 !=  '486306141' or d_821247024 != '922622075') \")",sep=" ")))
-data <- bq_table_download(query, bigint="integer64",n_max = Inf, page_size = 10000)
+#query <-  eval(parse(text=paste("bq_project_query(project, query=\"SELECT", select,"FROM  `nih-nci-dceg-connect-prod-6d04.FlatConnect.participants_JP` Where d_512820379 != '180583933' and (d_512820379 !=  '486306141' or d_821247024 != '922622075') \")",sep=" ")))
+#data <- bq_table_download(query, bigint="integer64",n_max = Inf, page_size = 10000)
 
 numbers_only <- function(x) !grepl("\\D", x) #\\D means "not digits"
 ##this function is T/F identifying any observations with numbers in them:
 #!grepl("\\D", 3) = TRUE
-###convert the numeric
 
 cnames <- names(data)
-# #  to check variables in recr_noinact_wl1
 for (i in 1: length(cnames)){
   varname <- cnames[i]
   var<-pull(data,varname) #selects that data column
@@ -264,19 +279,16 @@ recr_svybld_wk <- recr_svybld_wk %>% mutate_at(vars,~replace_na(., 0)) %>%  arra
 #reshape the data from wide to long
 veri_svybld_wk <- melt(recr_svybld_wk[,c("recruit.week.date","total_anyact.cum","total_verified.cum", "total_blood.cum", "total_module.cum", "total_bldsvy.cum","total_veri_noact.cum")],#id.vars="Site", 
                        measure.vars=c("total_verified.cum", "total_anyact.cum","total_blood.cum", "total_module.cum", "total_bldsvy.cum","total_veri_noact.cum"), variable.name="Verified_type",
-                       value.name="Verified_Activities_n") %>% 
-  mutate(verified.activities=case_when(Verified_type =="total_verified.cum" ~ "Verified", 
-                                       Verified_type =="total_anyact.cum" ~ "Surveys or Blood",
-                                       Verified_type =="total_blood.cum" ~ "Blood", 
-                                       Verified_type =="total_module.cum" ~ "Surveys", 
-                                       Verified_type =="total_bldsvy.cum" ~ "Blood + Surveys",
-                                       Verified_type =="total_veri_noact.cum" ~ "Verified, no Activities")) %>%
-  arrange(verified.activities)
+                       value.name="Verified_Activities_n") %>% mutate(verified.activities=case_when(variable =="total_verified.cum" ~ "Verified", 
+                                                             variable =="total_anyact.cum" ~ "Surveys or Blood",
+                                                             variable =="total_blood.cum" ~ "Blood", 
+                                                             variable =="total_module.cum" ~ "Surveys", 
+                                                             variable =="total_bldsvy.cum" ~ "Blood + Surveys",
+                                                             variable =="total_veri_noact.cum" ~ "Verified, no Activities")) %>% arrange(verified.activities)
 
 #convert the verified.activites variable to a factor variable
 veri_svybld_wk$verified.activities <- factor(veri_svybld_wk$verified.activities, 
                                              levels=c("Verified, no Activities","Blood + Surveys","Blood","Surveys","Surveys or Blood","Verified"))
-max_y <- max(veri_svybld_wk$Verified_Activities_n)
 
 
 # Extract unique monthly dates from data
@@ -285,7 +297,7 @@ unique_monthly_dates <- unique(as.Date(format(veri_svybld_wk$recruit.week.date, 
 #plotly plot
 Fig_all.plotly <- plot_ly() %>%
   add_lines(data = veri_svybld_wk, x = ~as.Date(recruit.week.date), color = ~verified.activities,
-            y = ~Verified_Activities_n) %>%
+            y = ~value) %>%
   layout(
     title = paste("Cumulative Number of Participants by Study Activities \nthroughout", currentDate, "Overall", sep = " "),
     xaxis = list(title = "Date", tickvals = unique_monthly_dates, ticktext = format(unique_monthly_dates, "%y-%m-%d"), showline = TRUE),
