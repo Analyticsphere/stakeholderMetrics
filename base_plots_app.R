@@ -36,7 +36,8 @@ ui <- dashboardPage(
               fluidRow(
                 box(plotlyOutput("plot1", height = 450)),
                 box(plotlyOutput("plot2", height = 450)),
-                box(plotlyOutput("plot3", height =750)))
+                box(plotlyOutput("plot3", height =750))),
+               box(dataTableOutput("render_time"))
       ),
       
       # Second tab content
@@ -48,7 +49,7 @@ ui <- dashboardPage(
 )
 
 server <- function(input, output) {
-  
+  start_time <- Sys.time()
   #download GCP data once for all plots
   #first define the variables we want and from what tables they reside
   source("/Users/sansalerj/Desktop/rshiny_app/get_gcp_data.R")
@@ -76,7 +77,7 @@ server <- function(input, output) {
   variables = paste(var.list, collapse = ", ")
   }  
   #filter default is set to where connect_id is not missing and d_821247024 = 197316935
-  get_data <- get_gcp_data(variables, dataset, table, project = project, filter)
+  get_data <- get_gcp_data(variables, dataset, table, project = project)
   
   #activities by participant
   source("/Users/sansalerj/Desktop/recreating jing plot/activities_plot.R")
@@ -85,11 +86,10 @@ server <- function(input, output) {
   source("/Users/sansalerj/Desktop/rshiny_app/base_age_plot.R")
   output$plot2 <- renderPlotly({age_plot(data = get_data)})
   
-#  source("/Users/sansalerj/Desktop/rshiny_app/race_plot.R")
-#  output$plot3 <- renderPlotly({race_plot()})
-  
-
-  
+  source("/Users/sansalerj/Desktop/rshiny_app/race_plot2.R")
+  output$plot3 <- renderPlotly({race_plot()})
+end <- Sys.time()
+  output$render_time <- renderDataTable(data.frame(start = start_time, end = end))
 }
 
 shinyApp(ui, server)

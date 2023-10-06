@@ -1,5 +1,8 @@
 #testing pre-join using big query 
-# Define your project and dataset information
+#first i will pull the relevant race variables from module 1 v1 and v2
+#those will concat together, then will merge with participants table
+
+#Define project and dataset information
 library(bigrquery)
 library(DBI)
 library(RSQLite)
