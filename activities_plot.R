@@ -1,6 +1,6 @@
 #recreating jing plot from here: https://github.com/jeannewu/BiospecimenMetrics_Connect_SAS/blob/main/Connect_invites_activities_plot_08292023.Rmd
 #outputplot <- "~/Documents/Connect_projects/Biospecimen_Feb2022/Mia_requests/ConnectPlots/"
-activities_plot<- function(data){
+activities_plot<- function(data, variables){
 options(knitr.table.format = "latex")
 currentDate <- Sys.Date()-2
 library(expss)
@@ -23,23 +23,23 @@ library(stringr)
 
 
 #defining the variables that will be pulled from GCP
-modules <- c("d_100767870","d_949302066","d_536735468","d_663265240","d_976570371","d_517311251","d_832139544","d_264644252","d_770257102")
-bio.col <- c("d_684635302","d_878865966", "d_167958071", "d_173836415_d_266600170_d_915179629", "d_173836415_d_266600170_d_718172863",
-             "d_173836415_d_266600170_d_592099155", "d_173836415_d_266600170_d_561681068", "d_173836415_d_266600170_d_847159717", 
-             "d_173836415_d_266600170_d_448660695", "d_173836415_d_266600170_d_139245758", "d_173836415_d_266600170_d_541311218", 
-             "d_173836415_d_266600170_d_224596428", "d_173836415_d_266600170_d_740582332", "d_173836415_d_266600170_d_982213346", 
-             "d_173836415_d_266600170_d_398645039", "d_173836415_d_266600170_d_822274939")
-clc.bldtm <- c("d_173836415_d_266600170_d_769615780","d_173836415_d_266600170_d_822274939","d_173836415_d_266600170_d_398645039",
-               "d_173836415_d_266600170_d_982213346","d_173836415_d_266600170_d_740582332")
-clc.urinetm <- c("d_173836415_d_266600170_d_139245758","d_173836415_d_266600170_d_224596428","d_173836415_d_266600170_d_541311218",
-                 "d_173836415_d_266600170_d_939818935","d_173836415_d_266600170_d_740582332")
-var.list <- c("token","Connect_ID","d_821247024","d_914594314","d_512820379","state_d_158291096","d_471593703","d_827220437",
-              "d_130371375_d_266600170_d_787567527","d_130371375_d_266600170_d_731498909",bio.col,modules)
+#modules <- c("d_100767870","d_949302066","d_536735468","d_663265240","d_976570371","d_517311251","d_832139544","d_264644252","d_770257102")
+#bio.col <- c("d_684635302","d_878865966", "d_167958071", "d_173836415_d_266600170_d_915179629", "d_173836415_d_266600170_d_718172863",
+#             "d_173836415_d_266600170_d_592099155", "d_173836415_d_266600170_d_561681068", "d_173836415_d_266600170_d_847159717", 
+#             "d_173836415_d_266600170_d_448660695", "d_173836415_d_266600170_d_139245758", "d_173836415_d_266600170_d_541311218", 
+#             "d_173836415_d_266600170_d_224596428", "d_173836415_d_266600170_d_740582332", "d_173836415_d_266600170_d_982213346", 
+#             "d_173836415_d_266600170_d_398645039", "d_173836415_d_266600170_d_822274939")
+#clc.bldtm <- c("d_173836415_d_266600170_d_769615780","d_173836415_d_266600170_d_822274939","d_173836415_d_266600170_d_398645039",
+#               "d_173836415_d_266600170_d_982213346","d_173836415_d_266600170_d_740582332")
+#clc.urinetm <- c("d_173836415_d_266600170_d_139245758","d_173836415_d_266600170_d_224596428","d_173836415_d_266600170_d_541311218",
+#                 "d_173836415_d_266600170_d_939818935","d_173836415_d_266600170_d_740582332")
+#var.list <- c("token","Connect_ID","d_821247024","d_914594314","d_512820379","state_d_158291096","d_471593703","d_827220437",
+#              "d_130371375_d_266600170_d_787567527","d_130371375_d_266600170_d_731498909",bio.col,modules)
 
-select <- paste(var.list,collapse=",")
+#select <- paste(var.list,collapse=",")
 
-project <- "nih-nci-dceg-connect-prod-6d04"
-billing <- "nih-nci-dceg-connect-prod-6d04" ##project and billing should be consistent
+#project <- "nih-nci-dceg-connect-prod-6d04"
+#billing <- "nih-nci-dceg-connect-prod-6d04" ##project and billing should be consistent
 
 #d_512820379 !=  '486306141', where d_512820379 = recruitment type and 486306141 = active
 #d_821247024 != '922622075', where d_821247024 = indicator of match verification after creation of user profile,
@@ -84,10 +84,11 @@ data <- data[which (data$d_821247024 != 922622075 | data$d_512820379 !=486306141
 ########################################################################################################################################################
 #d_512820379 = recruitment type, where 486306141 = active
 #d_821247024 = match verification where 922622075 = duplicate
-veri_resp <- data[which(data$d_512820379 != 486306141 | data$d_821247024 != 922622075 ),var.list] %>%
-  mutate(recru_time = ymd_hms(d_471593703),
-         verified_time = ymd_hms(d_914594314),
-         elgible.time = ymd_hms(d_130371375_d_266600170_d_787567527))
+veri_resp <- data[which(data$d_512820379 != 486306141 | data$d_821247024 != 922622075 ),variables] %>%
+                                  mutate(recru_time = ymd_hms(d_471593703),
+                                  verified_time = ymd_hms(d_914594314),
+                                  elgible.time = ymd_hms(d_130371375_d_266600170_d_787567527))
+    
 veri_resp$recrstart.date <-  as_date(min(ymd_hms(veri_resp$d_471593703),na.rm=TRUE))
 
 #naming sites
@@ -299,7 +300,7 @@ Fig_all.plotly <- plot_ly() %>%
   add_lines(data = veri_svybld_wk, x = ~as.Date(recruit.week.date), color = ~verified.activities,
             y = ~value) %>%
   layout(
-    title = paste("Cumulative Number of Participants by Study Activities \nthroughout", currentDate, "Overall", sep = " "),
+    title = paste("Cumulative Number of Participants by Study Activities \nthroughout", currentDate, sep = " "),
     xaxis = list(title = "Date", tickvals = unique_monthly_dates, ticktext = format(unique_monthly_dates, "%y-%m-%d"), showline = TRUE),
     yaxis = list(title = "Number of Participants", showline = TRUE),
     legend = list(x = 0, y = 1, traceorder = "normal", font = list(family = "sans-serif", size = 12, color = "black")),

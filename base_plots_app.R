@@ -67,27 +67,38 @@ server <- function(input, output) {
     age <- c("state_d_934298480", "d_914594314")
     race <- c("d_821247024", "d_914594314",  "d_827220437","d_512820379","d_949302066" , "d_517311251")
   
-   var.list <- c("token", "Connect_ID", "d_821247024", "d_914594314", "d_512820379", "state_d_158291096", "d_471593703", "d_827220437",
-                "d_130371375_d_266600170_d_787567527", "d_130371375_d_266600170_d_731498909", bio.col, modules, age, race)
+    var_list_activity_plot <- c("token", "Connect_ID", "d_821247024", "d_914594314", "d_512820379", "state_d_158291096", "d_471593703", "d_827220437",
+                "d_130371375_d_266600170_d_787567527", "d_130371375_d_266600170_d_731498909","state_d_934298480", bio.col, modules, age, race)
+    var_list_activity_plot <- var_list_activity_plot[!duplicated(var_list_activity_plot)]
+    
   # Define the variables from the second query
   project <- 'nih-nci-dceg-connect-prod-6d04'
   dataset <- 'FlatConnect'
   table <- 'participants_JP'
   
-  variables = paste(var.list, collapse = ", ")
+  variables = paste(var_list_activity_plot, collapse = ", ")
   }  
   #filter default is set to where connect_id is not missing and d_821247024 = 197316935
   get_data <- get_gcp_data(variables, dataset, table, project = project)
+  print("data downloaded")
   
+  #plot1
   #activities by participant
   source("/Users/sansalerj/Desktop/recreating jing plot/activities_plot.R")
-  output$plot1 <- renderPlotly({activities_plot(data = get_data)})
+  output$plot1 <- renderPlotly({activities_plot(data = get_data, variables = var_list_activity_plot)})
+  print("plot 1 done")
   
+  #plot2
+  print("beginning plot2")
   source("/Users/sansalerj/Desktop/rshiny_app/base_age_plot.R")
   output$plot2 <- renderPlotly({age_plot(data = get_data)})
   
+  #need to incorporate this module 1 v1 + v2 merge into the get_gcp_data() function,
+  #so that the merge is completely done there, and the data is passed into this 
+  #race plot function
   source("/Users/sansalerj/Desktop/rshiny_app/race_plot2.R")
   output$plot3 <- renderPlotly({race_plot()})
+  print("plot 3 done")
 end <- Sys.time()
   output$render_time <- renderDataTable(data.frame(start = start_time, end = end))
 }

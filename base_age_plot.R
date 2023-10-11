@@ -52,7 +52,7 @@ age_plot<- function(data){
 
 # Customize the layout
   histogram <- plot_ly(y=agg$x, x=agg$Group.2, histfunc='sum', type = "histogram")
-  histogram <- histogram %>% layout(yaxis=list(type='linear'))
+  histogram <- histogram %>% layout(title="Ages of Verified Participants", yaxis=list(type='linear'))
 histogram
 }
 

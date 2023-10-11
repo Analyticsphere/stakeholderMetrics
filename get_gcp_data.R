@@ -10,7 +10,7 @@ combined_query <- glue("SELECT ", paste(variables, collapse = ", ")," FROM `", p
   
 
   # Download data
-  data <- bigrquery::bq_project_query(project, query = combined_query)
-  data <- bigrquery::bq_table_download(data, bigint = "integer64")
+  data <- bq_table_download(bq_project_query(project, query = combined_query), bigint = "integer64")
+  #data <- bigrquery::bq_table_download(data, bigint = "integer64")
 
 }

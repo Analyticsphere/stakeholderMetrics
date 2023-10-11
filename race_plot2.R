@@ -26,7 +26,9 @@ race_plot<- function(){
   library(RSQLite)
   devtools::install_github("tidyverse/reprex")
   options(tinytex.verbose = TRUE)
-  
+  #sql pre-merge
+  #################################################################
+  #################################################################
   #################################################################
   #Define project and dataset information
   project_id <- "nih-nci-dceg-connect-prod-6d04"
@@ -49,7 +51,7 @@ race_plot<- function(){
   formatted_vs <- paste("('", paste(vs, collapse = "', '"), "')")
   
   
-  #which variables do we want: race variables
+  #race variables from module 1 v1 and module 1 v2 tables
   variables <- c("Connect_ID", "D_384191091_D_384191091_D_583826374", "D_384191091_D_384191091_D_636411467", "D_384191091_D_384191091_D_458435048",
                  "D_384191091_D_384191091_D_706998638", "D_384191091_D_384191091_D_973565052", "D_384191091_D_384191091_D_586825330",
                  "D_384191091_D_384191091_D_412790539", "D_384191091_D_384191091_D_807835037", "D_384191091_D_747350323", "D_384191091_D_384191091_D_746038746")
@@ -88,14 +90,7 @@ race_plot<- function(){
   #put all of the race data together
   module1 <- rbind(v1,v2,v2_overlap)
   
-  
-  
-  
-  
-  
-  
-  
-  
+
   #using these connect_ids, pull the participant data
   connect_ids_participant_table <- paste("('", paste(unique(module1$Connect_ID), collapse = "', '"), "')")
   
@@ -119,6 +114,13 @@ race_plot<- function(){
   #combine the two datasets, only keeping individuals who have data from both datasets
   #need race data for the plot, need participant data for verification variables
   all_data <- inner_join(participant_table, module1, by = "Connect_ID")
+#################################################################
+#################################################################
+#################################################################  
+#done downloading bq data and merging, now data filtering
+  
+  
+  
   
   
   
@@ -138,6 +140,12 @@ race_plot<- function(){
   #D_949302066 = BOH survey status, 231311385 = completed
   module1 <- merged %>% filter(D_949302066==231311385)
   data_tib_m1 <- as_tibble(module1)
+  
+  
+  
+  
+  
+  
   
   ## Multi-racial
   #D_384191091 = which category describes you? select all that apply (race).
