@@ -52,7 +52,8 @@ server <- function(input, output) {
   start_time <- Sys.time()
   #download GCP data once for all plots
   #first define the variables we want and from what tables they reside
-  source("/Users/sansalerj/Desktop/rshiny_app/get_gcp_data.R")
+  #source("/Users/sansalerj/Desktop/rshiny_app/get_gcp_data.R")
+  source("./get_gcp_data.R", local = TRUE)
   #combining variables for activity plot and age plot
   {modules <- c("d_100767870", "d_949302066", "d_536735468", "d_663265240", "d_976570371", "d_517311251", "d_832139544", "d_264644252", "d_770257102")
   bio.col <- c("d_684635302", "d_878865966", "d_167958071", "d_173836415_d_266600170_d_915179629", "d_173836415_d_266600170_d_718172863",
@@ -84,19 +85,22 @@ server <- function(input, output) {
   
   #plot1
   #activities by participant
-  source("/Users/sansalerj/Desktop/recreating jing plot/activities_plot.R")
+  #source("/Users/sansalerj/Desktop/recreating jing plot/activities_plot.R")
+  source("./activities_plot.R", local = TRUE)
   output$plot1 <- renderPlotly({activities_plot(data = get_data, variables = var_list_activity_plot)})
   print("plot 1 done")
   
   #plot2
   print("beginning plot2")
-  source("/Users/sansalerj/Desktop/rshiny_app/base_age_plot.R")
+  #source("/Users/sansalerj/Desktop/rshiny_app/base_age_plot.R")
+  source("./base_age_plot.R", local = TRUE)
   output$plot2 <- renderPlotly({age_plot(data = get_data)})
   
   #need to incorporate this module 1 v1 + v2 merge into the get_gcp_data() function,
   #so that the merge is completely done there, and the data is passed into this 
   #race plot function
-  source("/Users/sansalerj/Desktop/rshiny_app/race_plot2.R")
+ # source("/Users/sansalerj/Desktop/rshiny_app/race_plot2.R")
+  source("./race_plot2.R", local = TRUE)
   output$plot3 <- renderPlotly({race_plot()})
   print("plot 3 done")
 end <- Sys.time()
