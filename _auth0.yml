@@ -1,0 +1,10 @@
+name: myApp
+remote_url: 'https://appshare-dev.cancer.gov/content/499a6759-6174-495b-8950-7af21faa8a5f'
+auth0_config:
+  api_url: https://bigquery.googleapis.com
+  access: token
+  request: token
+  scope: https://www.googleapis.com/auth/bigquery.readonly
+  credentials:
+    key: !expr Sys.getenv("AUTH0_CLIENTID")
+    secret: !expr Sys.getenv("AUTH0_SECRET")
