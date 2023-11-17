@@ -1,5 +1,5 @@
 race_plot<- function(){
-  
+  #load libraries
   library(bigrquery)
   library(foreach)
   library(stringr)
@@ -24,6 +24,8 @@ race_plot<- function(){
   library(ggrepel)
   library(DBI)
   library(RSQLite)
+  library(glue)
+  library(plotly)
   devtools::install_github("tidyverse/reprex")
   options(tinytex.verbose = TRUE)
   #sql pre-merge
@@ -77,7 +79,7 @@ race_plot<- function(){
   v2 <- bq_table_download(bq_project_query(project_id, v2_sql))
   
   
-  #overlap (middle of ven diagram)
+  #overlap (middle of ven diagram, i.e. individuals who completed version 1 and version 2)
   v2_overlap_sql <- paste0(
     "SELECT ", paste(variables, collapse = ", "),
     sprintf(" FROM `%s.%s.%s`", project_id, dataset_id, table_id2),

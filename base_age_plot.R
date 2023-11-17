@@ -21,8 +21,8 @@ age_plot<- function(data){
   library(stringr)
   
 #  project <- 'nih-nci-dceg-connect-prod-6d04'
-#  dataset <- 'FlatConnect'
-#  table   <- 'participants_JP'
+  dataset <- 'FlatConnect'
+  table   <- 'participants_JP'
   
   
 #  sql     <- glue::glue('SELECT state_d_934298480, d_914594314 ',
@@ -34,7 +34,7 @@ age_plot<- function(data){
   # Download data
 #  tb      <- bigrquery::bq_project_query(project, query=sql)
 #  data    <- bigrquery::bq_table_download(tb, bigint="integer64")
-  
+
   d2 <- data.frame(d_914594314=as.Date(data$d_914594314),
                    age = case_when(data$state_d_934298480 == 124276120 ~ "40-45",
                                    data$state_d_934298480 == 450985724 ~ "46-50",

@@ -278,7 +278,7 @@ recr_svybld_wk <- recr_svybld_wk %>% mutate_at(vars,~replace_na(., 0)) %>%  arra
          total_veri_noact.cum=cumsum(total_veri_noact))
 
 #reshape the data from wide to long
-veri_svybld_wk <- melt(recr_svybld_wk[,c("recruit.week.date","total_anyact.cum","total_verified.cum", "total_blood.cum", "total_module.cum", "total_bldsvy.cum","total_veri_noact.cum")],#id.vars="Site", 
+veri_svybld_wk <- melt(recr_svybld_wk[,c("recruit.week.date","total_anyact.cum","total_verified.cum", "total_blood.cum", "total_module.cum", "total_bldsvy.cum","total_veri_noact.cum")], 
                        measure.vars=c("total_verified.cum", "total_anyact.cum","total_blood.cum", "total_module.cum", "total_bldsvy.cum","total_veri_noact.cum"), variable.name="Verified_type",
                        value.name="Verified_Activities_n") %>% mutate(verified.activities=case_when(variable =="total_verified.cum" ~ "Verified", 
                                                              variable =="total_anyact.cum" ~ "Surveys or Blood",
