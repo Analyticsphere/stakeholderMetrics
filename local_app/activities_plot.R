@@ -42,8 +42,6 @@ data <- data[which (data$d_821247024 != 922622075 | data$d_512820379 !=486306141
 ########################################################################################################################################################
 #d_512820379 = recruitment type, where 486306141 = active
 #d_821247024 = match verification where 922622075 = duplicate
-print(paste0("the dimension of the data within the activity plot is:", dim(data)))
-print(paste0("the col names of the data structure within activity plot are:",names(data)))
 veri_resp <- data[which(data$d_512820379 != 486306141 | data$d_821247024 != 922622075 ),] %>%
                                   mutate(recru_time = ymd_hms(d_471593703),
                                   verified_time = ymd_hms(d_914594314),
@@ -240,15 +238,15 @@ recr_svybld_wk <- recr_svybld_wk %>% mutate_at(recr.type.vars,~replace_na(., 0))
 #reshape the data from wide to long
 veri_svybld_wk <- melt(recr_svybld_wk[,c("recruit.week.date","total_anyact.cum","total_verified.cum", "total_blood.cum", "total_module.cum", "total_bldsvy.cum","total_veri_noact.cum")], 
                        measure.vars=c("total_verified.cum", "total_anyact.cum","total_blood.cum", "total_module.cum", "total_bldsvy.cum","total_veri_noact.cum"), variable.name="Verified_type",
-                       value.name="Verified_Activities_n") %>% mutate(Verified_type=case_when(variable =="total_verified.cum" ~ "Verified", 
-                                                                                              variable =="total_anyact.cum" ~ "Surveys or Blood",
-                                                                                              variable =="total_blood.cum" ~ "Blood", 
-                                                                                              variable =="total_module.cum" ~ "Surveys", 
-                                                                                              variable =="total_bldsvy.cum" ~ "Blood + Surveys",
-                                                                                              variable =="total_veri_noact.cum" ~ "Verified, no Activities")) %>% arrange(variable)
+                       value.name="Verified_Activities_n") %>% mutate(Verified_type=case_when(Verified_type =="total_verified.cum" ~ "Verified", 
+                                                                                              Verified_type =="total_anyact.cum" ~ "Surveys or Blood",
+                                                                                              Verified_type =="total_blood.cum" ~ "Blood", 
+                                                                                              Verified_type =="total_module.cum" ~ "Surveys", 
+                                                                                              Verified_type =="total_bldsvy.cum" ~ "Blood + Surveys",
+                                                                                              Verified_type =="total_veri_noact.cum" ~ "Verified, no Activities")) %>% arrange(Verified_type)
 
 #convert the verified.activites variable to a factor variable
-veri_svybld_wk$verified.activities <- factor(veri_svybld_wk$variable, 
+veri_svybld_wk$verified.activities <- factor(veri_svybld_wk$Verified_type, 
                                              levels=c("Verified, no Activities","Blood + Surveys","Blood","Surveys","Surveys or Blood","Verified"))
 
 
@@ -258,9 +256,9 @@ unique_monthly_dates <- unique(as.Date(format(veri_svybld_wk$recruit.week.date, 
 #plotly plot
 Fig_all.plotly <- plot_ly() %>%
   add_lines(data = veri_svybld_wk, x = ~as.Date(recruit.week.date), color = ~Verified_type,
-            y = ~value) %>%
+            y = ~Verified_Activities_n) %>%
   layout(
-    title = paste("Cumulative Number of Participants by Study Activities \nthroughout", currentDate, sep = " "),
+    title = paste("Cumulative Number of Participants by Study Activities \n as of ", currentDate, sep = " "),
     xaxis = list(title = "Date", tickvals = unique_monthly_dates, ticktext = format(unique_monthly_dates, "%y-%m-%d"), showline = TRUE),
     yaxis = list(title = "Number of Participants", showline = TRUE),
     legend = list(x = 0, y = 1, traceorder = "normal", font = list(family = "sans-serif", size = 12, color = "black")),

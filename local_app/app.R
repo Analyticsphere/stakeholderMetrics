@@ -19,6 +19,7 @@ library(reshape2)
 library(forcats)
 library(ggrepel)
 library(stringr)
+library(expss) #this is used in the activity plot
 
 #this is the server call
 server <- function(input, output, session){
