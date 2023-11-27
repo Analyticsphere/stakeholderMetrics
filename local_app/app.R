@@ -1,5 +1,6 @@
 rm(list=ls())
 library(shiny)
+library(shinythemes)
 library(httr)
 library(bigrquery)
 library(glue)
@@ -23,54 +24,24 @@ library(expss) #this is used in the activity plot
 
 #this is the server call
 server <- function(input, output, session){
-  
-  #plot1
-  {modules <- c("d_100767870", "d_949302066", "d_536735468", "d_663265240", "d_976570371", "d_517311251", "d_832139544", "d_264644252", "d_770257102")
-   bio.col <- c("d_684635302", "d_878865966", "d_167958071", "d_173836415_d_266600170_d_915179629", "d_173836415_d_266600170_d_718172863",
-                "d_173836415_d_266600170_d_592099155", "d_173836415_d_266600170_d_561681068", "d_173836415_d_266600170_d_847159717",
-                "d_173836415_d_266600170_d_448660695", "d_173836415_d_266600170_d_139245758", "d_173836415_d_266600170_d_541311218",
-                "d_173836415_d_266600170_d_224596428", "d_173836415_d_266600170_d_740582332", "d_173836415_d_266600170_d_982213346",
-                "d_173836415_d_266600170_d_398645039", "d_173836415_d_266600170_d_822274939")
-   clc.bldtm <- c("d_173836415_d_266600170_d_769615780", "d_173836415_d_266600170_d_822274939", "d_173836415_d_266600170_d_398645039",
-                  "d_173836415_d_266600170_d_982213346", "d_173836415_d_266600170_d_740582332")
-   clc.urinetm <- c("d_173836415_d_266600170_d_139245758", "d_173836415_d_266600170_d_224596428", "d_173836415_d_266600170_d_541311218",
-                    "d_173836415_d_266600170_d_939818935", "d_173836415_d_266600170_d_740582332")
-    # age <- c("state_d_934298480", "d_914594314")
-    # race <- c("d_821247024", "d_914594314",  "d_827220437","d_512820379","d_949302066" , "d_517311251")
-
-     var_list_activity_plot <- c("token", "Connect_ID", "d_821247024", "d_914594314", "d_512820379", "state_d_158291096", "d_471593703", "d_827220437",
-                 "d_130371375_d_266600170_d_787567527", "d_130371375_d_266600170_d_731498909","state_d_934298480", bio.col, modules)
-     var_list_activity_plot <- var_list_activity_plot[!duplicated(var_list_activity_plot)]
-
-  # Define the variables from the second query
-   project <- 'nih-nci-dceg-connect-prod-6d04'
-   dataset <- 'FlatConnect'
-   table <- 'participants_JP'
-
-   variables = paste(var_list_activity_plot, collapse = ", ")
-   }
-  source("/Users/sansalerj/Desktop/local_app/get_gcp_data.R", local = TRUE)
-  #this reactive function will ensure that data from plot 1 is pulled and plotted
-  #before it is overwritten for plot2
-  activity_plot_data <- reactive({get_gcp_data(variables, dataset, table, project = project)})
-  source("/Users/sansalerj/Desktop/local_app/activities_plot.R", local = TRUE)
-  output$plot1 <- renderPlotly({activities_plot(data = activity_plot_data())})
-  
-  
   #plot2
     print("beginning plot2")
-     project <- "nih-nci-dceg-connect-stg-5519"
-     dataset <- 'FlatConnect'
-     table   <- 'participants_JP'
-     var <- c("d_914594314", "state_d_934298480")
+      age_plot_project <- "nih-nci-dceg-connect-stg-5519"
+      age_plot_dataset <- 'FlatConnect'
+      age_plot_table   <- 'participants_JP'
+      age_plot_var <- c("d_914594314", "state_d_934298480", "d_827220437")
      source("/Users/sansalerj/Desktop/local_app/get_gcp_data.R", local = TRUE)
-     age_plot_data <- reactive({get_gcp_data(var, dataset, table, project = project)})
+     age_plot_data <- reactive({get_gcp_data(age_plot_var, age_plot_dataset, age_plot_table, project = age_plot_project)})
      source("/Users/sansalerj/Desktop/local_app/base_age_plot.R", local = TRUE)
-     output$plot2 <- renderPlotly({age_plot(data = age_plot_data())})
+     output$plot2 <- renderPlotly({age_plot(data = age_plot_data(), selected_hospital = input$siteFilter)})
   #plot3
      #data is pulled within the race_plot2 file
       source("/Users/sansalerj/Desktop/local_app/race_plot2.R", local = TRUE)
       output$plot3 <- renderPlotly({race_plot()})
+      
+      #plot1
+      source("/Users/sansalerj/Desktop/local_app/activities_plot.R", local = TRUE)
+      output$plot1 <- renderPlotly({activities_plot(selected_hospital = input$siteFilter)})
   
 }
 
@@ -81,7 +52,7 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Plot Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-      menuItem("Data Filters", tabName = "filters", icon = icon("sliders"), 
+      menuItem("Data Filters", tabName = "filters", icon = icon("sliders"),
                badgeLabel = "new", badgeColor = "green"),
       menuItem("Advanced Analysis", tabName = "analysis", icon = icon("chart-line")),
       menuItem("Settings", tabName = "settings", icon = icon("cogs"))
@@ -93,8 +64,8 @@ ui <- dashboardPage(
       tabItem(tabName= "dashboard",
               h2("Interactive Plot Dashboard"),
               fluidRow(
-                box(plotlyOutput("plot1", height = 250), width = 6),
-                box(plotlyOutput("plot2", height = 250), width = 6)
+                box(plotlyOutput("plot1", height = 350), width = 6),
+                box(plotlyOutput("plot2", height = 350), width = 6)
               ),
               fluidRow(
                 box(plotlyOutput("plot3", height = 450), width = 12)
@@ -102,21 +73,31 @@ ui <- dashboardPage(
       
       # Filters Tab
       tabItem(tabName = "filters",
-              h2("Data Filters"),
               fluidRow(
                 box(title = "Filter Options", status = "primary", solidHeader = TRUE,
-                    sliderInput("slider1", "Select Range:", min = 0, max = 100, value = c(25, 75)),
-                    selectInput("select1", "Select Category:", choices = c("A", "B", "C")),
+                    selectInput("siteFilter", "Choose Cancer Site:",
+                                choices = c("All Hospitals" = NA,
+                                            "HealthPartners"= 531629870,
+                                            "Henry Ford Health System"=548392715,
+                                            "Kaiser Permanente Colorado" = 125001209,
+                                            "Kaiser Permanente Georgia" = 327912200,
+                                            "Kaiser Permanente Hawaii" = 300267574,
+                                            "Kaiser Permanente Northwest" = 452412599,
+                                            "Marshfield Clinic Health System" = 303349821,
+                                            "Sanford Health" = 657167265, 
+                                            "University of Chicago Medicine" = 809703864,
+                                            "National Cancer Institute" = 517700004,
+                                            "National Cancer Institute" = 13,"Other" = 181769837),
+                                            selected = "All Hospitals"),
                     actionButton("applyFilters", "Apply Filters")
                 )
               )),
-      
+
       # Advanced Analysis Tab
       tabItem(tabName = "analysis",
               h2("Advanced Data Analysis"),
               fluidRow(
                 box(title = "Analysis Tools", status = "warning", solidHeader = TRUE,
-                    # Additional analysis tools and inputs can be added here
                     p("Analysis tools and visualizations will be displayed here.")
                 )
               )),
@@ -126,7 +107,6 @@ ui <- dashboardPage(
               h2("Settings"),
               fluidRow(
                 box(title = "Configuration", status = "info", solidHeader = TRUE,
-                    # Settings and configurations can be added here
                     p("Dashboard settings and configurations.")
                 )
               ))

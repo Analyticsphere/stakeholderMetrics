@@ -5,7 +5,7 @@ get_gcp_data <- function(variables, dataset, table, project = 'nih-nci-dceg-conn
   library(glue)
 
   #bq_auth()  
-  combined_query <- glue("SELECT ", paste(variables, collapse = ", ")," FROM `", project, ".", dataset, ".", table, "`", " WHERE Connect_ID IS NOT NULL and d_821247024 = '197316935'" , sep = " ")
+  combined_query <- glue("SELECT ", paste(variables, collapse = ", ")," FROM `", project, ".", dataset, ".", table, "`", " WHERE Connect_ID IS NOT NULL and d_821247024 = '197316935' LIMIT 5000" , sep = " ")
   
 
   # Download data
