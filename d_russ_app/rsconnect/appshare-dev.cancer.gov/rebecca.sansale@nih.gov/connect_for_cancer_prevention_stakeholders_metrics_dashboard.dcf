@@ -1,0 +1,10 @@
+name: connect_for_cancer_prevention_stakeholders_metrics_dashboard
+title: Connect for Cancer Prevention Stakeholders Metrics Dashboard
+username: rebecca.sansale@nih.gov
+account: rebecca.sansale@nih.gov
+server: appshare-dev.cancer.gov
+hostUrl: https://appshare-dev.cancer.gov/__api__
+appId: 23
+bundleId: 294
+url: https://appshare-dev.cancer.gov/content/25f41804-de41-485b-a81c-24d42645e480/
+version: 1
