@@ -50,6 +50,8 @@ server <- function(input, output, session){
   #     source("/Users/sansalerj/Desktop/local_app/race_plot2.R", local = TRUE)
   #     output$plot3 <- renderPlotly({race_plot()})
   #     
+  source("/Users/sansalerj/Desktop/local_app_SMDB_data/race_plot2_SMDB.R", local = TRUE)
+        output$plot3 <- renderPlotly({race_plot()})
 
   
 }
