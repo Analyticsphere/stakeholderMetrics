@@ -1,6 +1,8 @@
 
 #this is to allow for a variety of filtering options (site/race etc.)
-activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selected_sex = ".", selected_age = ".", selected_race = ".", selected_campaign = "."){
+activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selected_sex = ".",
+                            selected_age = ".", selected_race = ".", selected_campaign = ".",
+                            selected_biospec = "."){
 
   activity_data <- expss::apply_labels(activity_data,d_827220437 = "Site",#RcrtES_Site_v1r0
                                        d_827220437 = c("HealthPartners"= 531629870,
@@ -15,7 +17,17 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
                                                        "National Cancer Institute" = 517700004,
                                                        "National Cancer Institute" = 13,"Other" = 181769837),
                                        sex = "sex", sex = c("Male" = 654207589, "Female" = 536341288, "Other" = 576796184))
-  
+  activity_data <- activity_data %>%
+    mutate(biocol_type = case_when(
+      d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "All 3 Sample Donations",
+      d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Blood & Urine",
+      d_878865966 == 353358909 & d_167958071 == 104430631 & d_684635302 == 353358909 ~ "Blood & Mouthwash",
+      d_878865966 == 104430631 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "Mouthwash & Urine",
+      d_878865966 == 353358909 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "Blood Only",
+      d_878865966 == 104430631 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Urine Only",
+      d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 353358909 ~ "Mouthwash Only",
+      d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "No Samples"
+    ))
   #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
     activity_data <- activity_data[activity_data$d_827220437 == selected_hospital,]
@@ -33,6 +45,9 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
   }
   if(selected_campaign != "."){
     activity_data <- activity_data[activity_data$active_camptype == selected_campaign,]
+  }
+  if(selected_campaign != "."){
+    activity_data <- activity_data[activity_data$biocol_type == selected_biospec,]
   }
   
   

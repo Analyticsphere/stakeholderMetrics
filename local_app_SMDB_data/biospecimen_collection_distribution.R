@@ -1,6 +1,7 @@
-race_plot2 <- function(race_data = data, selected_hospital = ".", selected_sex = ".",
-                      selected_age = ".", selected_race = ".", selected_campaign = ".",
-                      selected_biospec = "."){
+biospecimen_collections_distribution <- function(biocol_data = data, selected_hospital = ".", selected_sex = ".",
+                                                 selected_age = ".", selected_race = ".", selected_campaign = ".",
+                                                 selected_biospec = "."){
+  # Load libraries
   #load libraries
   library(bigrquery)
   library(foreach)
@@ -29,7 +30,7 @@ race_plot2 <- function(race_data = data, selected_hospital = ".", selected_sex =
   library(glue)
   library(plotly)
   
-  race_data <- expss::apply_labels(race_data,d_827220437 = "Site",#RcrtES_Site_v1r0
+  biocol_data <- expss::apply_labels(biocol_data,
                                   d_827220437 = c("HealthPartners"= 531629870,
                                                   "Henry Ford Health System"=548392715,
                                                   "Kaiser Permanente Colorado" = 125001209,
@@ -41,9 +42,10 @@ race_plot2 <- function(race_data = data, selected_hospital = ".", selected_sex =
                                                   "University of Chicago Medicine" = 809703864,
                                                   "National Cancer Institute" = 517700004,
                                                   "National Cancer Institute" = 13,"Other" = 181769837),
-                                  sex = "sex", sex = c("Male" = 654207589, "Female" = 536341288, "Other" = 576796184))
-
-  race_data <- race_data %>%
+                                  sex = c("Male" = 654207589, "Female" = 536341288, "Other" = 576796184))
+ 
+  # Define biocol_type based on your criteria
+  biocol_data <- biocol_data %>%
     mutate(biocol_type = case_when(
       d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "All 3 Sample Donations",
       d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Blood & Urine",
@@ -55,52 +57,44 @@ race_plot2 <- function(race_data = data, selected_hospital = ".", selected_sex =
       d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "No Samples"
     ))
   
-    #filter data by hospital if necessary and make label for graph
+  # Filter data based on provided criteria
   if(selected_hospital != "."){
-    race_data <- race_data[race_data$d_827220437 == selected_hospital,]
+    biocol_data <- biocol_data[biocol_data$d_827220437 == selected_hospital,]
   }
-  
   if(selected_sex != "."){
-    race_data <- race_data[race_data$sex == selected_sex,]
+    biocol_data <- biocol_data[biocol_data$sex == selected_sex,]
   }
-  
   if(selected_age != "."){
-    race_data <- race_data[race_data$AgeUP_cat == selected_age,]
+    biocol_data <- biocol_data[biocol_data$AgeUP_cat == selected_age,]
   }
-  
   if(selected_race != "."){
-    race_data <- race_data[race_data$Race_Ethnic == selected_race,]
+    biocol_data <- biocol_data[biocol_data$Race_Ethnic == selected_race,]
   }
   if(selected_campaign != "."){
-    race_data <- race_data[race_data$active_camptype == selected_campaign,]
+    biocol_data <- biocol_data[biocol_data$active_camptype == selected_campaign,]
   }
   if(selected_biospec != "."){
-    race_data <- race_data[race_data$biocol_type == selected_biospec,]
+    biocol_data <- biocol_data[biocol_data$biocol_type == selected_biospec,]
   }
   
-  
-  # Assuming the data is already read and cleaned in your R environment
-  # Replace 'data_cleaned' with the name of your cleaned dataframe
-  # Count the occurrences of each race/ethnicity
-  race_counts <- table(race_data$Race_Ethnic)
+  # Count the occurrences of each biospecimen collection type
+  biocol_counts <- table(biocol_data$biocol_type)
   
   # Convert to a dataframe for Plotly
-  race_df <- as.data.frame(race_counts)
-  names(race_df) <- c("Race_Ethnic", "Count")
+  biocol_df <- as.data.frame(biocol_counts)
+  names(biocol_df) <- c("CollectionType", "Count")
   
   # Create a Plotly pie chart
-  fig <- plot_ly(race_df, labels = ~Race_Ethnic, values = ~Count, type = 'pie',
+  fig <- plot_ly(biocol_df, labels = ~CollectionType, values = ~Count, type = 'pie',
                  textinfo = 'label+percent',
                  insidetextorientation = 'radial')
   
   # Customize the layout
   curr.date <- Sys.Date()
-  fig <- fig %>% layout(title = paste0("Race of Participants Who Completed BOH \n Section of First Survey as of ",curr.date),
+  fig <- fig %>% layout(title = paste0("Distribution of Biospecimen Collections as of ", curr.date),
                         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
   
   # Print the plot
   fig
-  
 }
-

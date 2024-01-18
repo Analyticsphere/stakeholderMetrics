@@ -1,5 +1,7 @@
 #male/female pie chart
-sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_sex = ".", selected_age = ".", selected_race = ".", selected_campaign = "."){
+sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_sex = ".",
+                             selected_age = ".", selected_race = ".", selected_campaign = ".",
+                             selected_biospec = "."){
   #load libraries
   library(bigrquery)
   library(foreach)
@@ -42,6 +44,19 @@ sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_
                                                    "National Cancer Institute" = 13,"Other" = 181769837),
                                    sex = c("Male" = 654207589, "Female" = 536341288, "Other" = 576796184))
   
+  
+  sex_data <- sex_data %>%
+    mutate(biocol_type = case_when(
+      d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "All 3 Sample Donations",
+      d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Blood & Urine",
+      d_878865966 == 353358909 & d_167958071 == 104430631 & d_684635302 == 353358909 ~ "Blood & Mouthwash",
+      d_878865966 == 104430631 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "Mouthwash & Urine",
+      d_878865966 == 353358909 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "Blood Only",
+      d_878865966 == 104430631 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Urine Only",
+      d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 353358909 ~ "Mouthwash Only",
+      d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "No Samples"
+    ))
+  
   #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
     sex_data <- sex_data[sex_data$d_827220437 == selected_hospital, ]
@@ -58,6 +73,9 @@ sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_
   }
   if(selected_campaign != "."){
     sex_data <- sex_data[sex_data$active_camptype == selected_campaign,]
+  }
+  if(selected_biospec != "."){
+    sex_data <- sex_data[sex_data$biocol_type == selected_biospec,]
   }
   
   #keep only the observations with responses

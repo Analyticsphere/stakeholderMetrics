@@ -1,5 +1,7 @@
 #plot2-- activities by participant
-age_plot<- function(age_data=data, selected_hospital = ".", selected_sex=".", selected_age = ".", selected_race = ".", selected_campaign = "."){
+age_plot<- function(age_data=data, selected_hospital = ".", selected_sex=".",
+                    selected_age = ".", selected_race = ".", selected_campaign = ".",
+                    selected_biospec = "."){
   library(bigrquery)
   library(plotly)
   library(dplyr)
@@ -31,16 +33,17 @@ age_plot<- function(age_data=data, selected_hospital = ".", selected_sex=".", se
                                                        "National Cancer Institute" = 517700004,
                                                        "National Cancer Institute" = 13,"Other" = 181769837),
                                        sex = "sex", sex = c("Male" = 654207589, "Female" = 536341288, "Other" = 576796184))
-  #filter by hospital if specified
-  hospital_list <- data.frame(hospital_name = c("HealthPartners", "Henry Ford Health System", "Kaiser Permanente Colorado",
-                                                "Kaiser Permanente Georgia", "Kaiser Permanente Hawaii", "Kaiser Permanente Northwest",
-                                                "Marshfield Clinic Health System","Sanford Health","University of Chicago Medicine",
-                                                "National Cancer Institute", "National Cancer Institute", "other"), hospital_cid = c("531629870","548392715","125001209",
-                                                                                                                                     "327912200","300267574", "452412599",
-                                                                                                                                     "303349821", "657167265", "809703864",
-                                                                                                                                     "517700004", "13", "181769837"))
-  sex_list <- data.frame(sex_name = c("Male", "Female", "Other"), sex_cid = c("654207589", "536341288", "576796184"))
-  
+  age_data <- age_data %>%
+    mutate(biocol_type = case_when(
+      d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "All 3 Sample Donations",
+      d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Blood & Urine",
+      d_878865966 == 353358909 & d_167958071 == 104430631 & d_684635302 == 353358909 ~ "Blood & Mouthwash",
+      d_878865966 == 104430631 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "Mouthwash & Urine",
+      d_878865966 == 353358909 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "Blood Only",
+      d_878865966 == 104430631 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Urine Only",
+      d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 353358909 ~ "Mouthwash Only",
+      d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "No Samples"
+    ))  
   #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
     age_data <- age_data[age_data$d_827220437 == selected_hospital,]
@@ -57,6 +60,9 @@ age_plot<- function(age_data=data, selected_hospital = ".", selected_sex=".", se
   }
   if(selected_campaign != "."){
     age_data <- age_data[age_data$active_camptype == selected_campaign,]
+  }
+  if(selected_biospec != "."){
+    age_data <- age_data[age_data$biocol_type == selected_biospec,]
   }
 
 
