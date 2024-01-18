@@ -1,5 +1,5 @@
 #plot2-- activities by participant
-age_plot<- function(age_data=data, selected_hospital = ".", sex="."){
+age_plot<- function(age_data=data, selected_hospital = ".", selected_sex=".", selected_age = ".", selected_race = ".", selected_campaign = "."){
   library(bigrquery)
   library(plotly)
   library(dplyr)
@@ -44,12 +44,19 @@ age_plot<- function(age_data=data, selected_hospital = ".", sex="."){
   #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
     age_data <- age_data[age_data$d_827220437 == selected_hospital,]
-    hospital_label <- hospital_list[hospital_list$hospital_cid==selected_hospital, 1]
   }
   
-  if(sex != "."){
-    age_data <- age_data[age_data$sex == sex,]
-    hospital_label <- sex_list[sex_list$sex_cid==sex, 1]
+  if(selected_sex != "."){
+    age_data <- age_data[age_data$sex == selected_sex,]
+  }
+  if(selected_age != "."){
+    age_data <- age_data[age_data$AgeUP_cat == selected_age,]
+  }
+  if(selected_race != "."){
+    age_data <- age_data[age_data$Race_Ethnic == selected_race,]
+  }
+  if(selected_campaign != "."){
+    age_data <- age_data[age_data$active_camptype == selected_campaign,]
   }
 
 

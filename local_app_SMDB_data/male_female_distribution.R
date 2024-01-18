@@ -1,5 +1,5 @@
 #male/female pie chart
-sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_sex = "."){
+sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_sex = ".", selected_age = ".", selected_race = ".", selected_campaign = "."){
   #load libraries
   library(bigrquery)
   library(foreach)
@@ -49,6 +49,15 @@ sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_
   
   if(selected_sex != "."){
     sex_data <- sex_data[sex_data$sex == selected_sex,]
+  }
+  if(selected_age != "."){
+    sex_data <- sex_data[sex_data$AgeUP_cat == selected_age,]
+  }
+  if(selected_race != "."){
+    sex_data <- sex_data[sex_data$Race_Ethnic == selected_race,]
+  }
+  if(selected_campaign != "."){
+    sex_data <- sex_data[sex_data$active_camptype == selected_campaign,]
   }
   
   #keep only the observations with responses

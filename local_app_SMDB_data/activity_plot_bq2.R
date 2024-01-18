@@ -1,6 +1,6 @@
 
 #this is to allow for a variety of filtering options (site/race etc.)
-activity_plot_2 <- function(activity_data = data, selected_hospital = ".", sex = "."){
+activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selected_sex = ".", selected_age = ".", selected_race = ".", selected_campaign = "."){
 
   activity_data <- expss::apply_labels(activity_data,d_827220437 = "Site",#RcrtES_Site_v1r0
                                        d_827220437 = c("HealthPartners"= 531629870,
@@ -15,28 +15,27 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", sex =
                                                        "National Cancer Institute" = 517700004,
                                                        "National Cancer Institute" = 13,"Other" = 181769837),
                                        sex = "sex", sex = c("Male" = 654207589, "Female" = 536341288, "Other" = 576796184))
-  #filter by hospital if specified
-  hospital_list <- data.frame(hospital_name = c("HealthPartners", "Henry Ford Health System", "Kaiser Permanente Colorado",
-                                                "Kaiser Permanente Georgia", "Kaiser Permanente Hawaii", "Kaiser Permanente Northwest",
-                                                "Marshfield Clinic Health System","Sanford Health","University of Chicago Medicine",
-                                                "National Cancer Institute", "National Cancer Institute", "other"), hospital_cid = c("531629870","548392715","125001209",
-                                                                                                                                     "327912200","300267574", "452412599",
-                                                                                                                                     "303349821", "657167265", "809703864",
-                                                                                                                                     "517700004", "13", "181769837"))
-  sex_list <- data.frame(sex_name = c("Male", "Female", "Other"), sex_cid = c("654207589", "536341288", "576796184"))
   
   #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
     activity_data <- activity_data[activity_data$d_827220437 == selected_hospital,]
-    hospital_label <- hospital_list[hospital_list$hospital_cid==selected_hospital, 1]
-    print("applied hospital filter")
   }
   
-  if(sex != "."){
-    activity_data <- activity_data[activity_data$sex == sex,]
-    sex_label <- sex_list[sex_list$sex_cid==sex, 1]
-    print("applied sex filter")
+  if(selected_sex != "."){
+    activity_data <- activity_data[activity_data$sex == selected_sex,]
   }
+  
+  if(selected_age != "."){
+    activity_data <- activity_data[activity_data$AgeUP_cat == selected_age,]
+  }
+  if(selected_race != "."){
+    activity_data <- activity_data[activity_data$Race_Ethnic == selected_race,]
+  }
+  if(selected_campaign != "."){
+    activity_data <- activity_data[activity_data$active_camptype == selected_campaign,]
+  }
+  
+  
   
   #aggregation
   activity_data$Verified_wkdate <- as.Date(activity_data$Verified_wkdate, format = "%Y-%m-%d")  # adjust the format as per your data
