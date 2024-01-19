@@ -1,33 +1,9 @@
 biospecimen_collections_distribution <- function(biocol_data = data, selected_hospital = ".", selected_sex = ".",
                                                  selected_age = ".", selected_race = ".", selected_campaign = ".",
-                                                 selected_biospec = "."){
-  # Load libraries
+                                                 selected_biospec = ".", selected_surveycomplete = "."){
   #load libraries
-  library(bigrquery)
-  library(foreach)
-  library(stringr)
-  library(magrittr)
-  library(arsenal)
-  library(gtsummary)
-  library(rio)
-  library(ggplot2)
-  library(gridExtra)
-  library(scales)
-  library(gt)
-  library(tinytex)
-  library(data.table) 
   library(tidyverse) 
   library(dplyr) 
-  library(reshape) 
-  library(listr) 
-  library(sqldf) 
-  library(lubridate)
-  library(stringr)
-  library(RColorBrewer)
-  library(ggrepel)
-  library(DBI)
-  library(RSQLite)
-  library(glue)
   library(plotly)
   
   # Filter data based on provided criteria
@@ -48,6 +24,9 @@ biospecimen_collections_distribution <- function(biocol_data = data, selected_ho
   }
   if(selected_biospec != "."){
     biocol_data <- biocol_data[biocol_data$biocol_type == selected_biospec,]
+  }
+  if(selected_surveycomplete != "."){
+    biocol_data <- biocol_data[biocol_data$Msrv_complt == selected_surveycomplete,]
   }
   # Check if the filtered dataset is empty
   if (nrow(biocol_data) == 0) {

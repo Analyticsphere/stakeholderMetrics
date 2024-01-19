@@ -2,8 +2,10 @@
 #this is to allow for a variety of filtering options (site/race etc.)
 activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selected_sex = ".",
                             selected_age = ".", selected_race = ".", selected_campaign = ".",
-                            selected_biospec = "."){
-
+                            selected_biospec = ".", selected_surveycomplete = "."){
+  library(tidyverse) 
+  library(dplyr) 
+  library(plotly)
 
   #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
@@ -25,6 +27,9 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
   }
   if(selected_campaign != "."){
     activity_data <- activity_data[activity_data$biocol_type == selected_biospec,]
+  }
+  if(selected_surveycomplete != "."){
+    activity_data <- activity_data[activity_data$Msrv_complt == selected_surveycomplete,]
   }
   # Check if the filtered dataset is empty
   if (nrow(activity_data) == 0) {

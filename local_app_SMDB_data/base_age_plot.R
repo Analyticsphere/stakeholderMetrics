@@ -1,25 +1,10 @@
 #plot2-- activities by participant
 age_plot<- function(age_data=data, selected_hospital = ".", selected_sex=".",
                     selected_age = ".", selected_race = ".", selected_campaign = ".",
-                    selected_biospec = "."){
-  library(bigrquery)
+                    selected_biospec = ".", selected_surveycomplete = "."){
+  library(tidyverse) 
+  library(dplyr) 
   library(plotly)
-  library(dplyr)
-  library(glue)
-  library(plyr)
-  library(dplyr)
-  library(ggplot2)
-  library(plotly)
-  library(tidyverse)
-  library(tidyr)
-  library(magrittr)
-  library(lubridate)
-  library(purrr)
-  library(reshape2)
-  library(forcats)
-  library(ggrepel)
-  library(stringr)
-  library(expss)
 
   #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
@@ -40,6 +25,9 @@ age_plot<- function(age_data=data, selected_hospital = ".", selected_sex=".",
   }
   if(selected_biospec != "."){
     age_data <- age_data[age_data$biocol_type == selected_biospec,]
+  }
+  if(selected_surveycomplete != "."){
+    age_data <- age_data[age_data$Msrv_complt == selected_surveycomplete,]
   }
   # Check if the filtered dataset is empty
   if (nrow(age_data) == 0) {

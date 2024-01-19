@@ -1,33 +1,9 @@
 #male/female pie chart
 sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_sex = ".",
                              selected_age = ".", selected_race = ".", selected_campaign = ".",
-                             selected_biospec = "."){
-  #load libraries
-  library(bigrquery)
-  library(foreach)
-  library(stringr)
-  library(magrittr)
-  library(arsenal)
-  library(gtsummary)
-  library(rio)
-  library(ggplot2)
-  library(gridExtra)
-  library(scales)
-  library(gt)
-  library(tinytex)
-  library(data.table) 
+                             selected_biospec = ".", selected_surveycomplete = "."){
   library(tidyverse) 
   library(dplyr) 
-  library(reshape) 
-  library(listr) 
-  library(sqldf) 
-  library(lubridate)
-  library(stringr)
-  library(RColorBrewer)
-  library(ggrepel)
-  library(DBI)
-  library(RSQLite)
-  library(glue)
   library(plotly)
   
   #filter data by hospital if necessary and make label for graph
@@ -49,6 +25,9 @@ sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_
   }
   if(selected_biospec != "."){
     sex_data <- sex_data[sex_data$biocol_type == selected_biospec,]
+  }
+  if(selected_surveycomplete != "."){
+    sex_data <- sex_data[sex_data$Msrv_complt == selected_surveycomplete,]
   }
   # Check if the filtered dataset is empty
   if (nrow(sex_data) == 0) {

@@ -1,32 +1,9 @@
 race_plot2 <- function(race_data = data, selected_hospital = ".", selected_sex = ".",
                       selected_age = ".", selected_race = ".", selected_campaign = ".",
-                      selected_biospec = "."){
+                      selected_biospec = ".", selected_surveycomplete = "."){
   #load libraries
-  library(bigrquery)
-  library(foreach)
-  library(stringr)
-  library(magrittr)
-  library(arsenal)
-  library(gtsummary)
-  library(rio)
-  library(ggplot2)
-  library(gridExtra)
-  library(scales)
-  library(gt)
-  library(tinytex)
-  library(data.table) 
   library(tidyverse) 
   library(dplyr) 
-  library(reshape) 
-  library(listr) 
-  library(sqldf) 
-  library(lubridate)
-  library(stringr)
-  library(RColorBrewer)
-  library(ggrepel)
-  library(DBI)
-  library(RSQLite)
-  library(glue)
   library(plotly)
   
 
@@ -52,6 +29,9 @@ race_plot2 <- function(race_data = data, selected_hospital = ".", selected_sex =
   }
   if(selected_biospec != "."){
     race_data <- race_data[race_data$biocol_type == selected_biospec,]
+  }
+  if(selected_surveycomplete != "."){
+    race_data <- race_data[race_data$Msrv_complt == selected_surveycomplete,]
   }
   
   # Check if the filtered dataset is empty

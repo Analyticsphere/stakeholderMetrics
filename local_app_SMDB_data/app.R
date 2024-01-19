@@ -7,24 +7,17 @@ library(glue)
 library(plotly)
 library(shinydashboard)
 library(glue)
-library(plyr)
-library(dplyr)
-library(ggplot2)
 library(plotly)
 library(tidyverse)
-library(tidyr)
-library(magrittr)
 library(lubridate)
 library(purrr)
-library(reshape2)
 library(forcats)
-library(ggrepel)
-library(stringr)
 library(expss) #this is used in the activity plot
 
 server <- function(input, output, session){
   
-  data_project <- 'nih-nci-dceg-connect-bq2-prod'
+  #call data once for entire dashboard
+  {data_project <- 'nih-nci-dceg-connect-bq2-prod'
   data_dataset <- 'StakeHolderMetrics_RS'
   data_table   <- 'complete_table'
   
@@ -73,44 +66,46 @@ server <- function(input, output, session){
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 != "231311385" & d_663265240 == "231311385" ~ "BOH, MRE, and LAW",
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 == "231311385" & d_663265240 == "231311385" ~ "BOH, SAS, and LAW",
         d_100767870 == "104430631" & d_949302066 != "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "No Survey Sections"))
-      
+  }
   
     
   
-  
-  source("~/Desktop/local_app_SMDB_data/activity_plot_bq2.R", local = TRUE)
+  wd = "/Users/sansalerj/Desktop/local_app_SMDB_data/"
+  source(paste0(wd,"activity_plot_bq2.R"), local = TRUE)
   output$plot1 <- renderPlotly({activity_plot_2(activity_data = data, selected_hospital = input$siteFilter,
                                                 selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                                 selected_race = input$raceFilter,selected_campaign = input$campaignFilter,
-                                                selected_biospec = input$biospecFilter)})
+                                                selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
   
-  source("/Users/sansalerj/Desktop/local_app_SMDB_data/base_age_plot.R", local = TRUE)
+  source(paste0(wd,"base_age_plot.R"), local = TRUE)
   output$plot2 <- renderPlotly({age_plot(age_data = data, selected_hospital = input$siteFilter,
                                          selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                          selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
-                                         selected_biospec = input$biospecFilter)})
+                                         selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
   
-  source("/Users/sansalerj/Desktop/local_app_SMDB_data/race_plot2_SMDB.R", local = TRUE)
+  source(paste0(wd,"race_plot2_SMDB.R"), local = TRUE)
   output$plot3 <- renderPlotly({race_plot2(race_data = data, selected_hospital = input$siteFilter,
                                            selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                            selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
-                                           selected_biospec = input$biospecFilter)})
+                                           selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
   
-  source("/Users/sansalerj/Desktop/local_app_SMDB_data/male_female_distribution.R", local = TRUE)
+  source(paste0(wd,"male_female_distribution.R"), local = TRUE)
   output$plot4 <- renderPlotly({sex_distribution(sex_data = data, selected_hospital = input$siteFilter,
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
-                                                 selected_campaign = input$campaignFilter, selected_biospec = input$biospecFilter)})
+                                                 selected_campaign = input$campaignFilter,
+                                                 selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
   
-  source("/Users/sansalerj/Desktop/local_app_SMDB_data/biospecimen_collection_distribution.R", local = TRUE)
+  source(paste0(wd,"biospecimen_collection_distribution.R"), local = TRUE)
   output$plot5 <- renderPlotly({biospecimen_collections_distribution(biocol_data = data, selected_hospital = input$siteFilter,
                                                                      selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                                      selected_campaign = input$campaignFilter,
-                                                                     selected_biospec = input$biospecFilter)})
+                                                                     selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
 
-  source("/Users/sansalerj/Desktop/local_app_SMDB_data/completed_survey.R", local = TRUE)
+  source(paste0(wd,"completed_survey.R"), local = TRUE)
   output$plot6 <- renderPlotly({completed_survey(survey_data = data, selected_hospital = input$siteFilter,
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
-                                                 selected_campaign = input$campaignFilter, selected_biospec = input$biospecFilter)})
+                                                 selected_campaign = input$campaignFilter,
+                                                 selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
   
   # Reactive expression for title
   titleReactive <- reactive({
@@ -118,7 +113,7 @@ server <- function(input, output, session){
     selectedSex <- input$sexFilter
     selectedAge <- input$ageFilter
     selectedRace <- input$raceFilter
-    glue("Interactive Plot Dashboard -Site: {selectedHospital}, Gender: {selectedSex}, Age: {selectedAge}, Race: {selectedRace}")
+    glue("Interactive Plot Dashboard")
   })
   
   # Send the reactive title to UI
@@ -221,6 +216,19 @@ ui <- dashboardPage(
                                                 "No Samples" = "No Samples"),
                                     selected = "All"),
                         actionButton("applyBiospFilters", "Apply Filters")),
+                box(solidHeader = TRUE, 
+                    selectInput("surveycompleteFilter", "Choose Survey Completion Level:",
+                                choices = c("All" = ".",
+                                            "BOH only" =  "BOH only",
+                                            "BOH and MRE" = "BOH and MRE",
+                                            "BOH and SAS" = "BOH and SAS", 
+                                            "BOH and LAW" = "BOH and LAW",
+                                            "BOH, MRE, and SAS" = "BOH, MRE, and SAS",
+                                            "BOH, MRE, and LAW" = "BOH, MRE, and LAW",
+                                            "BOH, SAS, and LAW" = "BOH, SAS, and LAW",
+                                            "No Survey Sections" = "No Survey Sections"),
+                                selected = "All"),
+                    actionButton("applySurvCompleteFilters", "Apply Filters")),
               fluidRow(
                 box(plotlyOutput("plot1", height = 350), width = 10),
                 box(plotlyOutput("plot2", height = 350), width = 10),
@@ -234,5 +242,4 @@ ui <- dashboardPage(
   )
 )
 )
-
 shinyApp(ui, server)
