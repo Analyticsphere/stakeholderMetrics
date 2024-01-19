@@ -29,40 +29,88 @@ server <- function(input, output, session){
   data_table   <- 'complete_table'
   
   combined_query <- glue("SELECT * FROM `", data_project, ".", data_dataset, ".", data_table, "`" , sep = " ")
-  # Download data
   data <- bq_table_download(bq_project_query(data_project, query = combined_query), bigint = "integer64")
   
+  #some data formatting
+  data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
+                                   d_827220437 = c("HealthPartners"= 531629870,
+                                                   "Henry Ford Health System"=548392715,
+                                                   "Kaiser Permanente Colorado" = 125001209,
+                                                   "Kaiser Permanente Georgia" = 327912200,
+                                                   "Kaiser Permanente Hawaii" = 300267574,
+                                                   "Kaiser Permanente Northwest" = 452412599,
+                                                   "Marshfield Clinic Health System" = 303349821,
+                                                   "Sanford Health" = 657167265, 
+                                                   "University of Chicago Medicine" = 809703864,
+                                                   "National Cancer Institute" = 517700004,
+                                                   "National Cancer Institute" = 13,"Other" = 181769837))
   
-  #plot1
-  #source("/Users/sansalerj/Desktop/local_app/activities_plot.R", local = TRUE)
+  data <- data %>%
+    mutate(
+      sex = case_when(
+        state_d_706256705 == "536341288" | state_d_435027713 == "536341288" ~ "Female",
+        state_d_706256705 == "654207589" | state_d_435027713 == "654207589" ~ "Male",
+        state_d_706256705 == "830573274" ~ "Intersex or Other",
+        state_d_706256705 %in% c("178420302", NA) | state_d_435027713 %in% c("178420302", NA) ~ "Unknown"
+      ),
+      biocol_type = case_when(
+        d_878865966 == "353358909" & d_167958071 == "353358909" & d_684635302 == "353358909" ~ "All 3 Sample Donations",
+        d_878865966 == "353358909" & d_167958071 == "353358909" & d_684635302 == "104430631" ~ "Blood & Urine",
+        d_878865966 == "353358909" & d_167958071 == "104430631" & d_684635302 == "353358909" ~ "Blood & Mouthwash",
+        d_878865966 == "104430631" & d_167958071 == "353358909" & d_684635302 == "353358909" ~ "Mouthwash & Urine",
+        d_878865966 == "353358909" & d_167958071 == "104430631" & d_684635302 == "104430631" ~ "Blood Only",
+        d_878865966 == "104430631" & d_167958071 == "353358909" & d_684635302 == "104430631" ~ "Urine Only",
+        d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "353358909" ~ "Mouthwash Only",
+        d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "104430631" ~ "No Samples"
+      ),
+      Msrv_complt = case_when(
+        d_100767870 == "353358909" ~ "All 4 Survey Sections",
+        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "BOH only",
+        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "BOH and MRE",
+        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 == "231311385" & d_663265240 != "231311385" ~ "BOH and SAS",
+        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 == "231311385" ~ "BOH and LAW",
+        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 == "231311385" & d_663265240 != "231311385" ~ "BOH, MRE, and SAS",
+        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 != "231311385" & d_663265240 == "231311385" ~ "BOH, MRE, and LAW",
+        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 == "231311385" & d_663265240 == "231311385" ~ "BOH, SAS, and LAW",
+        d_100767870 == "104430631" & d_949302066 != "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "No Survey Sections"))
+      
+  
+    
+  
+  
   source("~/Desktop/local_app_SMDB_data/activity_plot_bq2.R", local = TRUE)
   output$plot1 <- renderPlotly({activity_plot_2(activity_data = data, selected_hospital = input$siteFilter,
                                                 selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                                 selected_race = input$raceFilter,selected_campaign = input$campaignFilter,
                                                 selected_biospec = input$biospecFilter)})
   
-  #plot 2
   source("/Users/sansalerj/Desktop/local_app_SMDB_data/base_age_plot.R", local = TRUE)
   output$plot2 <- renderPlotly({age_plot(age_data = data, selected_hospital = input$siteFilter,
                                          selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                          selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
                                          selected_biospec = input$biospecFilter)})
   
-  #using the BQ2 data for today, theres something wrong w the other plot 
   source("/Users/sansalerj/Desktop/local_app_SMDB_data/race_plot2_SMDB.R", local = TRUE)
   output$plot3 <- renderPlotly({race_plot2(race_data = data, selected_hospital = input$siteFilter,
                                            selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                            selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
                                            selected_biospec = input$biospecFilter)})
   
-  #using the BQ2 data for today, theres something wrong w the other plot 
   source("/Users/sansalerj/Desktop/local_app_SMDB_data/male_female_distribution.R", local = TRUE)
   output$plot4 <- renderPlotly({sex_distribution(sex_data = data, selected_hospital = input$siteFilter,
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                  selected_campaign = input$campaignFilter, selected_biospec = input$biospecFilter)})
   
   source("/Users/sansalerj/Desktop/local_app_SMDB_data/biospecimen_collection_distribution.R", local = TRUE)
-  output$plot5 <- renderPlotly({biospecimen_collections_distribution(biocol_data = data, selected_hospital = input$siteFilter, selected_age = input$ageFilter, selected_race = input$raceFilter, selected_campaign = input$campaignFilter, selected_biospec = input$biospecFilter)})
+  output$plot5 <- renderPlotly({biospecimen_collections_distribution(biocol_data = data, selected_hospital = input$siteFilter,
+                                                                     selected_age = input$ageFilter, selected_race = input$raceFilter,
+                                                                     selected_campaign = input$campaignFilter,
+                                                                     selected_biospec = input$biospecFilter)})
+
+  source("/Users/sansalerj/Desktop/local_app_SMDB_data/completed_survey.R", local = TRUE)
+  output$plot6 <- renderPlotly({completed_survey(survey_data = data, selected_hospital = input$siteFilter,
+                                                 selected_age = input$ageFilter, selected_race = input$raceFilter,
+                                                 selected_campaign = input$campaignFilter, selected_biospec = input$biospecFilter)})
   
   # Reactive expression for title
   titleReactive <- reactive({
@@ -115,9 +163,9 @@ ui <- dashboardPage(
                 box(solidHeader = TRUE,
                     selectInput("sexFilter", "Choose Gender:",
                                 choices = c("All" = ".",
-                                            "Male" = 654207589,
-                                            "Female" = 536341288, 
-                                            "Other" = 576796184),
+                                            "Male" = "Male",
+                                            "Female" = "Female", 
+                                            "Other" = "Other"),
                                 selected = "All"),
                     actionButton("applySexFilters", "Apply Filters")
                 ),
@@ -161,7 +209,7 @@ ui <- dashboardPage(
                                 selected = "All"),
                                 actionButton("applyCampaignFilters", "Apply Filters")),
                     box(solidHeader = TRUE, 
-                        selectInput("biospecFilter", "Choose Campaign:",
+                        selectInput("biospecFilter", "Choose Biospecimen Collection Type:",
                                     choices = c("All" = ".",
                                                 "All 3 Sample Donations" =  "All 3 Sample Donations",
                                                 "Blood & Urine" = "Blood & Urine",
@@ -178,7 +226,8 @@ ui <- dashboardPage(
                 box(plotlyOutput("plot2", height = 350), width = 10),
                 box(plotlyOutput("plot3", height = 350), width = 10),
                 box(plotlyOutput("plot4", height = 450), width = 10),
-                box(plotlyOutput("plot5", height = 450), width = 10)
+                box(plotlyOutput("plot5", height = 450), width = 10),
+                box(plotlyOutput("plot6", height = 650), width = 10)
               )
       )
     )

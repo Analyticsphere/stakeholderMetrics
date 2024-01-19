@@ -4,30 +4,7 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
                             selected_age = ".", selected_race = ".", selected_campaign = ".",
                             selected_biospec = "."){
 
-  activity_data <- expss::apply_labels(activity_data,d_827220437 = "Site",#RcrtES_Site_v1r0
-                                       d_827220437 = c("HealthPartners"= 531629870,
-                                                       "Henry Ford Health System"=548392715,
-                                                       "Kaiser Permanente Colorado" = 125001209,
-                                                       "Kaiser Permanente Georgia" = 327912200,
-                                                       "Kaiser Permanente Hawaii" = 300267574,
-                                                       "Kaiser Permanente Northwest" = 452412599,
-                                                       "Marshfield Clinic Health System" = 303349821,
-                                                       "Sanford Health" = 657167265, 
-                                                       "University of Chicago Medicine" = 809703864,
-                                                       "National Cancer Institute" = 517700004,
-                                                       "National Cancer Institute" = 13,"Other" = 181769837),
-                                       sex = "sex", sex = c("Male" = 654207589, "Female" = 536341288, "Other" = 576796184))
-  activity_data <- activity_data %>%
-    mutate(biocol_type = case_when(
-      d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "All 3 Sample Donations",
-      d_878865966 == 353358909 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Blood & Urine",
-      d_878865966 == 353358909 & d_167958071 == 104430631 & d_684635302 == 353358909 ~ "Blood & Mouthwash",
-      d_878865966 == 104430631 & d_167958071 == 353358909 & d_684635302 == 353358909 ~ "Mouthwash & Urine",
-      d_878865966 == 353358909 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "Blood Only",
-      d_878865966 == 104430631 & d_167958071 == 353358909 & d_684635302 == 104430631 ~ "Urine Only",
-      d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 353358909 ~ "Mouthwash Only",
-      d_878865966 == 104430631 & d_167958071 == 104430631 & d_684635302 == 104430631 ~ "No Samples"
-    ))
+
   #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
     activity_data <- activity_data[activity_data$d_827220437 == selected_hospital,]
@@ -49,8 +26,12 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
   if(selected_campaign != "."){
     activity_data <- activity_data[activity_data$biocol_type == selected_biospec,]
   }
-  
-  
+  # Check if the filtered dataset is empty
+  if (nrow(activity_data) == 0) {
+    # Return a message indicating not enough data
+    return(plotly::plot_ly() %>% 
+             layout(title = "Not Enough Data to Display This Chart"))
+  } else {
   
   #aggregation
   activity_data$Verified_wkdate <- as.Date(activity_data$Verified_wkdate, format = "%Y-%m-%d")  # adjust the format as per your data
@@ -121,7 +102,7 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
   
   # Print the plotly plot
   Fig_all.plotly
-  
+  }
 }
 
 
