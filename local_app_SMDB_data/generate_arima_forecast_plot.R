@@ -1,9 +1,32 @@
-generate_arima_forecast_plot <- function(data, date_col, value_col, h = 52, series_name = "Time Series") {
+generate_arima_forecast_plot <- function(data, date_col= "verified_date", value_col = "cumul_verified", h = 52, series_name = "Verified") {
   library(forecast)
   library(plotly)
   library(dplyr)
   library(lubridate)
   
+  #aggregation
+  data$Verified_wkdate <- as.Date(data$Verified_wkdate, format = "%Y-%m-%d")  # adjust the format as per your data
+  data$verified <- ifelse(is.na(data$Verified_wkdate), 0, 1)
+  data$blood <- ifelse(is.na(data$Blood_wk), 0, 1)
+  data$all_survey_complete <- ifelse(is.na(data$CompleteDate), 0, 1)
+  data$only_blood <- ifelse((is.na(data$CompleteDate)&!is.na(data$Blood_wk)), 1, 0)
+  data$blood_and_all_survey <- ifelse((data$blood ==1 & data$all_survey_complete==1), 1, 0)
+  data$only_all_survey_complete <- ifelse((data$blood ==0 & data$all_survey_complete==1), 1, 0)
+  
+  
+  #lastupdateblooddate = 
+  #lastmoduledate = the latest date any module was completed
+  agg <- aggregate(list(data$verified, data$blood, data$all_survey_complete, data$only_blood, data$blood_and_all_survey, data$only_all_survey_complete), list(verifiedcount = activity_data$Verified_wkdate) , FUN=sum)
+  
+  colnames(agg) <- c("verified_date", "verified", "blood", "all_survey_complete", "only_blood", "blood_and_all_survey", "only_all_survey_complete")
+  
+  #cumulative variables
+  agg$cumul_verified <- cumsum(agg$verified)
+  
+  
+  # Sorting the data by VerifiedWeekDate
+  agg <- agg[order(as.Date(agg$verified_date)),]
+  data = agg
   # Ensure necessary columns exist
   if (!(date_col %in% names(data)) || !(value_col %in% names(data))) {
     stop("Specified columns do not exist in the data frame.")

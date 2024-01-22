@@ -49,7 +49,7 @@ age_plot<- function(age_data=data, selected_hospital = ".", selected_sex=".",
 
 # Customize the layout
   histogram <- plot_ly(y=agg$x, x=agg$Group.2, histfunc='sum', type = "histogram")
-  histogram <- histogram %>% layout(title= list(text=paste0("Ages of Verified Participants as of ", Sys.Date()), font = list(size = 10)), yaxis=list(type='linear'))
+  histogram <- histogram %>% layout(title= list(text=paste0("Ages of Verified Participants as of ", Sys.Date()), yaxis=list(type='linear')))
 histogram
 }
 }

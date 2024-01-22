@@ -25,7 +25,7 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
   if(selected_campaign != "."){
     activity_data <- activity_data[activity_data$active_camptype == selected_campaign,]
   }
-  if(selected_campaign != "."){
+  if(selected_biospec != "."){
     activity_data <- activity_data[activity_data$biocol_type == selected_biospec,]
   }
   if(selected_surveycomplete != "."){
@@ -76,7 +76,7 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
               variable.name = "activity", value.name = "value")
   
   # Create a factor with specified levels and labels
-  agg$variable <- factor(agg$variable, 
+  agg$activity <- factor(agg$activity, 
                          levels = c("cumul_verified", "cumul_blood", "cumul_all_survey_complete", 
                                     "cumul_only_blood", "cumul_blood_and_all_survey", 
                                     "cumul_only_all_survey_complete", "cumul_verified_no_activity"),
@@ -97,8 +97,7 @@ activity_plot_2 <- function(activity_data = data, selected_hospital = ".", selec
     add_lines(data = agg, x = ~as.Date(verified_date), color = ~activity, colors = c("lightblue", "purple", "red", "blue", "green", "#BEBADA"),
               y = ~value) %>%
     layout(
-      title = list(text = paste0("Cumulative Number of Participants by Study Activities \n as of ", currentDate),
-                   font = list(size = 10)),
+      title = list(text = paste0("Cumulative Number of Participants by Study Activities \n as of ", currentDate)),
       xaxis = list(title = "Date", tickvals = unique_monthly_dates, ticktext = format(unique_monthly_dates, "%y-%m-%d"), showline = TRUE),
       yaxis = list(title = "Number of Participants", showline = TRUE),
       legend = list(x = 0, y = 1, traceorder = "normal", font = list(family = "sans-serif", size = 12, color = "black")),

@@ -106,8 +106,13 @@ server <- function(input, output, session){
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                  selected_campaign = input$campaignFilter,
                                                  selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
+  source(paste0(wd,"generate_arima_forecast_plot.R"), local = TRUE)
+  output$plotForecast1 <- renderPlotly({generate_arima_forecast_plot(data, date_col= "verified_date",
+                                                                  value_col = "cumul_verified", h = 52, series_name = "Verified Participants")})
+  source(paste0(wd,"physical_activites_plot.R"), local = TRUE)
+  output$plotForecast2 <- renderPlot({physical_activities_plot(data)})
   
-  # Reactive expression for title
+   # Reactive expression for title
   titleReactive <- reactive({
     selectedHospital <- input$siteFilter
     selectedSex <- input$sexFilter
@@ -128,9 +133,7 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Plot Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-      menuItem("Data Filters", tabName = "filters", icon = icon("sliders"), badgeLabel = "new", badgeColor = "green"),
-      menuItem("Advanced Analysis", tabName = "analysis", icon = icon("chart-line")),
-      menuItem("Settings", tabName = "settings", icon = icon("cogs"))
+      menuItem("Forecasts", tabName = "forecast", icon = icon("sliders"), badgeLabel = "new", badgeColor = "green")
     )
   ),
   dashboardBody(
@@ -230,16 +233,23 @@ ui <- dashboardPage(
                                 selected = "All"),
                     actionButton("applySurvCompleteFilters", "Apply Filters")),
               fluidRow(
-                box(plotlyOutput("plot1", height = 350), width = 10),
-                box(plotlyOutput("plot2", height = 350), width = 10),
-                box(plotlyOutput("plot3", height = 350), width = 10),
-                box(plotlyOutput("plot4", height = 450), width = 10),
-                box(plotlyOutput("plot5", height = 450), width = 10),
-                box(plotlyOutput("plot6", height = 650), width = 10)
+                box(plotlyOutput("plot1", height = 350), width = 12),
+                box(plotlyOutput("plot2", height = 350), width = 12),
+                box(plotlyOutput("plot3", height = 350), width = 12),
+                box(plotlyOutput("plot4", height = 450), width = 12),
+                box(plotlyOutput("plot5", height = 450), width = 12),
+                box(plotlyOutput("plot6", height = 650), width = 12)
               )
       )
-    )
+    ),
+  # Add the "Forecasts" tab item
+  tabItem(tabName = "forecast",
+          h2("Forecasts"),
+          fluidRow(
+            box(plotlyOutput("plotForecast1", height = 350), width = 12),
+            box(plotOutput("plotForecast2", height = 350), width = 12))
   )
+    )
 )
 )
 shinyApp(ui, server)
