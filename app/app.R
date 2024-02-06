@@ -21,8 +21,8 @@ server <- function(input, output, session){
 #call data once for entire dashboard
 #authentication step for Posit
 #this code was written by D Russ
-source("./get_authenticaion.R")
-get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+#source("./get_authenticaion.R")
+#get_authentication(service_account_key = "SERVICE_ACCT_KEY")
 
 #clean, re-label and generate some variables to plot
 source("./clean_data.R")
