@@ -36,21 +36,17 @@ library(plotly)
              layout(title = "Not Enough Data to Display This Chart"))
   } else {
 
-age_data <- data.frame(d_914594314=as.Date(age_data$d_914594314),
-                   age = age_data$AgeUP_cat) 
-    
-#using the verification date as the censor date
-age_data$age_date <- as.Date(cut(age_data$d_914594314,"week"))
-age_data$a <- 1
+# Create the histogram plot with plotly
+  plot <- plot_ly(data = age_data, x = ~AgeUP_cat, type = 'histogram',
+                  hoverinfo = 'x+y', hoverlabel = list(bgcolor = 'white'),
+                  marker = list(line = list(color = 'black', width = 1)))
   
-agg <- aggregate(age_data$a, list(age_data$age_date, age_data$age), FUN = sum)
-agg$x <- as.character(agg$x)
+  # Update layout
+  plot <- plot %>% layout(title = paste0("Ages of Verified Participants as of ", Sys.Date()),
+                          xaxis = list(title = "Age"),
+                          yaxis = list(title = "Count"))
+  plot
 
-
-# Customize the layout
-histogram <- plot_ly(y=agg$x, x=agg$Group.2, histfunc='sum', type = "histogram")
-histogram <- histogram %>% layout(title= list(text=paste0("Ages of Verified Participants as of ", Sys.Date()), yaxis=list(type='linear')))
-histogram
 }
 }
 

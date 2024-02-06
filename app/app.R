@@ -33,7 +33,6 @@ data <- clean_data(data = data)
 
 
 wd <- "./"
-print("calling activity plot")
 source(paste0(wd,"activity_plot.R"), local = TRUE)
 output$plot1 <- renderPlotly({activity_plot(activity_data = data, selected_hospital = input$siteFilter,
                                                 selected_sex = input$sexFilter, selected_age = input$ageFilter,
