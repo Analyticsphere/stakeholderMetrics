@@ -3,10 +3,10 @@
 completed_survey <- function(survey_data, selected_hospital = ".", selected_sex = ".",
                              selected_age = ".", selected_race = ".", selected_campaign = ".",
                              selected_biospec = ".", selected_surveycomplete = ".") {
-  # Load libraries
-  library(tidyverse) 
-  library(dplyr) 
-  library(plotly)
+# Load libraries
+library(tidyverse) 
+library(dplyr) 
+library(plotly)
   
   # Filter data based on the provided criteria
   if(selected_hospital != "."){
@@ -32,26 +32,26 @@ completed_survey <- function(survey_data, selected_hospital = ".", selected_sex 
   }
   
   # Check if the filtered dataset is empty
-  if (nrow(survey_data) == 0) {
+  if (nrow(survey_data) <= 9) {
     # Return a message indicating not enough data
     return(plotly::plot_ly() %>% 
              layout(title = "Not Enough Data to Display This Chart"))
   } else {
-    # Count the occurrences of each Msrv_complt
-    msrv_counts <- table(survey_data$Msrv_complt)
+# Count the occurrences of each Msrv_complt
+msrv_counts <- table(survey_data$Msrv_complt)
     
-    # Convert to a dataframe for Plotly
-    msrv_df <- as.data.frame(msrv_counts)
-    names(msrv_df) <- c("Msrv_complt", "Count")
+# Convert to a dataframe for Plotly
+msrv_df <- as.data.frame(msrv_counts)
+names(msrv_df) <- c("Msrv_complt", "Count")
     
-    # Create a Plotly pie chart
-    fig <- plot_ly(msrv_df, labels = ~Msrv_complt, values = ~Count, type = 'pie',
+# Create a Plotly pie chart
+fig <- plot_ly(msrv_df, labels = ~Msrv_complt, values = ~Count, type = 'pie',
                    textinfo = 'label+percent',
                    insidetextorientation = 'radial')
     
-    # Customize the layout
-    curr.date <- Sys.Date()
-    fig <- fig %>% layout(title = paste0("Survey Completion Status as of ", curr.date),
+# Customize the layout
+curr.date <- Sys.Date()
+fig <- fig %>% layout(title = paste0("Survey Completion Status as of ", curr.date),
                           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
     

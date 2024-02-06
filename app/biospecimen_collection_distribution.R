@@ -1,10 +1,10 @@
-biospecimen_collections_distribution <- function(biocol_data = data, selected_hospital = ".", selected_sex = ".",
+biospecimen_collection_distribution <- function(biocol_data = data, selected_hospital = ".", selected_sex = ".",
                                                  selected_age = ".", selected_race = ".", selected_campaign = ".",
                                                  selected_biospec = ".", selected_surveycomplete = "."){
-  #load libraries
-  library(tidyverse) 
-  library(dplyr) 
-  library(plotly)
+#load libraries
+library(tidyverse) 
+library(dplyr) 
+library(plotly)
   
   # Filter data based on provided criteria
   if(selected_hospital != "."){
@@ -29,25 +29,26 @@ biospecimen_collections_distribution <- function(biocol_data = data, selected_ho
     biocol_data <- biocol_data[biocol_data$Msrv_complt == selected_surveycomplete,]
   }
   # Check if the filtered dataset is empty
-  if (nrow(biocol_data) == 0) {
+  if (nrow(biocol_data) <= 9) {
     # Return a message indicating not enough data
     return(plotly::plot_ly() %>% 
              layout(title = "Not Enough Data to Display This Chart"))
   } else {
-  # Count the occurrences of each biospecimen collection type
-  biocol_counts <- table(biocol_data$biocol_type)
+
+# Count the occurrences of each biospecimen collection type
+biocol_counts <- table(biocol_data$biocol_type)
   
-  # Convert to a dataframe for Plotly
-  biocol_df <- as.data.frame(biocol_counts)
-  names(biocol_df) <- c("CollectionType", "Count")
+# Convert to a dataframe for Plotly
+biocol_df <- as.data.frame(biocol_counts)
+names(biocol_df) <- c("CollectionType", "Count")
   
-  # Create a Plotly pie chart
-  fig <- plot_ly(biocol_df, labels = ~CollectionType, values = ~Count, type = 'pie',
+# Create a Plotly pie chart
+fig <- plot_ly(biocol_df, labels = ~CollectionType, values = ~Count, type = 'pie',
                  textinfo = 'label+percent',
                  insidetextorientation = 'radial')
   
-  # Customize the layout
-  curr.date <- Sys.Date()
+# Customize the layout
+curr.date <- Sys.Date()
   fig <- fig %>% layout(title = paste0("Distribution of Biospecimen Collections as of ", curr.date),
                         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
