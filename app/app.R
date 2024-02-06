@@ -12,124 +12,96 @@ library(tidyverse)
 library(lubridate)
 library(purrr)
 library(forcats)
-library(expss) #this is used in the activity plot
+library(expss)
+library(jsonlite)
+library(httr)
 
 server <- function(input, output, session){
   
-  #call data once for entire dashboard
-  {data_project <- 'nih-nci-dceg-connect-bq2-prod'
-  data_dataset <- 'StakeHolderMetrics_RS'
-  data_table   <- 'complete_table'
+#call data once for entire dashboard
+#authentication step for Posit
+#this code was written by D Russ
+source("./get_authentication.R", local = TRUE)
+get_authentication(service_account_key = "SERVICE_ACCT_KEY")
   
-  combined_query <- glue("SELECT * FROM `", data_project, ".", data_dataset, ".", data_table, "`" , sep = " ")
-  data <- bq_table_download(bq_project_query(data_project, query = combined_query), bigint = "integer64")
-  
-  #some data formatting
-  data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
-                                   d_827220437 = c("HealthPartners"= 531629870,
-                                                   "Henry Ford Health System"=548392715,
-                                                   "Kaiser Permanente Colorado" = 125001209,
-                                                   "Kaiser Permanente Georgia" = 327912200,
-                                                   "Kaiser Permanente Hawaii" = 300267574,
-                                                   "Kaiser Permanente Northwest" = 452412599,
-                                                   "Marshfield Clinic Health System" = 303349821,
-                                                   "Sanford Health" = 657167265, 
-                                                   "University of Chicago Medicine" = 809703864,
-                                                   "National Cancer Institute" = 517700004,
-                                                   "National Cancer Institute" = 13,"Other" = 181769837))
-  
-  data <- data %>%
-    mutate(
-      sex = case_when(
-        state_d_706256705 == "536341288" | state_d_435027713 == "536341288" ~ "Female",
-        state_d_706256705 == "654207589" | state_d_435027713 == "654207589" ~ "Male",
-        state_d_706256705 == "830573274" ~ "Intersex or Other",
-        state_d_706256705 %in% c("178420302", NA) | state_d_435027713 %in% c("178420302", NA) ~ "Unknown"
-      ),
-      biocol_type = case_when(
-        d_878865966 == "353358909" & d_167958071 == "353358909" & d_684635302 == "353358909" ~ "All 3 Sample Donations",
-        d_878865966 == "353358909" & d_167958071 == "353358909" & d_684635302 == "104430631" ~ "Blood & Urine",
-        d_878865966 == "353358909" & d_167958071 == "104430631" & d_684635302 == "353358909" ~ "Blood & Mouthwash",
-        d_878865966 == "104430631" & d_167958071 == "353358909" & d_684635302 == "353358909" ~ "Mouthwash & Urine",
-        d_878865966 == "353358909" & d_167958071 == "104430631" & d_684635302 == "104430631" ~ "Blood Only",
-        d_878865966 == "104430631" & d_167958071 == "353358909" & d_684635302 == "104430631" ~ "Urine Only",
-        d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "353358909" ~ "Mouthwash Only",
-        d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "104430631" ~ "No Samples"
-      ),
-      Msrv_complt = case_when(
-        d_100767870 == "353358909" ~ "All 4 Survey Sections",
-        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "BOH only",
-        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "BOH and MRE",
-        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 == "231311385" & d_663265240 != "231311385" ~ "BOH and SAS",
-        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 == "231311385" ~ "BOH and LAW",
-        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 == "231311385" & d_663265240 != "231311385" ~ "BOH, MRE, and SAS",
-        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 != "231311385" & d_663265240 == "231311385" ~ "BOH, MRE, and LAW",
-        d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 == "231311385" & d_663265240 == "231311385" ~ "BOH, SAS, and LAW",
-        d_100767870 == "104430631" & d_949302066 != "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "No Survey Sections"))
-  }
-  
-    
-  
-  wd = "/Users/sansalerj/Desktop/local_app_SMDB_data/"
-  source(paste0(wd,"activity_plot_bq2.R"), local = TRUE)
-  output$plot1 <- renderPlotly({activity_plot_2(activity_data = data, selected_hospital = input$siteFilter,
+#clean, re-label and generate some variables to plot
+source("./clean_data.R", local = TRUE)
+source("./get_data.R", local=TRUE)
+print("retrieving data")
+data <- get_data()
+data <- clean_data(data = data)
+
+
+wd <- "./"
+print("calling activity plot")
+source(paste0(wd,"activity_plot.R"), local = TRUE)
+output$plot1 <- renderPlotly({activity_plot(activity_data = data, selected_hospital = input$siteFilter,
                                                 selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                                 selected_race = input$raceFilter,selected_campaign = input$campaignFilter,
                                                 selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  
-  source(paste0(wd,"base_age_plot.R"), local = TRUE)
-  output$plot2 <- renderPlotly({age_plot(age_data = data, selected_hospital = input$siteFilter,
+
+source(paste0(wd,"age_plot.R"), local = TRUE)
+output$plot2 <- renderPlotly({age_plot(age_data = data, selected_hospital = input$siteFilter,
                                          selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                          selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
                                          selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  
-  source(paste0(wd,"race_plot2_SMDB.R"), local = TRUE)
-  output$plot3 <- renderPlotly({race_plot2(race_data = data, selected_hospital = input$siteFilter,
+
+source(paste0(wd,"race_plot.R"), local = TRUE)
+output$plot3 <- renderPlotly({race_plot(race_data = data, selected_hospital = input$siteFilter,
                                            selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                            selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
                                            selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  
-  source(paste0(wd,"male_female_distribution.R"), local = TRUE)
-  output$plot4 <- renderPlotly({sex_distribution(sex_data = data, selected_hospital = input$siteFilter,
+
+source(paste0(wd,"sex_distribution.R"), local = TRUE)
+output$plot4 <- renderPlotly({sex_distribution(sex_data = data, selected_hospital = input$siteFilter,
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                  selected_campaign = input$campaignFilter,
                                                  selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  
-  source(paste0(wd,"biospecimen_collection_distribution.R"), local = TRUE)
-  output$plot5 <- renderPlotly({biospecimen_collections_distribution(biocol_data = data, selected_hospital = input$siteFilter,
+
+source(paste0(wd,"biospecimen_collection_distribution.R"), local = TRUE)
+output$plot5 <- renderPlotly({biospecimen_collection_distribution(biocol_data = data, selected_hospital = input$siteFilter,
                                                                      selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                                      selected_campaign = input$campaignFilter,
                                                                      selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
 
-  source(paste0(wd,"completed_survey.R"), local = TRUE)
-  output$plot6 <- renderPlotly({completed_survey(survey_data = data, selected_hospital = input$siteFilter,
+source(paste0(wd,"completed_survey.R"), local = TRUE)
+output$plot6 <- renderPlotly({completed_survey(survey_data = data, selected_hospital = input$siteFilter,
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                  selected_campaign = input$campaignFilter,
                                                  selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  source(paste0(wd,"generate_arima_forecast_plot.R"), local = TRUE)
-  output$plotForecast1 <- renderPlotly({generate_arima_forecast_plot(data, date_col= "verified_date",
-                                                                  value_col = "cumul_verified", h = 52, series_name = "Verified Participants")})
-  source(paste0(wd,"physical_activites_plot.R"), local = TRUE)
-  output$plotForecast2 <- renderPlot({physical_activities_plot(data)})
-  
-   # Reactive expression for title
-  titleReactive <- reactive({
+#source(paste0(wd,"generate_arima_forecast_plot.R"), local = TRUE)
+#output$plotForecast1 <- renderPlotly({generate_arima_forecast_plot(data, date_col= "verified_date",
+#                                      value_col = "cumul_verified", h = 52, series_name = "Verified Participants")})
+source(paste0(wd,"physical_activites_plot.R"), local = TRUE)
+output$plotForecast2 <- renderPlot({physical_activities_plot(data)})
+
+# Reactive expression for title
+titleReactive <- reactive({
     selectedHospital <- input$siteFilter
     selectedSex <- input$sexFilter
     selectedAge <- input$ageFilter
     selectedRace <- input$raceFilter
     glue("Interactive Plot Dashboard")
-  })
-  
-  # Send the reactive title to UI
+})
+
+# Send the reactive title to UI
   output$dynamicTitle <- renderText({titleReactive()})
+  
+# Dynamic UI for race filter
+output$raceFilterUI <- renderUI({
+# Assuming 'data' is loaded and processed as shown previously
+race_choices <- unique(data$Race_Ethnic)
+selectInput("raceFilter", "Choose Race:",
+                choices = c("All" = ".", race_choices),
+                selected = "All")
+})
   
 }
 
 
 # Define UI
 ui <- dashboardPage(
-  dashboardHeader(title = "Connect for Cancer Plot Dashboard"),
+  dashboardHeader(title = "Connect for Cancer Prevention Stakeholder Metrics Dashboard"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Plot Dashboard", tabName = "dashboard", icon = icon("dashboard")),
@@ -181,10 +153,7 @@ ui <- dashboardPage(
                     actionButton("applyAgeFilters", "Apply Filters")
                 ),
                 box(solidHeader = TRUE,
-                    selectInput("raceFilter", "Choose Race:",
-                                choices = c("All" = ".",
-                                            names(table(data$Race_Ethnic))),
-                                selected = "All"),
+                    uiOutput("raceFilterUI"), # Placeholder for dynamic selectInput
                     actionButton("applyRaceFilters", "Apply Filters")
                 ),
                 box(solidHeader = TRUE, 

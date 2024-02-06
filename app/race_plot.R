@@ -1,13 +1,11 @@
-race_plot2 <- function(race_data = data, selected_hospital = ".", selected_sex = ".",
+race_plot <- function(race_data = data, selected_hospital = ".", selected_sex = ".",
                       selected_age = ".", selected_race = ".", selected_campaign = ".",
                       selected_biospec = ".", selected_surveycomplete = "."){
   #load libraries
-  library(tidyverse) 
-  library(dplyr) 
-  library(plotly)
-  
+library(tidyverse) 
+library(dplyr) 
+library(plotly)
 
-  
     #filter data by hospital if necessary and make label for graph
   if(selected_hospital != "."){
     race_data <- race_data[race_data$d_827220437 == selected_hospital,]
@@ -35,28 +33,28 @@ race_plot2 <- function(race_data = data, selected_hospital = ".", selected_sex =
   }
   
   # Check if the filtered dataset is empty
-  if (nrow(race_data) == 0) {
+  if (nrow(race_data) <= 9) {
     # Return a message indicating not enough data
     return(plotly::plot_ly() %>% 
              layout(title = "Not Enough Data to Display This Chart"))
   } else {
-  # Assuming the data is already read and cleaned in your R environment
-  # Replace 'data_cleaned' with the name of your cleaned dataframe
-  # Count the occurrences of each race/ethnicity
-  race_counts <- table(race_data$Race_Ethnic)
+# Assuming the data is already read and cleaned in your R environment
+# Replace 'data_cleaned' with the name of your cleaned dataframe
+# Count the occurrences of each race/ethnicity
+race_counts <- table(race_data$Race_Ethnic)
   
-  # Convert to a dataframe for Plotly
-  race_df <- as.data.frame(race_counts)
-  names(race_df) <- c("Race_Ethnic", "Count")
+# Convert to a dataframe for Plotly
+race_df <- as.data.frame(race_counts)
+names(race_df) <- c("Race_Ethnic", "Count")
   
-  # Create a Plotly pie chart
-  fig <- plot_ly(race_df, labels = ~Race_Ethnic, values = ~Count, type = 'pie',
+# Create a Plotly pie chart
+fig <- plot_ly(race_df, labels = ~Race_Ethnic, values = ~Count, type = 'pie',
                  textinfo = 'label+percent',
                  insidetextorientation = 'radial')
   
-  # Customize the layout
-  curr.date <- Sys.Date()
-  fig <- fig %>% layout(title = paste0("Race of Participants Who Completed BOH \n Section of First Survey as of ",curr.date),
+# Customize the layout
+curr.date <- Sys.Date()
+fig <- fig %>% layout(title = paste0("Race of Participants Who Completed BOH \n Section of First Survey as of ",curr.date),
                         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
   
