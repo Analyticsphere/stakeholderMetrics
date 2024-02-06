@@ -21,39 +21,43 @@ server <- function(input, output, session){
 #call data once for entire dashboard
 #authentication step for Posit
 #this code was written by D Russ
-#source("./get_authenticaion.R")
-#get_authentication(service_account_key = "SERVICE_ACCT_KEY")
-
+source("./get_authentication.R", local = TRUE)
+get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+  
 #clean, re-label and generate some variables to plot
-source("./clean_data.R")
-source("./get_data.R")
-data <- clean_data(data = get_data())
+source("./clean_data.R", local = TRUE)
+source("./get_data.R", local=TRUE)
+print("retrieving data")
+data <- get_data()
+data <- clean_data(data = data)
+
 
 wd <- "./"
-source(paste0("./activity_plot.R"), local = TRUE)
+print("calling activity plot")
+source(paste0(wd,"activity_plot.R"), local = TRUE)
 output$plot1 <- renderPlotly({activity_plot(activity_data = data, selected_hospital = input$siteFilter,
                                                 selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                                 selected_race = input$raceFilter,selected_campaign = input$campaignFilter,
                                                 selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  
+
 source(paste0(wd,"age_plot.R"), local = TRUE)
 output$plot2 <- renderPlotly({age_plot(age_data = data, selected_hospital = input$siteFilter,
                                          selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                          selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
                                          selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  
-source(paste0(wd,"race_plot2_SMDB.R"), local = TRUE)
-output$plot3 <- renderPlotly({race_plot2(race_data = data, selected_hospital = input$siteFilter,
+
+source(paste0(wd,"race_plot.R"), local = TRUE)
+output$plot3 <- renderPlotly({race_plot(race_data = data, selected_hospital = input$siteFilter,
                                            selected_sex = input$sexFilter, selected_age = input$ageFilter,
                                            selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
                                            selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  
-source(paste0(wd,"male_female_distribution.R"), local = TRUE)
+
+source(paste0(wd,"sex_distribution.R"), local = TRUE)
 output$plot4 <- renderPlotly({sex_distribution(sex_data = data, selected_hospital = input$siteFilter,
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                  selected_campaign = input$campaignFilter,
                                                  selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-  
+
 source(paste0(wd,"biospecimen_collection_distribution.R"), local = TRUE)
 output$plot5 <- renderPlotly({biospecimen_collection_distribution(biocol_data = data, selected_hospital = input$siteFilter,
                                                                      selected_age = input$ageFilter, selected_race = input$raceFilter,
@@ -65,12 +69,12 @@ output$plot6 <- renderPlotly({completed_survey(survey_data = data, selected_hosp
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                  selected_campaign = input$campaignFilter,
                                                  selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-source(paste0(wd,"generate_arima_forecast_plot.R"), local = TRUE)
-output$plotForecast1 <- renderPlotly({generate_arima_forecast_plot(data, date_col= "verified_date",
-                                      value_col = "cumul_verified", h = 52, series_name = "Verified Participants")})
+#source(paste0(wd,"generate_arima_forecast_plot.R"), local = TRUE)
+#output$plotForecast1 <- renderPlotly({generate_arima_forecast_plot(data, date_col= "verified_date",
+#                                      value_col = "cumul_verified", h = 52, series_name = "Verified Participants")})
 source(paste0(wd,"physical_activites_plot.R"), local = TRUE)
 output$plotForecast2 <- renderPlot({physical_activities_plot(data)})
-  
+
 # Reactive expression for title
 titleReactive <- reactive({
     selectedHospital <- input$siteFilter
@@ -82,6 +86,15 @@ titleReactive <- reactive({
 
 # Send the reactive title to UI
   output$dynamicTitle <- renderText({titleReactive()})
+  
+# Dynamic UI for race filter
+output$raceFilterUI <- renderUI({
+# Assuming 'data' is loaded and processed as shown previously
+race_choices <- unique(data$Race_Ethnic)
+selectInput("raceFilter", "Choose Race:",
+                choices = c("All" = ".", race_choices),
+                selected = "All")
+})
   
 }
 
@@ -140,10 +153,7 @@ ui <- dashboardPage(
                     actionButton("applyAgeFilters", "Apply Filters")
                 ),
                 box(solidHeader = TRUE,
-                    selectInput("raceFilter", "Choose Race:",
-                                choices = c("All" = ".",
-                                            names(table(data$Race_Ethnic))),
-                                selected = "All"),
+                    uiOutput("raceFilterUI"), # Placeholder for dynamic selectInput
                     actionButton("applyRaceFilters", "Apply Filters")
                 ),
                 box(solidHeader = TRUE, 
