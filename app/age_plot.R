@@ -15,7 +15,7 @@ library(plotly)
     age_data <- age_data[age_data$sex == selected_sex,]
   }
   if(selected_age != "."){
-    age_data <- age_data[age_data$AgeUP_cat == selected_age,]
+    age_data <- age_data[age_data$Age == selected_age,]
   }
   if(selected_race != "."){
     age_data <- age_data[age_data$Race_Ethnic == selected_race,]
@@ -37,7 +37,7 @@ library(plotly)
   } else {
 
 # Create the histogram plot with plotly
-  plot <- plot_ly(data = age_data, x = ~AgeUP_cat, type = 'histogram',
+  plot <- plot_ly(data = age_data, x = ~Age, type = 'histogram',
                   hoverinfo = 'x+y', hoverlabel = list(bgcolor = 'white'),
                   marker = list(line = list(color = 'black', width = 1)))
   #This variable is from the user profile, therefore its self-reported

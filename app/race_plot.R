@@ -16,11 +16,11 @@ library(plotly)
   }
   
   if(selected_age != "."){
-    race_data <- race_data[race_data$AgeUP_cat == selected_age,]
+    race_data <- race_data[race_data$Age == selected_age,]
   }
   
   if(selected_race != "."){
-    race_data <- race_data[race_data$Race_Ethnic == selected_race,]
+    race_data <- race_data[race_data$race == selected_race,]
   }
   if(selected_campaign != "."){
     race_data <- race_data[race_data$active_camptype == selected_campaign,]
@@ -41,14 +41,14 @@ library(plotly)
 # Assuming the data is already read and cleaned in your R environment
 # Replace 'data_cleaned' with the name of your cleaned dataframe
 # Count the occurrences of each race/ethnicity
-race_counts <- table(race_data$Race_Ethnic)
+race_counts <- table(race_data$race)
   
 # Convert to a dataframe for Plotly
 race_df <- as.data.frame(race_counts)
-names(race_df) <- c("Race_Ethnic", "Count")
+names(race_df) <- c("race", "Count")
   
 # Create a Plotly pie chart
-fig <- plot_ly(race_df, labels = ~Race_Ethnic, values = ~Count, type = 'pie',
+fig <- plot_ly(race_df, labels = ~race, values = ~Count, type = 'pie',
                  textinfo = 'label+percent',
                  insidetextorientation = 'radial')
   
