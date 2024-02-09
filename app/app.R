@@ -31,6 +31,9 @@ print("retrieving data")
 data <- get_data()
 data <- clean_data(data = data)
 
+#get participant data
+invited_participant_data <- get_data(project = "nih-nci-dceg-connect-bq2-prod", dataset = "StakeHolderMetrics_RS", table = "invited_participants_complete")
+
 
 wd <- "./"
 source(paste0(wd,"activity_plot.R"), local = TRUE)
@@ -68,11 +71,12 @@ output$plot6 <- renderPlotly({completed_survey(survey_data = data, selected_hosp
                                                  selected_age = input$ageFilter, selected_race = input$raceFilter,
                                                  selected_campaign = input$campaignFilter,
                                                  selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
-#source(paste0(wd,"generate_arima_forecast_plot.R"), local = TRUE)
-#output$plotForecast1 <- renderPlotly({generate_arima_forecast_plot(data, date_col= "verified_date",
-#                                      value_col = "cumul_verified", h = 52, series_name = "Verified Participants")})
-source(paste0(wd,"physical_activites_plot.R"), local = TRUE)
-output$plotForecast2 <- renderPlot({physical_activities_plot(data)})
+
+source(paste0(wd,"age_plot.R"), local = TRUE)
+output$invited_plot1 <- renderPlotly({age_plot(age_data = invited_participant_data)})
+
+source(paste0(wd,"race_plot.R"), local = TRUE)
+output$invited_plot2 <- renderPlotly({race_plot(race_data = invited_participant_data)})
 
 # Reactive expression for title
 titleReactive <- reactive({
@@ -211,11 +215,11 @@ ui <- dashboardPage(
       )
     ),
   # Add the "Forecasts" tab item
-  tabItem(tabName = "forecast",
+  tabItem(tabName = "Invited Participants",
           h2("Invited Participant Dashboard"),
           fluidRow(
             box(plotlyOutput("invited_plot1", height = 350), width = 12),
-            box(plotOutput("invited_plot2", height = 350), width = 12))
+            box(plotlyOutput("invited_plot2", height = 350), width = 12))
   )
     )
 )
