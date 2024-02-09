@@ -40,9 +40,9 @@ library(plotly)
   plot <- plot_ly(data = age_data, x = ~AgeUP_cat, type = 'histogram',
                   hoverinfo = 'x+y', hoverlabel = list(bgcolor = 'white'),
                   marker = list(line = list(color = 'black', width = 1)))
-  
+  #This variable is from the user profile, therefore its self-reported
   # Update layout
-  plot <- plot %>% layout(title = paste0("Ages of Verified Participants as of ", Sys.Date()),
+  plot <- plot %>% layout(title = paste0("Self Reported Ages of Verified Participants as of ", Sys.Date()),
                           xaxis = list(title = "Age"),
                           yaxis = list(title = "Count"))
   plot

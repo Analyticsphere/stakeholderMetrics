@@ -212,10 +212,10 @@ ui <- dashboardPage(
     ),
   # Add the "Forecasts" tab item
   tabItem(tabName = "forecast",
-          h2("Forecasts"),
+          h2("Invited Participant Dashboard"),
           fluidRow(
-            box(plotlyOutput("plotForecast1", height = 350), width = 12),
-            box(plotOutput("plotForecast2", height = 350), width = 12))
+            box(plotlyOutput("invited_plot1", height = 350), width = 12),
+            box(plotOutput("invited_plot2", height = 350), width = 12))
   )
     )
 )
