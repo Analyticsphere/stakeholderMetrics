@@ -53,11 +53,9 @@ fig <- plot_ly(msrv_df, labels = ~Msrv_complt, values = ~Count, type = 'pie',
 curr.date <- Sys.Date()
 fig <- fig %>% layout(title = paste0("Survey Completion Status as of ", curr.date),
                           annotations = list(
-                            list(x = 1.2, y = 0.3, text = "BOH: Background and Overall Health", showarrow = F, font = 8),
-                            list(x = 1.2, y = 0.25, text = "MRE: Medications, Reproductive Health,\n Exercise and Sleep", showarrow = F, font = 8),
-                            list(x = 1.2, y = 0.2, text = "SAS: Smoking, Alcohol, and Sun Exposure", showarrow = F, font = 8),
-                            list(x = 1.2, y = 0.15, text = "LAW: Where You Live and Work", showarrow = F, font = 8)
-                          ),
+                            list(x = -0.1, y = -0.1, text = paste0("<b>BOH</b>",": Background and Overall Health; ","<b>MRE</b>",": Medications, Reproductive Health, Exercise and Sleep;","<b> SAS</b>",": Smoking, Alcohol, and Sun Exposure;","<b> LAW</b>",": Where You Live and Work"),
+                            showarrow = F, font = list(size = 7),
+                            xanchor = 'left', align = 'left')),
                           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
     
