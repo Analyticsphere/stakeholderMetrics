@@ -34,43 +34,39 @@ data <- clean_data(data = data)
 #get participant data
 invited_participant_data <- get_data(project = "nih-nci-dceg-connect-bq2-prod", dataset = "StakeHolderMetrics_RS", table = "invited_participants_complete")
 
+# Define a reactive expression that filters the data
+filtered_verified_data <- reactive({
+  req(data) # Ensure 'data' is loaded
+  
+  # Apply filtering based on user input
+  data %>%
+    filter((input$siteFilter == "." | d_827220437 == input$siteFilter) &
+             (input$sexFilter == "." | sex == input$sexFilter) &
+             (input$ageFilter == "." | Age == input$ageFilter)&
+             (input$raceFilter == "." | race == input$raceFilter)&
+             (input$campaignFilter == "." | active_camptype == input$campaignFilter)&
+             (input$biospecFilter == "." | biocol_type == input$biospecFilter)&
+             (input$surveycompleteFilter == "." | Msrv_complt == input$surveycompleteFilter))
+    })
 
 wd <- "./"
 source(paste0(wd,"activity_plot.R"), local = TRUE)
-output$plot1 <- renderPlotly({activity_plot(activity_data = data, selected_hospital = input$siteFilter,
-                                                selected_sex = input$sexFilter, selected_age = input$ageFilter,
-                                                selected_race = input$raceFilter,selected_campaign = input$campaignFilter,
-                                                selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
+output$plot1 <- renderPlotly({activity_plot(activity_data=filtered_verified_data())})
 
 source(paste0(wd,"age_plot.R"), local = TRUE)
-output$plot2 <- renderPlotly({age_plot(age_data = data, selected_hospital = input$siteFilter,
-                                         selected_sex = input$sexFilter, selected_age = input$ageFilter,
-                                         selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
-                                         selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
+output$plot2 <- renderPlotly({age_plot(age_data = filtered_verified_data())})
 
 source(paste0(wd,"race_plot.R"), local = TRUE)
-output$plot3 <- renderPlotly({race_plot(race_data = data, selected_hospital = input$siteFilter,
-                                           selected_sex = input$sexFilter, selected_age = input$ageFilter,
-                                           selected_race = input$raceFilter, selected_campaign = input$campaignFilter,
-                                           selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
+output$plot3 <- renderPlotly({race_plot(race_data = filtered_verified_data())})
 
 source(paste0(wd,"sex_distribution.R"), local = TRUE)
-output$plot4 <- renderPlotly({sex_distribution(sex_data = data, selected_hospital = input$siteFilter,
-                                                 selected_age = input$ageFilter, selected_race = input$raceFilter,
-                                                 selected_campaign = input$campaignFilter,
-                                                 selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
+output$plot4 <- renderPlotly({sex_distribution(sex_data = filtered_verified_data())})
 
 source(paste0(wd,"biospecimen_collection_distribution.R"), local = TRUE)
-output$plot5 <- renderPlotly({biospecimen_collection_distribution(biocol_data = data, selected_hospital = input$siteFilter,
-                                                                     selected_age = input$ageFilter, selected_race = input$raceFilter,
-                                                                     selected_campaign = input$campaignFilter,
-                                                                     selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
+output$plot5 <- renderPlotly({biospecimen_collection_distribution(biocol_data = filtered_verified_data())})
 
 source(paste0(wd,"completed_survey.R"), local = TRUE)
-output$plot6 <- renderPlotly({completed_survey(survey_data = data, selected_hospital = input$siteFilter,
-                                                 selected_age = input$ageFilter, selected_race = input$raceFilter,
-                                                 selected_campaign = input$campaignFilter,
-                                                 selected_biospec = input$biospecFilter, selected_surveycomplete = input$surveycompleteFilter)})
+output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
 
 source(paste0(wd,"age_plot.R"), local = TRUE)
 output$invited_plot1 <- renderPlotly({age_plot(age_data = invited_participant_data)})
@@ -78,27 +74,6 @@ output$invited_plot1 <- renderPlotly({age_plot(age_data = invited_participant_da
 source(paste0(wd,"race_plot.R"), local = TRUE)
 output$invited_plot2 <- renderPlotly({race_plot(race_data = invited_participant_data)})
 
-# Reactive expression for title
-titleReactive <- reactive({
-    selectedHospital <- input$siteFilter
-    selectedSex <- input$sexFilter
-    selectedAge <- input$ageFilter
-    selectedRace <- input$raceFilter
-    glue("Interactive Plot Dashboard")
-})
-
-# Send the reactive title to UI
-  output$dynamicTitle <- renderText({titleReactive()})
-  
-# Dynamic UI for race filter
-output$raceFilterUI <- renderUI({
-# Assuming 'data' is loaded and processed as shown previously
-race_choices <- unique(data$Race_Ethnic)
-selectInput("raceFilter", "Choose Race:",
-                choices = c("All" = ".", race_choices),
-                selected = "All")
-})
-  
 }
 
 
@@ -108,7 +83,7 @@ ui <- dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Plot Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-      menuItem("Forecasts", tabName = "forecast", icon = icon("sliders"), badgeLabel = "new", badgeColor = "green")
+      menuItem("Invited Participant Dashboard", tabName = "invited_participants", icon = icon("sliders"), badgeLabel = "new", badgeColor = "green")
     )
   ),
   dashboardBody(
@@ -156,8 +131,21 @@ ui <- dashboardPage(
                     actionButton("applyAgeFilters", "Apply Filters")
                 ),
                 box(solidHeader = TRUE,
-                    uiOutput("raceFilterUI"), # Placeholder for dynamic selectInput
-                    actionButton("applyRaceFilters", "Apply Filters")
+                    selectInput("raceFilter", "Choose Race:",
+                                choices = c("All" = ".",
+                                            "American Indian or Alaska Native" = "American Indian or Alaska Native",
+                                            "Asian" = "Asian", 
+                                            "Black, African American, or African" = "Black, African American, or African",
+                                            "Hawaiian or other Pacific Islander" = "Hawaiian or other Pacific Islander",
+                                            "Hispanic, Latino, or Spanish" = "Hispanic, Latino, or Spanish",
+                                            "Middle Eastern or North African" = "Middle Eastern or North African",
+                                            "Multi-race" = "Multi-race",
+                                            "Other" = "Other",
+                                            "Skipped this question" = "Skipped this question",
+                                            "UNKNOWN" = "UNKNOWN", 
+                                            "White" = "White"),
+                                selected = "All"),
+                    actionButton("applyRaceFilters", "Apply Race Filters")
                 ),
                 box(solidHeader = TRUE, 
                     selectInput("campaignFilter", "Choose Campaign:",
@@ -215,7 +203,7 @@ ui <- dashboardPage(
       )
     ),
   # Add the "Forecasts" tab item
-  tabItem(tabName = "Invited Participants",
+  tabItem(tabName = "invited_participants",
           h2("Invited Participant Dashboard"),
           fluidRow(
             box(plotlyOutput("invited_plot1", height = 350), width = 12),

@@ -1,36 +1,8 @@
-race_plot <- function(race_data = data, selected_hospital = ".", selected_sex = ".",
-                      selected_age = ".", selected_race = ".", selected_campaign = ".",
-                      selected_biospec = ".", selected_surveycomplete = "."){
+race_plot <- function(race_data = data){
   #load libraries
 library(tidyverse) 
 library(dplyr) 
 library(plotly)
-
-    #filter data by hospital if necessary and make label for graph
-  if(selected_hospital != "."){
-    race_data <- race_data[race_data$d_827220437 == selected_hospital,]
-  }
-  
-  if(selected_sex != "."){
-    race_data <- race_data[race_data$sex == selected_sex,]
-  }
-  
-  if(selected_age != "."){
-    race_data <- race_data[race_data$age == selected_age,]
-  }
-  
-  if(selected_race != "."){
-    race_data <- race_data[race_data$race == selected_race,]
-  }
-  if(selected_campaign != "."){
-    race_data <- race_data[race_data$active_camptype == selected_campaign,]
-  }
-  if(selected_biospec != "."){
-    race_data <- race_data[race_data$biocol_type == selected_biospec,]
-  }
-  if(selected_surveycomplete != "."){
-    race_data <- race_data[race_data$Msrv_complt == selected_surveycomplete,]
-  }
   
   # Check if the filtered dataset is empty
   if (nrow(race_data) <= 9) {
