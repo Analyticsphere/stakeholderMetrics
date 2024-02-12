@@ -17,10 +17,10 @@ library(plotly)
   }
   
   if(selected_age != "."){
-    activity_data <- activity_data[activity_data$AgeUP_cat == selected_age,]
+    activity_data <- activity_data[activity_data$age == selected_age,]
   }
   if(selected_race != "."){
-    activity_data <- activity_data[activity_data$Race_Ethnic == selected_race,]
+    activity_data <- activity_data[activity_data$race == selected_race,]
   }
   if(selected_campaign != "."){
     activity_data <- activity_data[activity_data$active_camptype == selected_campaign,]

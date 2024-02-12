@@ -16,7 +16,7 @@ library(plotly)
   }
   
   if(selected_age != "."){
-    race_data <- race_data[race_data$Age == selected_age,]
+    race_data <- race_data[race_data$age == selected_age,]
   }
   
   if(selected_race != "."){

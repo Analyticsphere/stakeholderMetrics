@@ -14,10 +14,10 @@ library(plotly)
     sex_data <- sex_data[sex_data$sex == selected_sex,]
   }
   if(selected_age != "."){
-    sex_data <- sex_data[sex_data$AgeUP_cat == selected_age,]
+    sex_data <- sex_data[sex_data$age == selected_age,]
   }
   if(selected_race != "."){
-    sex_data <- sex_data[sex_data$Race_Ethnic == selected_race,]
+    sex_data <- sex_data[sex_data$race == selected_race,]
   }
   if(selected_campaign != "."){
     sex_data <- sex_data[sex_data$active_camptype == selected_campaign,]

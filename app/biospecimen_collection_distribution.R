@@ -14,10 +14,10 @@ library(plotly)
     biocol_data <- biocol_data[biocol_data$sex == selected_sex,]
   }
   if(selected_age != "."){
-    biocol_data <- biocol_data[biocol_data$AgeUP_cat == selected_age,]
+    biocol_data <- biocol_data[biocol_data$age == selected_age,]
   }
   if(selected_race != "."){
-    biocol_data <- biocol_data[biocol_data$Race_Ethnic == selected_race,]
+    biocol_data <- biocol_data[biocol_data$race == selected_race,]
   }
   if(selected_campaign != "."){
     biocol_data <- biocol_data[biocol_data$active_camptype == selected_campaign,]

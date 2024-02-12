@@ -16,10 +16,10 @@ library(plotly)
     survey_data <- survey_data[survey_data$sex == selected_sex,]
   }
   if(selected_age != "."){
-    survey_data <- survey_data[survey_data$AgeUP_cat == selected_age,]
+    survey_data <- survey_data[survey_data$age == selected_age,]
   }
   if(selected_race != "."){
-    survey_data <- survey_data[survey_data$Race_Ethnic == selected_race,]
+    survey_data <- survey_data[survey_data$race == selected_race,]
   }
   if(selected_campaign != "."){
     survey_data <- survey_data[survey_data$active_camptype == selected_campaign,]
