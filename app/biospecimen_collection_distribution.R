@@ -1,33 +1,8 @@
-biospecimen_collection_distribution <- function(biocol_data = data, selected_hospital = ".", selected_sex = ".",
-                                                 selected_age = ".", selected_race = ".", selected_campaign = ".",
-                                                 selected_biospec = ".", selected_surveycomplete = "."){
+biospecimen_collection_distribution <- function(biocol_data = data){
 #load libraries
 library(tidyverse) 
 library(dplyr) 
 library(plotly)
-  
-  # Filter data based on provided criteria
-  if(selected_hospital != "."){
-    biocol_data <- biocol_data[biocol_data$d_827220437 == selected_hospital,]
-  }
-  if(selected_sex != "."){
-    biocol_data <- biocol_data[biocol_data$sex == selected_sex,]
-  }
-  if(selected_age != "."){
-    biocol_data <- biocol_data[biocol_data$age == selected_age,]
-  }
-  if(selected_race != "."){
-    biocol_data <- biocol_data[biocol_data$race == selected_race,]
-  }
-  if(selected_campaign != "."){
-    biocol_data <- biocol_data[biocol_data$active_camptype == selected_campaign,]
-  }
-  if(selected_biospec != "."){
-    biocol_data <- biocol_data[biocol_data$biocol_type == selected_biospec,]
-  }
-  if(selected_surveycomplete != "."){
-    biocol_data <- biocol_data[biocol_data$Msrv_complt == selected_surveycomplete,]
-  }
   # Check if the filtered dataset is empty
   if (nrow(biocol_data) <= 9) {
     # Return a message indicating not enough data

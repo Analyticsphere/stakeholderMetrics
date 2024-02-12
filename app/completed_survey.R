@@ -1,35 +1,10 @@
 
 
-completed_survey <- function(survey_data, selected_hospital = ".", selected_sex = ".",
-                             selected_age = ".", selected_race = ".", selected_campaign = ".",
-                             selected_biospec = ".", selected_surveycomplete = ".") {
+completed_survey <- function(survey_data) {
 # Load libraries
 library(tidyverse) 
 library(dplyr) 
 library(plotly)
-  
-  # Filter data based on the provided criteria
-  if(selected_hospital != "."){
-    survey_data <- survey_data[survey_data$d_827220437 == selected_hospital,]
-  }
-  if(selected_sex != "."){
-    survey_data <- survey_data[survey_data$sex == selected_sex,]
-  }
-  if(selected_age != "."){
-    survey_data <- survey_data[survey_data$age == selected_age,]
-  }
-  if(selected_race != "."){
-    survey_data <- survey_data[survey_data$race == selected_race,]
-  }
-  if(selected_campaign != "."){
-    survey_data <- survey_data[survey_data$active_camptype == selected_campaign,]
-  }
-  if(selected_biospec != "."){
-    survey_data <- survey_data[survey_data$biocol_type == selected_biospec,]
-  }
-  if(selected_surveycomplete != "."){
-    survey_data <- survey_data[survey_data$Msrv_complt == selected_surveycomplete,]
-  }
   
   # Check if the filtered dataset is empty
   if (nrow(survey_data) <= 9) {

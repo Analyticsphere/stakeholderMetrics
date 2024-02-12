@@ -1,36 +1,10 @@
 
 #this is to allow for a variety of filtering options (site/race etc.)
-activity_plot <- function(activity_data = data, selected_hospital = ".", selected_sex = ".",
-                            selected_age = ".", selected_race = ".", selected_campaign = ".",
-                            selected_biospec = ".", selected_surveycomplete = "."){
+activity_plot <- function(activity_data = data){
 library(tidyverse) 
 library(dplyr) 
 library(plotly)
 
-  #filter data by hospital if necessary and make label for graph
-  if(selected_hospital != "."){
-    activity_data <- activity_data[activity_data$d_827220437 == selected_hospital,]
-  }
-  
-  if(selected_sex != "."){
-    activity_data <- activity_data[activity_data$sex == selected_sex,]
-  }
-  
-  if(selected_age != "."){
-    activity_data <- activity_data[activity_data$age == selected_age,]
-  }
-  if(selected_race != "."){
-    activity_data <- activity_data[activity_data$race == selected_race,]
-  }
-  if(selected_campaign != "."){
-    activity_data <- activity_data[activity_data$active_camptype == selected_campaign,]
-  }
-  if(selected_biospec != "."){
-    activity_data <- activity_data[activity_data$biocol_type == selected_biospec,]
-  }
-  if(selected_surveycomplete != "."){
-    activity_data <- activity_data[activity_data$Msrv_complt == selected_surveycomplete,]
-  }
   # Check if the filtered dataset is empty
   if (nrow(activity_data) <= 9) {
     # Return a message indicating not enough data

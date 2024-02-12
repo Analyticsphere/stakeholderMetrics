@@ -1,33 +1,9 @@
 #male/female pie chart
-sex_distribution <- function(sex_data = data, selected_hospital = ".", selected_sex = ".",
-                             selected_age = ".", selected_race = ".", selected_campaign = ".",
-                             selected_biospec = ".", selected_surveycomplete = "."){
+sex_distribution <- function(sex_data = data){
 library(tidyverse) 
 library(dplyr) 
 library(plotly)
   
-  #filter data by hospital if necessary and make label for graph
-  if(selected_hospital != "."){
-    sex_data <- sex_data[sex_data$d_827220437 == selected_hospital, ]
-  }
-  if(selected_sex != "."){
-    sex_data <- sex_data[sex_data$sex == selected_sex,]
-  }
-  if(selected_age != "."){
-    sex_data <- sex_data[sex_data$age == selected_age,]
-  }
-  if(selected_race != "."){
-    sex_data <- sex_data[sex_data$race == selected_race,]
-  }
-  if(selected_campaign != "."){
-    sex_data <- sex_data[sex_data$active_camptype == selected_campaign,]
-  }
-  if(selected_biospec != "."){
-    sex_data <- sex_data[sex_data$biocol_type == selected_biospec,]
-  }
-  if(selected_surveycomplete != "."){
-    sex_data <- sex_data[sex_data$Msrv_complt == selected_surveycomplete,]
-  }
   # Check if the filtered dataset is empty
   if (nrow(sex_data) <= 9) {
     # Return a message indicating not enough data
