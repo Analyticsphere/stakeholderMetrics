@@ -16,37 +16,17 @@ library(expss)
 library(jsonlite)
 library(httr)
 
-# Define the custom CSS to apply the color palette
-customCSS <- "
-/* Header background color */
-.skin-blue .main-header .navbar {
-  background-color: rgb(42, 114, 165);
-}
-
-/* Sidebar background color */
-.skin-blue .main-sidebar {
-  background-color: rgb(28, 94, 134);
-}
-
-/* Box header background color */
-.box.box-solid>.box-header {
-  background-color: rgb(49, 159, 190);
-}
-
-/* Accent color for box backgrounds or elements */
-.accent-bg {
-  background-color: rgb(255, 191, 23);
-}
-
-"
+#source the custom aesthetic values for fonts and colors
+source("./customCSS.R", local = TRUE)
+custom_aesthetics <- customCSS()
 
 server <- function(input, output, session){
   
   #call data once for entire dashboard
   #authentication step for Posit
   #this code was written by D Russ
- # source("./get_authentication.R", local = TRUE)
-#  get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+  source("./get_authentication.R", local = TRUE)
+  get_authentication(service_account_key = "SERVICE_ACCT_KEY")
   
   #clean, re-label and generate some variables to plot
   source("./clean_data.R", local = TRUE)
@@ -111,12 +91,12 @@ ui <- dashboardPage(
     )
   ),
   dashboardBody(
-      tags$head(tags$style(HTML(customCSS))), # Apply the custom CSS
+      tags$head(tags$style(HTML(custom_aesthetics))), # Apply the custom CSS
       tabItems(
       tabItem(tabName = "dashboard",
               h2(uiOutput("dynamicTitle")),
               fluidRow(
-                box(solidHeader = FALSE, class = "box-header", 
+                box(solidHeader = FALSE, 
                     selectInput("siteFilter", "Choose Site:",
                                 choices = c("All Hospitals" = ".",
                                             "HealthPartners" = 531629870,
@@ -133,7 +113,7 @@ ui <- dashboardPage(
                                 selected = "All Hospitals"),
                     actionButton("applyHospitalFilter", "Apply Filters")
                 ),
-                box(solidHeader = TRUE,
+                box(solidHeader = FALSE,
                     selectInput("sexFilter", "Choose Gender:",
                                 choices = c("All" = ".",
                                             "Male" = "Male",
@@ -142,7 +122,7 @@ ui <- dashboardPage(
                                 selected = "All"),
                     actionButton("applySexFilters", "Apply Filters")
                 ),
-                box(solidHeader = TRUE,
+                box(solidHeader = FALSE,
                     selectInput("ageFilter", "Choose Age Bucket:",
                                 choices = c("All" = ".",
                                             "40-45" = "40-45",
@@ -155,7 +135,7 @@ ui <- dashboardPage(
                                 selected = "All"),
                     actionButton("applyAgeFilters", "Apply Filters")
                 ),
-                box(solidHeader = TRUE,
+                box(solidHeader = FALSE, class = "box-header", tags$style(type='text/css', ".selectize-input { font-family: Montserrat; } .selectize-dropdown { font-family: Montserrat; }"),
                     selectInput("raceFilter", "Choose Race:",
                                 choices = c("All" = ".",
                                             "American Indian or Alaska Native" = "American Indian or Alaska Native",
@@ -172,7 +152,7 @@ ui <- dashboardPage(
                                 selected = "All"),
                     actionButton("applyRaceFilters", "Apply Race Filters")
                 ),
-                box(solidHeader = TRUE, 
+                box(solidHeader = FALSE,
                     selectInput("campaignFilter", "Choose Campaign:",
                                 choices = c("All" = ".",
                                             "Random" = 926338735,
@@ -191,7 +171,7 @@ ui <- dashboardPage(
                                             "NA/Unknown" = NA),
                                 selected = "All"),
                     actionButton("applyCampaignFilters", "Apply Filters")),
-                box(solidHeader = TRUE, 
+                box(solidHeader = FALSE,
                     selectInput("biospecFilter", "Choose Biospecimen Collection Type:",
                                 choices = c("All" = ".",
                                             "All 3 Sample Donations" =  "All 3 Sample Donations",
@@ -204,7 +184,7 @@ ui <- dashboardPage(
                                             "No Samples" = "No Samples"),
                                 selected = "All"),
                     actionButton("applyBiospFilters", "Apply Filters")),
-                box(solidHeader = TRUE, 
+                box(solidHeader = FALSE,
                     selectInput("surveycompleteFilter", "Choose Survey Completion Level:",
                                 choices = c("All" = ".",
                                             "BOH only" =  "BOH only",
