@@ -25,7 +25,9 @@ names(sex_df) <- c("sex", "Count")
 # Create a Plotly pie chart
 fig <- plot_ly(sex_df, labels = ~c("Female", "Nonbinary", "Male"), values = ~Count, type = 'pie',
                  textinfo = 'label+percent',
-                 insidetextorientation = 'radial')
+                 insidetextorientation = 'radial',
+                marker = list(colors = c('rgb(42, 114, 165)', 'rgb(28, 94, 134)', 'rgb(49, 159, 190)'))) # Use the specified colors
+)
   
 # Customize the layout
 curr.date <- Sys.Date()
