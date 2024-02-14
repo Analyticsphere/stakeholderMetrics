@@ -116,7 +116,7 @@ ui <- dashboardPage(
       tabItem(tabName = "dashboard",
               h2(uiOutput("dynamicTitle")),
               fluidRow(
-                box(solidHeader = TRUE, class = "box-header", 
+                box(solidHeader = FALSE, class = "box-header", 
                     selectInput("siteFilter", "Choose Site:",
                                 choices = c("All Hospitals" = ".",
                                             "HealthPartners" = 531629870,
@@ -133,7 +133,7 @@ ui <- dashboardPage(
                                 selected = "All Hospitals"),
                     actionButton("applyHospitalFilter", "Apply Filters")
                 ),
-                box(solidHeader = TRUE, class = "box-header", 
+                box(solidHeader = TRUE,
                     selectInput("sexFilter", "Choose Gender:",
                                 choices = c("All" = ".",
                                             "Male" = "Male",
@@ -142,7 +142,7 @@ ui <- dashboardPage(
                                 selected = "All"),
                     actionButton("applySexFilters", "Apply Filters")
                 ),
-                box(solidHeader = TRUE, class = "box-header", 
+                box(solidHeader = TRUE,
                     selectInput("ageFilter", "Choose Age Bucket:",
                                 choices = c("All" = ".",
                                             "40-45" = "40-45",
@@ -155,7 +155,7 @@ ui <- dashboardPage(
                                 selected = "All"),
                     actionButton("applyAgeFilters", "Apply Filters")
                 ),
-                box(solidHeader = TRUE, class = "box-header", 
+                box(solidHeader = TRUE,
                     selectInput("raceFilter", "Choose Race:",
                                 choices = c("All" = ".",
                                             "American Indian or Alaska Native" = "American Indian or Alaska Native",
@@ -172,7 +172,7 @@ ui <- dashboardPage(
                                 selected = "All"),
                     actionButton("applyRaceFilters", "Apply Race Filters")
                 ),
-                box(solidHeader = TRUE, class = "box-header", 
+                box(solidHeader = TRUE, 
                     selectInput("campaignFilter", "Choose Campaign:",
                                 choices = c("All" = ".",
                                             "Random" = 926338735,
@@ -191,7 +191,7 @@ ui <- dashboardPage(
                                             "NA/Unknown" = NA),
                                 selected = "All"),
                     actionButton("applyCampaignFilters", "Apply Filters")),
-                box(solidHeader = TRUE, class = "box-header", 
+                box(solidHeader = TRUE, 
                     selectInput("biospecFilter", "Choose Biospecimen Collection Type:",
                                 choices = c("All" = ".",
                                             "All 3 Sample Donations" =  "All 3 Sample Donations",
@@ -204,7 +204,7 @@ ui <- dashboardPage(
                                             "No Samples" = "No Samples"),
                                 selected = "All"),
                     actionButton("applyBiospFilters", "Apply Filters")),
-                box(solidHeader = TRUE, class = "box-header", 
+                box(solidHeader = TRUE, 
                     selectInput("surveycompleteFilter", "Choose Survey Completion Level:",
                                 choices = c("All" = ".",
                                             "BOH only" =  "BOH only",
