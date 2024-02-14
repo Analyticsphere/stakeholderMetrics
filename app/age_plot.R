@@ -17,9 +17,10 @@ library(plotly)
                   marker = list(line = list(color = 'black', width = 1)))
   #This variable is from the user profile, therefore its self-reported
   # Update layout
-  plot <- plot %>% layout(title = paste0("Self Reported Ages of Verified Participants as of ", Sys.Date()),
-                          xaxis = list(title = "Age"),
-                          yaxis = list(title = "Count"))
+  plot <- plot %>% layout(title = list(text = paste0("Self Reported Ages of Verified Participants as of ", Sys.Date())),
+                          xaxis = list(title = list(text = "Age")),
+                          yaxis = list(title = list(text = "Count")),
+                          font = list(family = "Montserrat"))
   plot
 
 }

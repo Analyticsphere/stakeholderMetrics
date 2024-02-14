@@ -31,7 +31,8 @@ fig <- plot_ly(sex_df, labels = ~c("Female", "Nonbinary", "Male"), values = ~Cou
 curr.date <- Sys.Date()
 fig <- fig %>% layout(title = paste0("Site Reported Sex of Participants as of ",curr.date),
                         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+                        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                      font = list(family = "Montserrat"))
   
   # Print the plot
   fig
