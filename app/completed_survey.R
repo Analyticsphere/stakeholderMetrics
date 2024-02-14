@@ -1,6 +1,6 @@
 
 
-completed_survey <- function(survey_data) {
+completed_survey <- function(survey_data = data) {
 # Load libraries
 library(tidyverse) 
 library(dplyr) 
@@ -32,7 +32,8 @@ fig <- fig %>% layout(title = paste0("Survey Completion Status as of ", curr.dat
                             showarrow = F, font = list(size = 7),
                             xanchor = 'left', align = 'left')),
                           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+                          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                          font = list(family = "Montserrat"))
     
     # Print the plot
     fig

@@ -70,9 +70,14 @@ Fig_all.plotly <- plot_ly() %>%
               y = ~value) %>%
     layout(
       title = list(text = paste0("Cumulative Number of Participants by Study Activities \n as of ", currentDate)),
-      xaxis = list(title = "Date", tickvals = unique_monthly_dates, ticktext = format(unique_monthly_dates, "%y-%m-%d"), showline = TRUE),
-      yaxis = list(title = "Number of Participants", showline = TRUE),
-      legend = list(x = 0, y = 1, traceorder = "normal", font = list(family = "sans-serif", size = 12, color = "black")),
+      xaxis = list(title = list(text ="Date"),
+                   tickvals = unique_monthly_dates,
+                   ticktext = format(unique_monthly_dates, "%y-%m-%d"),
+                   showline = TRUE),
+      yaxis = list(title = list(text ="Number of Participants"),
+                   showline = TRUE),
+      legend = list(x = 0, y = 1, traceorder = "normal"),
+      font = list(family = "Montserrat"),
       showlegend = TRUE
     )
   
