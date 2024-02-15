@@ -1,6 +1,25 @@
 # Define the custom CSS to apply the color palette
 customCSS <- function(){
 c <- paste0(
+  " /* Remove borders from selectInput and actionButton */
+.selectize-control, .btn, .box {
+border: none !important; /* Removes border */
+box-shadow: none !important; /* Removes shadow if any */
+}
+",
+"/* Remove borders from plotly graphs */
+.plot-container .plotly {
+border: none !important;
+}",
+"/* Custom CSS to set the background color to white */
+    .content-wrapper, .main-footer {
+      background-color: #FFFFFF !important;
+    }
+  ",
+"/* Header background color */
+.skin-blue .main-header .navbar {
+  background-color: rgb(42, 114, 165);
+}",
 "/* Header background color */
 .skin-blue .main-header .navbar {
   background-color: rgb(42, 114, 165);
