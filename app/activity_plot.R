@@ -77,7 +77,7 @@ Fig_all.plotly <- plot_ly() %>%
       yaxis = list(title = list(text ="Number of Participants"),
                    showline = TRUE),
       legend = list(x = 0, y = 1, traceorder = "normal"),
-      font = list(family = "Montserrat"),
+      font = list(family = "Noto Sans"),
       showlegend = TRUE
     )
   

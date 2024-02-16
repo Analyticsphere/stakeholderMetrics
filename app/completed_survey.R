@@ -33,7 +33,7 @@ fig <- fig %>% layout(title = paste0("Survey Completion Status as of ", curr.dat
                             xanchor = 'left', align = 'left')),
                           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                          font = list(family = "Montserrat"))
+                          font = list(family = "Noto Sans"))
     
     # Print the plot
     fig

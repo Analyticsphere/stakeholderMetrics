@@ -27,7 +27,7 @@ curr.date <- Sys.Date()
 fig <- fig %>% layout(
   title = list(
     text = paste0("Distribution of Biospecimen Collections as of ", curr.date),
-    font = list(family = "Montserrat")
+    font = list(family = "Noto Sans")
   ),
   xaxis = list(showgrid = FALSE,
     zeroline = FALSE,
@@ -39,7 +39,7 @@ fig <- fig %>% layout(
     showticklabels = FALSE
   ),
   showlegend = TRUE,
-  font = list(family = "Montserrat")
+  font = list(family = "Noto Sans")
 )
   
   # Print the plot

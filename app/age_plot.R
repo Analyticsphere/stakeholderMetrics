@@ -20,7 +20,7 @@ library(plotly)
   plot <- plot %>% layout(title = list(text = paste0("Self Reported Ages of Verified Participants as of ", Sys.Date())),
                           xaxis = list(title = list(text = "Age")),
                           yaxis = list(title = list(text = "Count")),
-                          font = list(family = "Montserrat"))
+                          font = list(family = "Noto Sans"))
   plot
 
 }
