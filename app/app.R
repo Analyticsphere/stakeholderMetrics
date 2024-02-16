@@ -27,25 +27,32 @@ server <- function(input, output, session){
   #this code was written by D Russ
   #  source("./get_authentication.R", local = TRUE)
   #  get_authentication(service_account_key = "SERVICE_ACCT_KEY")
-  
-  #get participant data
-  #  
-  
-  # Define a reactive expression that filters the data
-  observeEvent(input$applyFilters, {
-    filtered_verified_data <- eventReactive(input$applyFilters, {
+
+#load verified data
+verified_data <- reactive({
       source("./clean_data.R", local = TRUE)
       source("./get_data.R", local=TRUE)
       data <- get_data() # Fetch your data
-      clean_data(data, type = "verified") %>% 
-        filter((input$siteFilter == "." | d_827220437 == input$siteFilter) &
+      clean_data(data, type = "verified")
+})
+
+  
+  # Define a reactive expression that filters the data
+    filtered_verified_data <- reactive({
+        req(verified_data())
+        if(input$applyFilters){
+          verified_data()%>%
+            filter((input$siteFilter == "." | d_827220437 == input$siteFilter) &
                  (input$sexFilter == "." | sex == input$sexFilter) &
                  (input$ageFilter == "." | Age == input$ageFilter)&
                  (input$raceFilter == "." | race == input$raceFilter)&
                  (input$campaignFilter == "." | active_camptype == input$campaignFilter)&
                  (input$biospecFilter == "." | biocol_type == input$biospecFilter)&
                  (input$surveycompleteFilter == "." | Msrv_complt == input$surveycompleteFilter))
-    })
+        }else{
+          verified_data()
+        }
+})
     
     source("./activity_plot.R", local = TRUE)
     output$plot1 <- renderPlotly({activity_plot(activity_data=filtered_verified_data())})
@@ -65,32 +72,38 @@ server <- function(input, output, session){
     source("./completed_survey.R", local = TRUE)
     output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
     
-  })
-  
-  observeEvent(input$applyIPfilters, {
-    filtered_IP_data <- eventReactive(input$applyFilters, {
+
+invited_participant_data <- reactive({
       source("./clean_data.R", local = TRUE)
       source("./get_data.R", local=TRUE)
       invited_participant_data <- clean_data(get_data(project =
-                                                        "nih-nci-dceg-connect-bq2-prod",
+                                                      "nih-nci-dceg-connect-bq2-prod",
                                                       dataset = "StakeHolderMetrics_RS",
                                                       table = "invited_participants_complete"),
-                                             type = "invited") %>% 
-        filter((input$IPsiteFilter == "." | site == input$IPsiteFilter) &
+                                                      type = "invited")
+})
+
+
+filtered_IP_data <- reactive({
+        req(invited_participant_data())
+        if(input$applyIPfilters){
+          invited_participant_data()%>%
+            filter((input$IPsiteFilter == "." | site == input$IPsiteFilter) &
                  (input$IPsexFilter == "." | sex == input$IPsexFilter) &
                  (input$IPageFilter == "." | Age == input$IPageFilter)&
                  (input$IPraceFilter == "." | race == input$IPraceFilter))
-    })
-    
-    
-    wd <- "./"
-    source(paste0(wd,"age_plot.R"), local = TRUE)
+        }else{
+          invited_participant_data()
+        }
+})
+
+    source("./age_plot.R", local = TRUE)
     output$invited_plot1 <- renderPlotly({age_plot(age_data = filtered_IP_data())})
     
-    source(paste0(wd,"race_plot.R"), local = TRUE)
+    source("./race_plot.R", local = TRUE)
     output$invited_plot2 <- renderPlotly({race_plot(race_data = filtered_IP_data())})
-    
-  })
+
+
 }
   
   # Define UI
