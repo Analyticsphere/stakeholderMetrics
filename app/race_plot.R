@@ -29,7 +29,7 @@ curr.date <- Sys.Date()
 fig <- fig %>% layout(title = paste0("Race of Participants Who Completed BOH \n Section of First Survey as of ",curr.date),
                         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                        font = list(family = "Montserrat"))
+                        font = list(family = "Noto Sans"))
   
   # Print the plot
   fig

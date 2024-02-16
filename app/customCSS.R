@@ -1,7 +1,8 @@
 # Define the custom CSS to apply the color palette
 customCSS <- function(){
 c <- paste0(
-  " /* Remove borders from selectInput and actionButton */
+"@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');",
+" /* Remove borders from selectInput and actionButton */
 .selectize-control, .btn, .box {
 border: none !important; /* Removes border */
 box-shadow: none !important; /* Removes shadow if any */
@@ -39,14 +40,14 @@ border: none !important;
 }",
 "/* Apply Montserrat font to selectize inputs, dropdowns, labels, and action buttons */
 .selectize-input, .selectize-dropdown, .shiny-input-container label, .btn {
-  font-family: 'Montserrat' !important;
+  font-family: 'Noto Sans' !important;
 }",
 "/* Apply Montserrat font to the main dashboard title */
 .skin-blue .main-header .logo, .skin-blue .main-header .navbar-brand {
-  font-family: 'Montserrat' !important;
-  font-size: 15px;
+  font-family: 'Noto Sans' !important;
+  font-size: 14px;
 }",
 "/* Apply Montserrat font to sidebar menu items */
-.skin-blue .sidebar-menu li a {font-family: 'Montserrat' !important;}"
+.skin-blue .sidebar-menu li a {font-family: 'Noto Sans' !important;}"
 )}
 
