@@ -45,7 +45,7 @@ border: none !important;
 "/* Apply Montserrat font to the main dashboard title */
 .skin-blue .main-header .logo, .skin-blue .main-header .navbar-brand {
   font-family: 'Noto Sans' !important;
-  font-size: 14px;
+  font-size: 13px;
 }",
 "/* Apply Montserrat font to sidebar menu items */
 .skin-blue .sidebar-menu li a {font-family: 'Noto Sans' !important;}"

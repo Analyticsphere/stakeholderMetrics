@@ -36,7 +36,11 @@ server <- function(input, output, session){
   data <- clean_data(data = data)
   
   #get participant data
-  invited_participant_data <- get_data(project = "nih-nci-dceg-connect-bq2-prod", dataset = "StakeHolderMetrics_RS", table = "invited_participants_complete")
+  invited_participant_data <- clean_data(get_data(project =
+   "nih-nci-dceg-connect-bq2-prod",
+    dataset = "StakeHolderMetrics_RS",
+     table = "invited_participants_complete"),
+     type = "invited")
   
   # Define a reactive expression that filters the data
   filtered_verified_data <- reactive({
@@ -59,7 +63,8 @@ server <- function(input, output, session){
     
     # Apply filtering based on user input
     invited_participant_data %>%
-      filter((input$IPsexFilter == "." | sex == input$IPsexFilter) &
+      filter((input$IPsiteFilter == "." | site == input$IPsiteFilter) &
+               (input$IPsexFilter == "." | sex == input$IPsexFilter) &
                (input$IPageFilter == "." | Age == input$IPageFilter)&
                (input$IPraceFilter == "." | race == input$IPraceFilter))
   })
@@ -94,7 +99,7 @@ server <- function(input, output, session){
 
 # Define UI
 ui <- dashboardPage(
-  dashboardHeader(title = "Connect for Cancer Prevention Stakeholder Metrics Dashboard"),
+  dashboardHeader(title = "Connect for Cancer Prevention"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Plot Dashboard", tabName = "dashboard", icon = icon("dashboard")),
@@ -246,19 +251,29 @@ ui <- dashboardPage(
                 box(solidHeader = FALSE,
                     selectInput("IPraceFilter", "Choose Race:",
                                 choices = c("All" = ".",
-                                            "American Indian or Alaska Native" = "American Indian or Alaska Native",
-                                            "Asian" = "Asian", 
-                                            "Black, African American, or African" = "Black, African American, or African",
-                                            "Hawaiian or other Pacific Islander" = "Hawaiian or other Pacific Islander",
-                                            "Hispanic, Latino, or Spanish" = "Hispanic, Latino, or Spanish",
-                                            "Middle Eastern or North African" = "Middle Eastern or North African",
-                                            "Multi-race" = "Multi-race",
-                                            "Other" = "Other",
-                                            "Skipped this question" = "Skipped this question",
+                                            "OTHER" = "OTHER",
                                             "UNKNOWN" = "UNKNOWN", 
-                                            "White" = "White"),
+                                            "WHITE, NON-HISPANIC" = "WHITE, NON-HISPANIC",
+                                            "NA" = "NA"),
                                 selected = "All"),
                     actionButton("applyIPRaceFilters", "Apply Race Filters")
+                ),
+                box(solidHeader = FALSE, 
+                    selectInput("IPsiteFilter", "Choose Site:",
+                                choices = c("All Hospitals" = ".",
+                                            "HealthPartners" = 531629870,
+                                            "Henry Ford Health System" = 548392715,
+                                            "Kaiser Permanente Colorado" = 125001209,
+                                            "Kaiser Permanente Georgia" = 327912200,
+                                            "Kaiser Permanente Hawaii" = 300267574,
+                                            "Kaiser Permanente Northwest" = 452412599,
+                                            "Marshfield Clinic Health System" = 303349821,
+                                            "Sanford Health" = 657167265, 
+                                            "University of Chicago Medicine" = 809703864,
+                                            "National Cancer Institute" = 517700004,
+                                            "National Cancer Institute" = 13, "Other" = 181769837),
+                                selected = "All Hospitals"),
+                    actionButton("applyIPHospitalFilter", "Apply Filters")
                 ),
                 box(plotlyOutput("invited_plot1", height = 350), width = 12),
                 box(plotlyOutput("invited_plot2", height = 350), width = 12))
