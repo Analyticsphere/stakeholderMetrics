@@ -1,4 +1,5 @@
-clean_data <- function(data = data){
+clean_data <- function(data = data, type = "verified"){
+  if(type == "verified"){
 data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
                                    d_827220437 = c("HealthPartners"= 531629870,
                                                    "Henry Ford Health System"=548392715,
@@ -40,4 +41,26 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 != "231311385" & d_663265240 == "231311385" ~ "BOH, MRE, and LAW",
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 == "231311385" & d_663265240 == "231311385" ~ "BOH, SAS, and LAW",
         d_100767870 == "104430631" & d_949302066 != "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "No Survey Sections"))
+}else{
+data <- expss::apply_labels(data,#RcrtES_Site_v1r0
+                                   site = c("HealthPartners"= 531629870,
+                                                   "Henry Ford Health System"=548392715,
+                                                   "Kaiser Permanente Colorado" = 125001209,
+                                                   "Kaiser Permanente Georgia" = 327912200,
+                                                   "Kaiser Permanente Hawaii" = 300267574,
+                                                   "Kaiser Permanente Northwest" = 452412599,
+                                                   "Marshfield Clinic Health System" = 303349821,
+                                                   "Sanford Health" = 657167265, 
+                                                   "University of Chicago Medicine" = 809703864,
+                                                   "National Cancer Institute" = 517700004,
+                                                   "National Cancer Institute" = 13,"Other" = 181769837))
+  data <- data %>%
+    mutate(
+      sex = case_when(
+        sex == "536341288" | sex == "536341288" ~ "Female",
+        sex == "654207589" | sex == "654207589" ~ "Male",
+        sex == "830573274" ~ "Intersex or Other",
+        sex %in% c("178420302", NA) | sex %in% c("178420302", NA) ~ "Unknown"
+      ))
+}
 }
