@@ -25,8 +25,8 @@ server <- function(input, output, session){
   #call data once for entire dashboard
   #authentication step for Posit
   #this code was written by D Russ
-  source("./get_authentication.R", local = TRUE)
-  get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+#  source("./get_authentication.R", local = TRUE)
+#  get_authentication(service_account_key = "SERVICE_ACCT_KEY")
   
   #clean, re-label and generate some variables to plot
   source("./clean_data.R", local = TRUE)
@@ -52,6 +52,17 @@ server <- function(input, output, session){
                (input$biospecFilter == "." | biocol_type == input$biospecFilter)&
                (input$surveycompleteFilter == "." | Msrv_complt == input$surveycompleteFilter))
   })
+
+
+  filtered_IP_data <- reactive({
+    req(invited_participant_data) # Ensure 'data' is loaded
+    
+    # Apply filtering based on user input
+    invited_participant_data %>%
+      filter((input$IPsexFilter == "." | sex == input$IPsexFilter) &
+               (input$IPageFilter == "." | Age == input$IPageFilter)&
+               (input$IPraceFilter == "." | race == input$IPraceFilter))
+  })
   
   wd <- "./"
   source(paste0(wd,"activity_plot.R"), local = TRUE)
@@ -73,10 +84,10 @@ server <- function(input, output, session){
   output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
   
   source(paste0(wd,"age_plot.R"), local = TRUE)
-  output$invited_plot1 <- renderPlotly({age_plot(age_data = invited_participant_data)})
+  output$invited_plot1 <- renderPlotly({age_plot(age_data = filtered_IP_data())})
   
   source(paste0(wd,"race_plot.R"), local = TRUE)
-  output$invited_plot2 <- renderPlotly({race_plot(race_data = invited_participant_data)})
+  output$invited_plot2 <- renderPlotly({race_plot(race_data = filtered_IP_data())})
   
 }
 
@@ -135,7 +146,7 @@ ui <- dashboardPage(
                                 selected = "All"),
                     actionButton("applyAgeFilters", "Apply Filters")
                 ),
-                box(solidHeader = FALSE, class = "box-header", tags$style(type='text/css', ".selectize-input { font-family: Montserrat; } .selectize-dropdown { font-family: Montserrat; }"),
+                box(solidHeader = FALSE,
                     selectInput("raceFilter", "Choose Race:",
                                 choices = c("All" = ".",
                                             "American Indian or Alaska Native" = "American Indian or Alaska Native",
@@ -210,7 +221,45 @@ ui <- dashboardPage(
       # Add the "Forecasts" tab item
       tabItem(tabName = "invited_participants",
               h2("Invited Participant Dashboard"),
-              fluidRow(
+              fluidRow(box(solidHeader = FALSE,
+                    selectInput("IPageFilter", "Age Range:",
+                                choices = c("All" = ".",
+                                            "40-45" = "40-45",
+                                            "46-50" = "46-50", 
+                                            "51-55" = "51-55",
+                                            "56-60" = "56-60",
+                                            "61-65" = "61-65",
+                                            "66-70" = "66-70",
+                                            "UNKNOWN" = "UNKNOWN"),
+                                selected = "All"),
+                    actionButton("applyIPAgeFilters", "Apply Filters")
+                ),
+                box(solidHeader = FALSE,
+                    selectInput("IPsexFilter", "Choose Gender:",
+                                choices = c("All" = ".",
+                                            "Male" = "Male",
+                                            "Female" = "Female", 
+                                            "Other" = "Other"),
+                                selected = "All"),
+                    actionButton("applyIPSexFilters", "Apply Filters")
+                ),
+                box(solidHeader = FALSE,
+                    selectInput("IPraceFilter", "Choose Race:",
+                                choices = c("All" = ".",
+                                            "American Indian or Alaska Native" = "American Indian or Alaska Native",
+                                            "Asian" = "Asian", 
+                                            "Black, African American, or African" = "Black, African American, or African",
+                                            "Hawaiian or other Pacific Islander" = "Hawaiian or other Pacific Islander",
+                                            "Hispanic, Latino, or Spanish" = "Hispanic, Latino, or Spanish",
+                                            "Middle Eastern or North African" = "Middle Eastern or North African",
+                                            "Multi-race" = "Multi-race",
+                                            "Other" = "Other",
+                                            "Skipped this question" = "Skipped this question",
+                                            "UNKNOWN" = "UNKNOWN", 
+                                            "White" = "White"),
+                                selected = "All"),
+                    actionButton("applyIPRaceFilters", "Apply Race Filters")
+                ),
                 box(plotlyOutput("invited_plot1", height = 350), width = 12),
                 box(plotlyOutput("invited_plot2", height = 350), width = 12))
       )
