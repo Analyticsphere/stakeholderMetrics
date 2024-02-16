@@ -32,22 +32,22 @@ server <- function(input, output, session){
   source("./clean_data.R", local = TRUE)
   source("./get_data.R", local=TRUE)
   print("retrieving data")
-  data <- get_data()
-  data <- clean_data(data = data)
+#  data <- get_data()
+#  data <- clean_data(data = data)
   
   #get participant data
-  invited_participant_data <- clean_data(get_data(project =
-   "nih-nci-dceg-connect-bq2-prod",
-    dataset = "StakeHolderMetrics_RS",
-     table = "invited_participants_complete"),
-     type = "invited")
+#  invited_participant_data <- clean_data(get_data(project =
+#   "nih-nci-dceg-connect-bq2-prod",
+#    dataset = "StakeHolderMetrics_RS",
+#     table = "invited_participants_complete"),
+#     type = "invited")
   
   # Define a reactive expression that filters the data
-  filtered_verified_data <- reactive({
-    req(data) # Ensure 'data' is loaded
-    
-    # Apply filtering based on user input
-    data %>%
+  observeEvent(input$applyFilters, {
+    filtered_verified_data <- eventReactive(input$applyFilters, {
+      
+      data <- get_data() # Fetch your data
+      clean_data(data) %>% 
       filter((input$siteFilter == "." | d_827220437 == input$siteFilter) &
                (input$sexFilter == "." | sex == input$sexFilter) &
                (input$ageFilter == "." | Age == input$ageFilter)&
@@ -56,7 +56,26 @@ server <- function(input, output, session){
                (input$biospecFilter == "." | biocol_type == input$biospecFilter)&
                (input$surveycompleteFilter == "." | Msrv_complt == input$surveycompleteFilter))
   })
-
+    wd <- "./"
+    source(paste0(wd,"activity_plot.R"), local = TRUE)
+    output$plot1 <- renderPlotly({activity_plot(activity_data=filtered_verified_data())})
+    
+    source(paste0(wd,"age_plot.R"), local = TRUE)
+    output$plot2 <- renderPlotly({age_plot(age_data = filtered_verified_data())})
+    
+    source(paste0(wd,"race_plot.R"), local = TRUE)
+    output$plot3 <- renderPlotly({race_plot(race_data = filtered_verified_data())})
+    
+    source(paste0(wd,"sex_distribution.R"), local = TRUE)
+    output$plot4 <- renderPlotly({sex_distribution(sex_data = filtered_verified_data())})
+    
+    source(paste0(wd,"biospecimen_collection_distribution.R"), local = TRUE)
+    output$plot5 <- renderPlotly({biospecimen_collection_distribution(biocol_data = filtered_verified_data())})
+    
+    source(paste0(wd,"completed_survey.R"), local = TRUE)
+    output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
+    
+})
 
   filtered_IP_data <- reactive({
     req(invited_participant_data) # Ensure 'data' is loaded
@@ -69,25 +88,8 @@ server <- function(input, output, session){
                (input$IPraceFilter == "." | race == input$IPraceFilter))
   })
   
+
   wd <- "./"
-  source(paste0(wd,"activity_plot.R"), local = TRUE)
-  output$plot1 <- renderPlotly({activity_plot(activity_data=filtered_verified_data())})
-  
-  source(paste0(wd,"age_plot.R"), local = TRUE)
-  output$plot2 <- renderPlotly({age_plot(age_data = filtered_verified_data())})
-  
-  source(paste0(wd,"race_plot.R"), local = TRUE)
-  output$plot3 <- renderPlotly({race_plot(race_data = filtered_verified_data())})
-  
-  source(paste0(wd,"sex_distribution.R"), local = TRUE)
-  output$plot4 <- renderPlotly({sex_distribution(sex_data = filtered_verified_data())})
-  
-  source(paste0(wd,"biospecimen_collection_distribution.R"), local = TRUE)
-  output$plot5 <- renderPlotly({biospecimen_collection_distribution(biocol_data = filtered_verified_data())})
-  
-  source(paste0(wd,"completed_survey.R"), local = TRUE)
-  output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
-  
   source(paste0(wd,"age_plot.R"), local = TRUE)
   output$invited_plot1 <- renderPlotly({age_plot(age_data = filtered_IP_data())})
   
@@ -109,11 +111,11 @@ ui <- dashboardPage(
   dashboardBody(
       tags$head(tags$style(HTML(custom_aesthetics))), # Apply the custom CSS
       tabItems(
-      tabItem(tabName = "dashboard",
-              h2(uiOutput("dynamicTitle")),
+        tabItem(tabName = "dashboard",
               fluidRow(
-                box(solidHeader = FALSE, 
-                    selectInput("siteFilter", "Choose Site:",
+                      column(4,
+                             box(solidHeader = FALSE, title = "Choose Filters:", width = 12,
+                    selectInput("siteFilter", "Site",
                                 choices = c("All Hospitals" = ".",
                                             "HealthPartners" = 531629870,
                                             "Henry Ford Health System" = 548392715,
@@ -127,19 +129,13 @@ ui <- dashboardPage(
                                             "National Cancer Institute" = 517700004,
                                             "National Cancer Institute" = 13, "Other" = 181769837),
                                 selected = "All Hospitals"),
-                    actionButton("applyHospitalFilter", "Apply Filters")
-                ),
-                box(solidHeader = FALSE,
-                    selectInput("sexFilter", "Choose Gender:",
+                    selectInput("sexFilter", "Gender",
                                 choices = c("All" = ".",
                                             "Male" = "Male",
                                             "Female" = "Female", 
                                             "Other" = "Other"),
                                 selected = "All"),
-                    actionButton("applySexFilters", "Apply Filters")
-                ),
-                box(solidHeader = FALSE,
-                    selectInput("ageFilter", "Choose Age Bucket:",
+                    selectInput("ageFilter", "Age",
                                 choices = c("All" = ".",
                                             "40-45" = "40-45",
                                             "46-50" = "46-50", 
@@ -149,10 +145,7 @@ ui <- dashboardPage(
                                             "66-70" = "66-70",
                                             "UNKNOWN" = "UNKNOWN"),
                                 selected = "All"),
-                    actionButton("applyAgeFilters", "Apply Filters")
-                ),
-                box(solidHeader = FALSE,
-                    selectInput("raceFilter", "Choose Race:",
+                    selectInput("raceFilter", "Race",
                                 choices = c("All" = ".",
                                             "American Indian or Alaska Native" = "American Indian or Alaska Native",
                                             "Asian" = "Asian", 
@@ -166,10 +159,7 @@ ui <- dashboardPage(
                                             "UNKNOWN" = "UNKNOWN", 
                                             "White" = "White"),
                                 selected = "All"),
-                    actionButton("applyRaceFilters", "Apply Race Filters")
-                ),
-                box(solidHeader = FALSE,
-                    selectInput("campaignFilter", "Choose Campaign:",
+                    selectInput("campaignFilter", "Campaign",
                                 choices = c("All" = ".",
                                             "Random" = 926338735,
                                             "Screening appointment" = 348281054,
@@ -186,9 +176,7 @@ ui <- dashboardPage(
                                             "None of these apply" = 398561594,
                                             "NA/Unknown" = NA),
                                 selected = "All"),
-                    actionButton("applyCampaignFilters", "Apply Filters")),
-                box(solidHeader = FALSE,
-                    selectInput("biospecFilter", "Choose Biospecimen Collection Type:",
+                    selectInput("biospecFilter", "Biospecimen Collection Type",
                                 choices = c("All" = ".",
                                             "All 3 Sample Donations" =  "All 3 Sample Donations",
                                             "Blood & Urine" = "Blood & Urine",
@@ -199,9 +187,7 @@ ui <- dashboardPage(
                                             "Mouthwash Only" = "Mouthwash Only",
                                             "No Samples" = "No Samples"),
                                 selected = "All"),
-                    actionButton("applyBiospFilters", "Apply Filters")),
-                box(solidHeader = FALSE,
-                    selectInput("surveycompleteFilter", "Choose Survey Completion Level:",
+                    selectInput("surveycompleteFilter", "Survey Completion Level",
                                 choices = c("All" = ".",
                                             "BOH only" =  "BOH only",
                                             "BOH and MRE" = "BOH and MRE",
@@ -211,15 +197,17 @@ ui <- dashboardPage(
                                             "BOH, MRE, and LAW" = "BOH, MRE, and LAW",
                                             "BOH, SAS, and LAW" = "BOH, SAS, and LAW",
                                             "No Survey Sections" = "No Survey Sections"),
-                                selected = "All"),
-                    actionButton("applySurvCompleteFilters", "Apply Filters")),
-                fluidRow(
+                                selected = "All")),
+                    actionButton("applyFilters", "Apply Filters")),
+                column(width = 8,
+                  fluidRow(
                   box(plotlyOutput("plot1", height = 350), width = 12),
                   box(plotlyOutput("plot2", height = 350), width = 12),
                   box(plotlyOutput("plot3", height = 350), width = 12),
                   box(plotlyOutput("plot4", height = 450), width = 12),
                   box(plotlyOutput("plot5", height = 450), width = 12),
                   box(plotlyOutput("plot6", height = 650), width = 12)
+                )
                 )
               )
       ),
