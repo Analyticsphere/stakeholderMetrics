@@ -33,7 +33,7 @@ verified_data <- reactive({
       source("./clean_data.R", local = TRUE)
       source("./get_data.R", local=TRUE)
       data <- get_data() # Fetch your data
-      clean_data(data, type = "verified")
+      data <- clean_data(data, type = "verified")
 })
 
   
@@ -44,7 +44,7 @@ verified_data <- reactive({
           verified_data()%>%
             filter((input$siteFilter == "." | d_827220437 == input$siteFilter) &
                  (input$sexFilter == "." | sex == input$sexFilter) &
-                 (input$ageFilter == "." | Age == input$ageFilter)&
+                 (input$ageFilter == "." | age == input$ageFilter)&
                  (input$raceFilter == "." | race == input$raceFilter)&
                  (input$campaignFilter == "." | active_camptype == input$campaignFilter)&
                  (input$biospecFilter == "." | biocol_type == input$biospecFilter)&
@@ -71,6 +71,9 @@ verified_data <- reactive({
     
     source("./completed_survey.R", local = TRUE)
     output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
+    
+    source("./income_distribution.R", local = TRUE)
+    output$plot7 <- renderPlotly({income_distribution(income_data = filtered_verified_data())})
     
 
 invited_participant_data <- reactive({
@@ -213,7 +216,8 @@ filtered_IP_data <- reactive({
                                   box(plotlyOutput("plot3", height = 350), width = 12),
                                   box(plotlyOutput("plot4", height = 450), width = 12),
                                   box(plotlyOutput("plot5", height = 450), width = 12),
-                                  box(plotlyOutput("plot6", height = 650), width = 12))
+                                  box(plotlyOutput("plot6", height = 650), width = 12),
+                                  box(plotlyOutput("plot7", height = 450), width = 12))
                                 )
                   ) 
                 ), 
