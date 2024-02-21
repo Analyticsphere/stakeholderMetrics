@@ -11,9 +11,9 @@ library(plotly)
   } else {
 
 # Create the histogram plot with plotly
-  plot <- plot_ly(data = age_data, x = ~Age, type = 'histogram',
+  plot <- plot_ly(data = age_data, x = ~age, type = 'histogram',
                   hoverinfo = 'x+y', hoverlabel = list(bgcolor = 'white'),
-                  marker = list(color = 'rgb(255, 191, 23)', line = list(color = 'black', width = 1)))
+                  marker = list(color = 'rgb(42, 114, 165)', line = list(color = 'black', width = 1)))
                   
   #This variable is from the user profile, therefore its self-reported
   # Update layout
