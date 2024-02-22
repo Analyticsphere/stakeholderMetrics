@@ -26,7 +26,7 @@ fig <- plot_ly(msrv_df, labels = ~Msrv_complt, values = ~Count, type = 'pie',
     
 # Customize the layout
 curr.date <- Sys.Date()
-fig <- fig %>% layout(title = paste0("Survey Completion Status as of ", curr.date),
+fig <- fig %>% layout(title = c("Survey Completion Status"),
                           annotations = list(
                             list(x = 0, y = -0.05, text = paste0("<b>BOH</b>",": Background and Overall Health; ","<b>MRE</b>",": Medications, Reproductive Health, Exercise and Sleep;","<b> SAS</b>",": Smoking, Alcohol, and Sun Exposure;","<b> LAW</b>",": Where You Live and Work"),
                             showarrow = F, font = list(size = 7),

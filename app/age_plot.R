@@ -19,7 +19,7 @@ library(plotly)
                   
   #This variable is from the user profile, therefore its self-reported
   # Update layout
-  plot <- plot %>% layout(title = list(text = paste0("Self Reported Ages of Verified Participants as of ", Sys.Date())),
+  plot <- plot %>% layout(title = list(text = c("Self Reported Ages of Verified Participants")),
                           xaxis = list(title = list(text = "Age")),
                           yaxis = list(title = list(text = "Count")),
                           font = list(family = "Noto Sans"))
@@ -31,7 +31,7 @@ library(plotly)
     
     #This variable is from the user profile, therefore its self-reported
     # Update layout
-    plot <- plot %>% layout(title = list(text = paste0("Self Reported Ages of Participants as of ", Sys.Date())),
+    plot <- plot %>% layout(title = list(text = c("Self Reported Ages of Participants")),
                             xaxis = list(title = list(text = "Age")),
                             yaxis = list(title = list(text = "Count")),
                             font = list(family = "Noto Sans"))
