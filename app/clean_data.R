@@ -55,6 +55,8 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
         income == "746038746" ~ "Declined",
         TRUE ~ "Unknown"  # Default case if none of the above conditions are met
       ))
+  
+  
 }else{
 data <- expss::apply_labels(data,#RcrtES_Site_v1r0
                                    site = c("HealthPartners"= 531629870,
@@ -76,5 +78,7 @@ data <- expss::apply_labels(data,#RcrtES_Site_v1r0
         sex == "830573274" ~ "Intersex or Other",
         sex %in% c("178420302", NA) | sex %in% c("178420302", NA) ~ "Unknown"
       ))
+
+
 }
 }
