@@ -25,8 +25,8 @@ server <- function(input, output, session){
   #call data once for entire dashboard
   #authentication step for Posit
   #this code was written by D Russ
-    source("./get_authentication.R", local = TRUE)
-    get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+#    source("./get_authentication.R", local = TRUE)
+#    get_authentication(service_account_key = "SERVICE_ACCT_KEY")
 
 #load verified data
 verified_data <- reactive({
@@ -119,6 +119,12 @@ filtered_IP_data <- reactive({
       )
     ),
     dashboardBody(
+      fluidRow(
+        column(12, align = "center", 
+               tags$h3(style = "text-align: center;", 
+                       HTML(glue("Verified Participant Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
+        )
+      ),
       tags$head(tags$style(HTML(custom_aesthetics))), 
       tabItems(
         tabItem(tabName = "dashboard",
@@ -211,13 +217,13 @@ filtered_IP_data <- reactive({
                              actionButton("applyFilters", "Apply Filters"))),
                          column(width = 8,
                                 fluidRow(
-                                  box(plotlyOutput("plot1", height = 350), width = 12),
-                                  box(plotlyOutput("plot2", height = 350), width = 12),
-                                  box(plotlyOutput("plot3", height = 350), width = 12),
-                                  box(plotlyOutput("plot4", height = 450), width = 12),
-                                  box(plotlyOutput("plot5", height = 450), width = 12),
-                                  box(plotlyOutput("plot6", height = 650), width = 12),
-                                  box(plotlyOutput("plot7", height = 450), width = 12))
+                                  div(class = "plot-container", plotlyOutput("plot1")),
+                                  div(class = "plot-container", plotlyOutput("plot2")),
+                                  div(class = "pie-plot-container", plotlyOutput("plot3")),
+                                  div(class = "pie-plot-container", plotlyOutput("plot4")),
+                                  div(class = "pie-plot-container", plotlyOutput("plot5")),
+                                  div(class = "pie-plot-container", plotlyOutput("plot6")),
+                                  div(class = "plot-container", plotlyOutput("plot7")))
                                 )
                   ) 
                 ), 
