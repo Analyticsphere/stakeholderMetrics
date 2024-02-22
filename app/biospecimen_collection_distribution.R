@@ -26,7 +26,7 @@ curr.date <- Sys.Date()
 
 fig <- fig %>% layout(
   title = list(
-    text = paste0("Distribution of Biospecimen Collections as of ", curr.date),
+    text = c("Distribution of Biospecimen Collections"),
     font = list(family = "Noto Sans")
   ),
   xaxis = list(showgrid = FALSE,

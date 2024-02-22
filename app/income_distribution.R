@@ -22,7 +22,7 @@ income_distribution <- income_data %>%
                   
   #This variable is from the user profile, therefore its self-reported
   # Update layout
-  plot <- plot %>% layout(title = list(text = paste0("Self Reported Income of Verified Participants as of ", Sys.Date())),
+  plot <- plot %>% layout(title = list(text = c("Self Reported Income of Verified Participants")),
                           xaxis = list(title = list(text = "Income")),
                           yaxis = list(title = list(text = "Count")),
                           font = list(family = "Noto Sans"))

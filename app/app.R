@@ -119,15 +119,15 @@ filtered_IP_data <- reactive({
       )
     ),
     dashboardBody(
-      fluidRow(
-        column(12, align = "center", 
-               tags$h3(style = "text-align: center;", 
-                       HTML(glue("Verified Participant Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
-        )
-      ),
       tags$head(tags$style(HTML(custom_aesthetics))), 
       tabItems(
         tabItem(tabName = "dashboard",
+                fluidRow(
+                  column(12, align = "center", 
+                         tags$h3(style = "text-align: center;", 
+                                 HTML(glue("Verified Participant Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
+                  )
+                ),
                 fluidRow(
                   column(4,
                          box(solidHeader = FALSE, title = "Choose Filters:", width = 12,
@@ -228,6 +228,12 @@ filtered_IP_data <- reactive({
                   ) 
                 ), 
                 tabItem(tabName = "invited_participants",
+                        fluidRow(
+                          column(12, align = "center", 
+                                 tags$h3(style = "text-align: center;", 
+                                         HTML(glue("Invited Participant Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
+                          )
+                        ),
                         fluidRow(
                           column(4,
                                  box(solidHeader = FALSE,
