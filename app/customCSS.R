@@ -1,7 +1,10 @@
 # Define the custom CSS to apply the color palette
 customCSS <- function(){
 c <- paste0(
+#first import the font, need to do this first
 "@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');",
+
+#colors, borders:
 " /* Remove borders from selectInput and actionButton */
 .selectize-control, .btn, .box {
 border: none !important; /* Removes border */
@@ -38,6 +41,8 @@ border: none !important;
 .accent-bg {
   background-color: rgb(255, 191, 23);
 }",
+
+#fonts
 "/* Apply Montserrat font to selectize inputs, dropdowns, labels, and action buttons */
 .selectize-input, .selectize-dropdown, .shiny-input-container label, .btn {
   font-family: 'Noto Sans' !important;
@@ -48,6 +53,16 @@ border: none !important;
   font-size: 13px;
 }",
 "/* Apply Montserrat font to sidebar menu items */
-.skin-blue .sidebar-menu li a {font-family: 'Noto Sans' !important;}"
-)}
+.skin-blue .sidebar-menu li a {font-family: 'Noto Sans' !important;}",
+
+#spacing
+"/* Increase bottom margin for main title */
+h3 {
+    margin-bottom: 30px; /* Adjust this value as needed */
+}",
+"/* Add more space around plot containers */
+.plot-container, .pie-plot-container {
+    margin-bottom: 40px; /* Space between plots vertically */
+    padding: 10px; /* Optional: Adds space inside the container, around the plot */
+}")}
 
