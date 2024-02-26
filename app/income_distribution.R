@@ -25,7 +25,8 @@ income_distribution <- income_data %>%
   plot <- plot %>% layout(title = list(text = c("Self Reported Income of Verified Participants")),
                           xaxis = list(title = list(text = "Income")),
                           yaxis = list(title = list(text = "Count")),
-                          font = list(family = "Noto Sans"))
+                          font = list(family = "Noto Sans"),
+                          margin = list(t = 50))
   plot
 
 }

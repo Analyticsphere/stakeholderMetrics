@@ -25,8 +25,8 @@ server <- function(input, output, session){
   #call data once for entire dashboard
   #authentication step for Posit
   #this code was written by D Russ
-#    source("./get_authentication.R", local = TRUE)
-#    get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+    source("./get_authentication.R", local = TRUE)
+    get_authentication(service_account_key = "SERVICE_ACCT_KEY")
 
 #load verified data
 verified_data <- reactive({
@@ -132,7 +132,7 @@ filtered_IP_data <- reactive({
                   column(4,
                          box(solidHeader = FALSE, title = "Choose Filters:", width = 12,
                              selectInput("siteFilter", "Site",
-                                         choices = c("All Hospitals" = ".",
+                                         choices = c("All" = ".",
                                                      "HealthPartners" = 531629870,
                                                      "Henry Ford Health System" = 548392715,
                                                      "Kaiser Permanente Colorado" = 125001209,
@@ -144,7 +144,7 @@ filtered_IP_data <- reactive({
                                                      "University of Chicago Medicine" = 809703864,
                                                      "National Cancer Institute" = 517700004,
                                                      "National Cancer Institute" = 13, "Other" = 181769837),
-                                         selected = "All Hospitals"),
+                                         selected = "All"),
                              selectInput("sexFilter", "Gender",
                                          choices = c("All" = ".",
                                                      "Male" = "Male",
@@ -261,7 +261,7 @@ filtered_IP_data <- reactive({
                                                              "NA" = "NA"),
                                                  selected = "All"),
                                      selectInput("IPsiteFilter", "Choose Site:",
-                                                 choices = c("All Hospitals" = ".",
+                                                 choices = c("All" = ".",
                                                              "HealthPartners" = 531629870,
                                                              "Henry Ford Health System" = 548392715,
                                                              "Kaiser Permanente Colorado" = 125001209,
@@ -273,7 +273,7 @@ filtered_IP_data <- reactive({
                                                              "University of Chicago Medicine" = 809703864,
                                                              "National Cancer Institute" = 517700004,
                                                              "National Cancer Institute" = 13, "Other" = 181769837),
-                                                 selected = "All Hospitals"),
+                                                 selected = "All"),
                                      actionButton("applyIPfilters", "Apply Filters"))),
                         column(8,
                                fluidRow(

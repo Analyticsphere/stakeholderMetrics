@@ -22,7 +22,8 @@ library(plotly)
   plot <- plot %>% layout(title = list(text = c("Self Reported Ages of Verified Participants")),
                           xaxis = list(title = list(text = "Age")),
                           yaxis = list(title = list(text = "Count")),
-                          font = list(family = "Noto Sans"))
+                          font = list(family = "Noto Sans"),
+                          margin = list(t = 50))
   plot} else{
     # Create the histogram plot with plotly
     plot <- plot_ly(data = age_data, x = ~Age, type = 'histogram',
@@ -34,7 +35,8 @@ library(plotly)
     plot <- plot %>% layout(title = list(text = c("Self Reported Ages of Participants")),
                             xaxis = list(title = list(text = "Age")),
                             yaxis = list(title = list(text = "Count")),
-                            font = list(family = "Noto Sans"))
+                            font = list(family = "Noto Sans"),
+                            margin = list(t = 50))
     plot
     
   }

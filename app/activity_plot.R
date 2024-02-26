@@ -78,7 +78,8 @@ Fig_all.plotly <- plot_ly() %>%
                    showline = TRUE),
       legend = list(x = 0, y = 1, traceorder = "normal"),
       font = list(family = "Noto Sans"),
-      showlegend = TRUE
+      showlegend = TRUE,
+      margin = list(t = 50)
     )
   
   # Print the plotly plot

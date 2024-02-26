@@ -5,7 +5,7 @@ account: rebecca.sansale@nih.gov
 server: appshare-dev.cancer.gov
 hostUrl: https://appshare-dev.cancer.gov/__api__
 appId: 67
-bundleId: 359
+bundleId: 362
 url: https://appshare-dev.cancer.gov/content/151bbace-be73-4552-b569-e374e9aafca1/
 version: 1
 asMultiple: FALSE
