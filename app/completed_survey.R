@@ -21,8 +21,10 @@ names(msrv_df) <- c("Msrv_complt", "Count")
     
 # Create a Plotly pie chart
 fig <- plot_ly(msrv_df, labels = ~Msrv_complt, values = ~Count, type = 'pie',
-                   textinfo = 'label+percent',
-                   insidetextorientation = 'radial')
+               hoverinfo = 'label+percent',
+               textinfo ='label',
+               insidetextorientation = 'radial',
+               domain = list(x = c(0.1, 0.9), y = c(0.1, 0.9)))
     
 # Customize the layout
 curr.date <- Sys.Date()
@@ -33,7 +35,8 @@ fig <- fig %>% layout(title = c("Survey Completion Status"),
                             xanchor = 'left', align = 'left')),
                           xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                           yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                          font = list(family = "Noto Sans"))
+                          font = list(family = "Noto Sans"),
+                           margin = list(t = 50))
     
     # Print the plot
     fig

@@ -18,8 +18,10 @@ names(biocol_counts) <- c("CollectionType", "Count")
   
 # Create a Plotly pie chart
 fig <- plot_ly(biocol_counts, labels = ~CollectionType, values = ~Count, type = 'pie',
-                 textinfo = 'label+percent',
-                 insidetextorientation = 'radial')
+               textinfo='label',
+               hoverinfo = 'label+percent',
+               insidetextorientation = 'radial',
+               domain = list(x = c(0.1, 0.9), y = c(0.1, 0.9)))
   
 # Customize the layout
 curr.date <- Sys.Date()
@@ -39,7 +41,8 @@ fig <- fig %>% layout(
     showticklabels = FALSE
   ),
   showlegend = TRUE,
-  font = list(family = "Noto Sans")
+  font = list(family = "Noto Sans"),
+  margin = list(t = 50)
 )
   
   # Print the plot
