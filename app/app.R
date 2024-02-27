@@ -103,8 +103,8 @@ filtered_IP_data <- reactive({
     source("./age_plot.R", local = TRUE)
     output$invited_plot1 <- renderPlotly({age_plot(age_data = filtered_IP_data())})
     
-    source("./race_plot.R", local = TRUE)
-    output$invited_plot2 <- renderPlotly({race_plot(race_data = filtered_IP_data())})
+    source("./race_double_bar_chart.R", local = TRUE)
+    output$invited_plot2 <- renderPlotly({race_double_bar_chart(ip_race_data = filtered_IP_data(), v_race_data = filtered_verified_data())})
 
     source("./sex_double_bar_chart.R", local = TRUE)
     output$invited_plot3 <- renderPlotly({sex_double_bar_chart(ip_sex_data = filtered_IP_data(), v_sex_data = filtered_verified_data())})
@@ -280,7 +280,7 @@ filtered_IP_data <- reactive({
                         column(8,
                                fluidRow(
                                  div(class = "plot-container", plotlyOutput("invited_plot1")),
-                                 div(class = "pie-plot-container", plotlyOutput("invited_plot2")),
+                                 div(class = "plot-container", plotlyOutput("invited_plot2")),
                                  div(class = "plot-container", plotlyOutput("invited_plot3"))),
                                )
                         )
