@@ -44,7 +44,7 @@ sex_double_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
     ratios$ratio <- with(ratios, n.x / n.y)
     
     color_mapping <- setNames(c('rgb(42, 114, 165)', 'rgb(45, 159, 190)'), c("Verified", "Invited"))
-    sex_group_counts$color <- color_mapping[sex_df$population]
+    sex_group_counts$color <- color_mapping[sex_group_counts$population]
     #plot
     fig <- plot_ly(data = sex_group_counts, x = ~sex_factor, y = ~n, color = ~population,
                    type = 'bar',
