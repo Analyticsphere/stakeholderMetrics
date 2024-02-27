@@ -25,8 +25,8 @@ server <- function(input, output, session){
   #call data once for entire dashboard
   #authentication step for Posit
   #this code was written by D Russ
-    source("./get_authentication.R", local = TRUE)
-    get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+ #   source("./get_authentication.R", local = TRUE)
+#    get_authentication(service_account_key = "SERVICE_ACCT_KEY")
 
 #load verified data
 verified_data <- reactive({
@@ -106,6 +106,8 @@ filtered_IP_data <- reactive({
     source("./race_plot.R", local = TRUE)
     output$invited_plot2 <- renderPlotly({race_plot(race_data = filtered_IP_data())})
 
+    source("./sex_double_bar_chart.R", local = TRUE)
+    output$invited_plot3 <- renderPlotly({sex_double_bar_chart(ip_sex_data = filtered_IP_data(), v_sex_data = filtered_verified_data())})
 
 }
   
@@ -277,8 +279,9 @@ filtered_IP_data <- reactive({
                                      actionButton("applyIPfilters", "Apply Filters"))),
                         column(8,
                                fluidRow(
-                                 box(plotlyOutput("invited_plot1", height = 350), width = 12),
-                                 box(plotlyOutput("invited_plot2", height = 350), width = 12))
+                                 div(class = "plot-container", plotlyOutput("invited_plot1")),
+                                 div(class = "pie-plot-container", plotlyOutput("invited_plot2")),
+                                 div(class = "plot-container", plotlyOutput("invited_plot3"))),
                                )
                         )
                 )
