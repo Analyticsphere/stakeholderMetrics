@@ -12,16 +12,10 @@ race_double_bar_chart <- function(ip_race_data = data, v_race_data = data) {
              layout(title = "Not Enough Data to Display This Chart"))
   } else {
     
-  ip_race_data <- ip_race_data %>%
-    mutate(race = case_when(
-      race == "WHITE, NON-HISPANIC" ~ "White, Non-Hispanic",
-      race == "OTHER" ~ "Other",
-      race == "UNKNOWN" ~"Unknown",
-      TRUE ~ race # Default case to handle any unexpected values
-    ))
-  
+    #this editing must remain here 
+    #mapping verified data to invited data categories
     v_race_data <- v_race_data %>%
-      mutate(race = if_else(is.na(race), "NA", race)) %>% # Convert existing NA values to "NA" string
+      mutate(race = if_else(is.na(race), "NA", race)) %>% 
       mutate(race = case_when(
         race == "White" ~ "White, Non-Hispanic",
         race == "Black, African American, or African" ~ "Other",
@@ -34,83 +28,64 @@ race_double_bar_chart <- function(ip_race_data = data, v_race_data = data) {
         race == "American Indian or Alaska Native" ~ "Other",
         race == "UNKNOWN" ~ "Unknown", # Retain "UNKNOWN" as is
         race == "Skipped this question" ~ "NA", # Convert to NA
-        TRUE ~ race # Default case to handle any unexpected values
+        TRUE ~ race 
       ))
     
-    # Ensure 'sex' is a factor with specific levels
-    ip_race_data$race_factor <- factor(ip_race_data$race, levels = c("White, Non-Hispanic", "Other", "Unknown", "NA"))
-    v_race_data$race_factor <- factor(v_race_data$race, levels = c("White, Non-Hispanic", "Other", "Unknown", "NA"))
+    #convert race variable to a factor
+    ip_race_factor <- data.frame(race_factor = factor(ip_race_data$race, levels =
+                                           c("White, Non-Hispanic", "Other", "Unknown", "NA")))
+    v_race_factor <- data.frame(race_factor = factor(v_race_data$race, levels =
+                                        c("White, Non-Hispanic", "Other", "Unknown", "NA")))
+    #label the data
+    ip_race_factor$population <- "Invited"
+    v_race_factor$population <- "Verified"
+    all_race_data <- rbind(ip_race_factor, v_race_factor)
+    
+    #aggregate the number of individuals per race bucket
+    count_matrix <- all_race_data %>%
+      group_by(race_factor, population) %>%
+      summarize(count = n(), .groups = 'drop') %>%
+      pivot_wider(names_from = population, values_from = count, values_fill = list(count = 0))
+    
+    #make percentages
+    count_matrix <- count_matrix %>%
+      mutate(percentage = 100 * (`Verified` / `Invited`))
     
     
-    # Aggregate data by sex and group
-    ip_race_group_counts <- ip_race_data %>%
-      count(race_factor)
-    ip_race_group_counts$population <- "Invited"
-    # Aggregate data by sex and group
-    v_race_group_counts <- v_race_data %>%
-      count(race_factor)
-    v_race_group_counts$population = "Verified"
+    # Prepare the annotation text for percentages using the updated count_matrix
+    percentage_text <- paste0(count_matrix$race_factor, "- ",
+                              round(count_matrix$percentage, 2), "%", collapse = "\n")
+    indented_percentage_text <- gsub("\n", "\n    ", percentage_text)
+    annotations_text <- paste("Conversion Percentages:",
+                              indented_percentage_text, sep = "\n    ")
     
-    race_group_counts <- as.data.frame(rbind(ip_race_group_counts, v_race_group_counts))
+    # Define colors
+    verified_color <- 'rgb(42, 114, 165)'
+    invited_color <- 'rgb(45, 159, 190)'
     
-    # Calculate ratios of invited to verified for each sex
-    #this seems like overkill but actually makes the annotation plotting easier
-    ratios <- merge(ip_race_group_counts, v_race_group_counts, by = "race_factor")
-    ratios$percentages <- with(ratios, 100*(n.y / n.x))
-    
-    color_mapping <- setNames(c('rgb(42, 114, 165)', 'rgb(45, 159, 190)'), c("Verified", "Invited"))
-    race_group_counts$color <- color_mapping[race_group_counts$population]
-    
-    # Spread the data to wide format
-    wide_data <- race_group_counts %>%
-      group_by(race_factor) %>%
-      mutate(color = first(color)) %>% # Ensure color consistency
-      ungroup() %>%
-      spread(key = population, value = n)
-    
-    wide_data <- merge(wide_data, ratios, by = "race_factor")
-
-    
-    # Create the initial grouped bar chart without the ratio and second y-axis
-    p <- plot_ly(data = wide_data) %>%
+    # Create the plot using the updated count_matrix
+    p <- plot_ly(data = count_matrix) %>%
       add_trace(x = ~race_factor, y = ~Invited, type = 'bar', name = 'Invited',
-                marker = list(color = 'rgb(45, 159, 190)')) %>%
+                marker = list(color = invited_color)) %>%
       add_trace(x = ~race_factor, y = ~Verified, type = 'bar', name = 'Verified',
-                marker = list(color = 'rgb(42, 114, 165)')) %>%
+                marker = list(color = verified_color)) %>%
       layout(
         yaxis = list(title = 'Counts'), 
         xaxis = list(title = 'Race'),
-        barmode = 'group', 
-        margin = list(b = 50, t = 50, r = 150)  # Adjust right margin to make space for the list
-      )
-    
-    # Create a text annotation for the ratio values
-    ratio_list_text <- paste("Conversion Percentages:", paste0("• ", wide_data$race_factor, "- ",
-                                                               round(wide_data$percentages,3), "%",
-                                                               collapse = "\n"), sep = "\n")
-    
-    # Adjust the y position to place the box under the legend
-    # The y position value is lower to drop the box under the legend. Adjust the value as needed based on your plot's layout
-    p <- p %>%
-      layout(
         title = 'Site-Reported Race, Invited vs. Verified Participant Distribution',
+        barmode = 'group',
+        margin = list(b = 50, t = 50, r = 200), # Adjusted for annotation space
         annotations = list(
           list(
-            text = ratio_list_text,
+            text = annotations_text, # Use the prepared annotations text
             align = 'left',
             showarrow = FALSE,
-            x = 0.95,  # Position the box on the RHS, adjust as needed
-            xanchor = 'left',
-            y = 0.8,  # Lower the box under the legend. Adjust this value as necessary
-            yanchor = 'top',
-            xref = 'paper',
-            yref = 'paper',
+            x = 1.15, xanchor = 'right', # Adjust to anchor the annotations box correctly
+            y = 0.5, yanchor = 'middle',
+            xref = 'paper', yref = 'paper',
             font = list(size = 10),
-            bordercolor = 'black',
-            borderwidth = 1,
-            borderpad = 4,
-            bgcolor = 'white',
-            opacity = 0.8
+            bordercolor = 'black', borderwidth = 1, borderpad = 4,
+            bgcolor = 'white', opacity = 0.8
           )
         )
       )
