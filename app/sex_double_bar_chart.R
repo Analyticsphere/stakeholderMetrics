@@ -12,75 +12,65 @@ sex_double_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
              layout(title = "Not Enough Data to Display This Chart"))
   } else {
     
-    # Ensure 'sex' is a factor with specific levels
-    ip_sex_data$sex_factor <- factor(ip_sex_data$sex, levels =
-                                       c("Female", "Nonbinary", "Male", "Unknown"))
-    v_sex_data$sex_factor <- factor(v_sex_data$sex, levels =
-                                      c("Female", "Nonbinary", "Male", "Unknown"))
+    # Convert sex variable to a factor with specific levels
+    ip_sex_factor <- data.frame(sex_factor = factor(ip_sex_data$sex,
+                              levels = c("Female", "Nonbinary", "Male", "Unknown")))
+    v_sex_factor <- data.frame(sex_factor = factor(v_sex_data$sex,
+                              levels = c("Female", "Nonbinary", "Male", "Unknown")))
     
-    # Aggregate data by sex and group
-    ip_sex_group_counts <- ip_sex_data %>%
-      count(sex_factor)
-    ip_sex_group_counts$population <- "Invited"
-    # Aggregate data by sex and group
-    v_sex_group_counts <- v_sex_data %>%
-      count(sex_factor)
-    v_sex_group_counts$population = "Verified"
+    # Label the data
+    ip_sex_factor$population <- "Invited"
+    v_sex_factor$population <- "Verified"
     
-    #combine
-    sex_group_counts <- as.data.frame(rbind(ip_sex_group_counts, v_sex_group_counts))
+    # Combine the datasets
+    all_sex_data <- rbind(ip_sex_factor, v_sex_factor)
+    
+    # Aggregate the number of individuals per sex bucket
+    count_matrix <- all_sex_data %>%
+      group_by(sex_factor, population) %>%
+      summarize(count = n(), .groups = 'drop') %>%
+      pivot_wider(names_from = population, values_from = count, values_fill = list(count = 0))
+    
+    # Calculate percentages
+    count_matrix <- count_matrix %>%
+      mutate(percentage = 100 * (`Verified` / `Invited`))
+    
         
-    # Calculate percentages directly
-    percentages <- sex_group_counts %>%
-      group_by(sex_factor) %>%
-      summarise(percentage = 100 * first(n[population == "Verified"]) / first(n[population == "Invited"])) %>%
-      ungroup()
+
     
     # Define colors
     verified_color <- 'rgb(42, 114, 165)'
     invited_color <- 'rgb(45, 159, 190)'
     
-    #conversion rates
-    percentage_text <- paste(percentages$sex_factor, "- ",
-                             round(percentages$percentage, 2), "%", collapse = "\n")
-    # Adding spaces for indentation
-    indented_percentage_text <- gsub("\n", "\n    ", percentage_text)
+    # Prepare the annotation text for percentages
+    percentage_text <- paste0(count_matrix$sex_factor, "- ", round(count_matrix$percentage, 2), "%", collapse = "\n")
+    indented_percentage_text <- gsub("\n", "\n    ", percentage_text) # Adds indentation
     annotations_text <- paste("Conversion Percentages:", indented_percentage_text, sep = "\n    ")
     
-    # Plot with annotations added on the right-hand side
-    p <- plot_ly() %>%
-      add_bars(data = sex_group_counts[sex_group_counts$population == "Invited",], 
-               x = ~sex_factor, y = ~n, 
-               name = 'Invited',
+    # Create the plot with corrected color specification and annotations
+    p <- plot_ly(data = count_matrix) %>%
+      add_bars(x = ~sex_factor, y = ~Invited, name = 'Invited',
                marker = list(color = invited_color)) %>%
-      add_bars(data = sex_group_counts[sex_group_counts$population == "Verified",], 
-               x = ~sex_factor, y = ~n, 
-               name = 'Verified',
+      add_bars(x = ~sex_factor, y = ~Verified, name = 'Verified',
                marker = list(color = verified_color)) %>%
       layout(yaxis = list(title = 'Counts'), 
              xaxis = list(title = 'Sex'),
              title = 'Site-Reported Sex, Invited vs. Verified Participant Distribution',
              barmode = 'group',
+             margin = list(t = 50, b = 50, r = 200), # Adjusted for annotation space
              annotations = list(
                list(
                  text = annotations_text,
                  align = 'left',
                  showarrow = FALSE,
-                 x = 1.05, 
-                 xanchor = 'left',
-                 y = 0.5,  
-                 yanchor = 'middle',
-                 xref = 'paper',
-                 yref = 'paper',
+                 x = 1.15, xanchor = 'right',
+                 y = 0.5, yanchor = 'middle',
+                 xref = 'paper', yref = 'paper',
                  font = list(size = 10),
-                 bordercolor = 'black',
-                 borderwidth = 1,
-                 borderpad = 4,
-                 bgcolor = 'white',
-                 opacity = 0.8
+                 bordercolor = 'black', borderwidth = 1, borderpad = 4,
+                 bgcolor = 'white', opacity = 0.8
                )
-             ),
-             margin = list(t = 50, b = 50, r = 200) 
+             )
       )
     
     p
