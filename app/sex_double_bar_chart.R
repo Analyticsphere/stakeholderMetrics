@@ -29,23 +29,24 @@ sex_double_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
     count_matrix <- all_sex_data %>%
       group_by(sex_factor, population) %>%
       summarize(count = n(), .groups = 'drop') %>%
-      pivot_wider(names_from = population, values_from = count, values_fill = list(count = 0))
+      pivot_wider(names_from = population, values_from = count,
+                  values_fill = list(count = 0))
     
     # Calculate percentages
     count_matrix <- count_matrix %>%
       mutate(percentage = 100 * (`Verified` / `Invited`))
     
-        
-
     
     # Define colors
     verified_color <- 'rgb(42, 114, 165)'
     invited_color <- 'rgb(45, 159, 190)'
     
     # Prepare the annotation text for percentages
-    percentage_text <- paste0(count_matrix$sex_factor, "- ", round(count_matrix$percentage, 2), "%", collapse = "\n")
-    indented_percentage_text <- gsub("\n", "\n    ", percentage_text) # Adds indentation
-    annotations_text <- paste("Conversion Percentages:", indented_percentage_text, sep = "\n    ")
+    percentage_text <- paste0(count_matrix$sex_factor, "- ",
+                              round(count_matrix$percentage, 2), "%", collapse = "\n")
+    indented_percentage_text <- gsub("\n", "\n    ", percentage_text) 
+    annotations_text <- paste("Conversion Percentages:",
+                              indented_percentage_text, sep = "\n    ")
     
     # Create the plot with corrected color specification and annotations
     p <- plot_ly(data = count_matrix) %>%

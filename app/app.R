@@ -100,8 +100,8 @@ filtered_IP_data <- reactive({
         }
 })
 
-    source("./age_plot.R", local = TRUE)
-    output$invited_plot1 <- renderPlotly({age_plot(age_data = filtered_IP_data())})
+    source("./age_double_bar_chart.R", local = TRUE)
+    output$invited_plot1 <- renderPlotly({age_double_bar_chart(ip_age_data = filtered_IP_data(), v_age_data = filtered_verified_data())})
     
     source("./race_double_bar_chart.R", local = TRUE)
     output$invited_plot2 <- renderPlotly({race_double_bar_chart(ip_race_data = filtered_IP_data(), v_race_data = filtered_verified_data())})
