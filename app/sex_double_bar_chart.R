@@ -41,8 +41,8 @@ sex_double_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
     invited_color <- 'rgb(45, 159, 190)'
     
     #conversion rates
-    percentage_text <- paste(percentage$sex_factor, "- ",
-                             round(percentage$percentage, 2), "%", collapse = "\n")
+    percentage_text <- paste(percentages$sex_factor, "- ",
+                             round(percentages$percentage, 2), "%", collapse = "\n")
     # Adding spaces for indentation
     indented_percentage_text <- gsub("\n", "\n    ", percentage_text)
     annotations_text <- paste("Conversion Percentages:", indented_percentage_text, sep = "\n    ")

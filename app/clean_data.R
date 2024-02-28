@@ -78,6 +78,14 @@ data <- expss::apply_labels(data,#RcrtES_Site_v1r0
         sex == "830573274" ~ "Nonbinary",
         sex %in% c("178420302", NA) | sex %in% c("178420302", NA) ~ "Unknown"
       ))
+  
+  data <- data %>%
+    mutate(race = case_when(
+      race == "WHITE, NON-HISPANIC" ~ "White, Non-Hispanic",
+      race == "OTHER" ~ "Other",
+      race == "UNKNOWN" ~"Unknown",
+      TRUE ~ race # Default case to handle any unexpected values
+    ))
 
 
 }
