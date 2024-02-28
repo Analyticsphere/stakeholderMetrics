@@ -18,7 +18,7 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
       sex = case_when(
         state_d_706256705 == "536341288" | state_d_435027713 == "536341288" ~ "Female",
         state_d_706256705 == "654207589" | state_d_435027713 == "654207589" ~ "Male",
-        state_d_706256705 == "830573274" ~ "Intersex or Other",
+        state_d_706256705 == "830573274" ~ "Nonbinary",
         state_d_706256705 %in% c("178420302", NA) | state_d_435027713 %in% c("178420302", NA) ~ "Unknown"
       ),
       biocol_type = case_when(
@@ -75,7 +75,7 @@ data <- expss::apply_labels(data,#RcrtES_Site_v1r0
       sex = case_when(
         sex == "536341288" | sex == "536341288" ~ "Female",
         sex == "654207589" | sex == "654207589" ~ "Male",
-        sex == "830573274" ~ "Intersex or Other",
+        sex == "830573274" ~ "Nonbinary",
         sex %in% c("178420302", NA) | sex %in% c("178420302", NA) ~ "Unknown"
       ))
 
