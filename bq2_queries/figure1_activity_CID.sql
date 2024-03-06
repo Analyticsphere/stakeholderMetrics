@@ -1,0 +1,80 @@
+CREATE OR REPLACE TABLE `nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.figure1_activity_CID` AS
+WITH verified AS (
+  SELECT
+    Connect_ID,
+    token,
+    d_471593703,
+    DATE_DIFF(DATE(d_471593703), DATE('2021-07-23'), week(Monday)) AS recruitment_wk,
+    d_914594314,
+    DATE_DIFF(DATE(d_914594314), DATE('2021-07-23'), week(Monday)) AS Verified_wk,
+    DATE_TRUNC(DATE(d_914594314), week(Monday)) AS Verified_wkdate,
+    CASE
+      WHEN (d_173836415_d_266600170_d_592099155='664882224' AND d_878865966 = '353358909') THEN GREATEST(d_173836415_d_266600170_d_982213346,d_173836415_d_266600170_d_398645039,d_173836415_d_266600170_d_822274939)
+      WHEN (d_173836415_d_266600170_d_592099155 ='534621077'
+      AND d_878865966='353358909') THEN d_173836415_d_266600170_d_561681068
+  END
+    AS LastUpdateBloodDate,
+    CASE
+      WHEN (d_173836415_d_266600170_d_592099155='664882224' AND d_878865966 = '353358909') THEN DATE_DIFF(DATE(GREATEST(d_173836415_d_266600170_d_982213346,d_173836415_d_266600170_d_398645039,d_173836415_d_266600170_d_822274939)),DATE('2021-07-23'),week(Monday))
+      WHEN (d_173836415_d_266600170_d_592099155 ='534621077'
+      AND d_878865966='353358909') THEN DATE_DIFF(DATE(d_173836415_d_266600170_d_561681068),DATE('2021-07-23'),week(Monday))
+  END
+    AS Blood_wk,
+    CASE
+      WHEN (d_100767870 = '353358909') THEN GREATEST(d_517311251,d_832139544,d_264644252,d_770257102)
+  END
+    AS LastModuleDate,
+    CASE
+      WHEN (d_173836415_d_266600170_d_592099155='664882224' AND d_878865966='353358909' AND d_100767870='353358909') THEN GREATEST(d_173836415_d_266600170_d_982213346,d_173836415_d_266600170_d_398645039,d_173836415_d_266600170_d_822274939,d_517311251,d_832139544,d_264644252,d_770257102)
+      WHEN (d_173836415_d_266600170_d_592099155 ='534621077'
+      AND d_878865966='353358909'
+      AND d_100767870='353358909') THEN GREATEST(d_173836415_d_266600170_d_561681068,d_517311251,d_832139544,d_264644252,d_770257102)
+  END
+    AS CompleteDate
+  FROM
+    `nih-nci-dceg-connect-prod-6d04.FlatConnect.participants_JP`
+  WHERE
+    d_821247024 = '197316935'
+    AND d_747006172 != '353358909'
+),
+tab1 AS (
+  SELECT
+    DATE_TRUNC(DATE(d_914594314), week(Monday)) AS verified_wkdate,
+    COUNT(1) AS verified_n
+    --COUNT(1) is counting the number of rows
+  FROM
+    `nih-nci-dceg-connect-prod-6d04.FlatConnect.participants_JP`
+  WHERE
+    d_821247024 = '197316935'
+    AND d_747006172 != '353358909'
+  GROUP BY
+    1),
+  tab2 AS (
+  SELECT
+    DATE_TRUNC(DATE(LastUpdateBloodDate),week(Monday)) AS Blood_wkdate,
+    COUNT(1) AS blood_n
+  FROM
+    Verified
+  GROUP BY
+    1),
+  tab3 AS (
+  SELECT
+    DATE_TRUNC(DATE(LastModuleDate),week(Monday)) AS Module_wkdate,
+    COUNT(1) AS Module_n
+  FROM
+    Verified
+  GROUP BY
+    1),
+  tab4 AS (
+  SELECT
+    DATE_TRUNC(DATE(CompleteDate),week(Monday)) AS Complete_wkdate,
+    COUNT(1) AS count_1
+  FROM
+    verified
+  GROUP BY
+    1)
+SELECT * FROM verified;
+
+
+
+
