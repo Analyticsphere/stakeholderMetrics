@@ -17,7 +17,7 @@ age_double_bar_chart<- function(ip_age_data = data, v_age_data = data){
       # Convert sex variable to a factor with specific levels
       ip_age_factor <- data.frame(age_factor = factor(ip_age_data$Age))
                                                       
-      v_age_factor <- data.frame(age_factor = factor(v_sex_data$age))
+      v_age_factor <- data.frame(age_factor = factor(v_age_data$age))
       
       # Label the data
       ip_age_factor$population <- "Invited"

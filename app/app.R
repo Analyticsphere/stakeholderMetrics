@@ -69,6 +69,9 @@ verified_data <- reactive({
     source("./biospecimen_collection_distribution.R", local = TRUE)
     output$plot5 <- renderPlotly({biospecimen_collection_distribution(biocol_data = filtered_verified_data())})
     
+    source("./biospecimen_collection_barchart.R", local = TRUE)
+    output$plot5b <- renderPlotly({biospecimen_collection_barchart(biocol_data = filtered_verified_data())})
+    
     source("./completed_survey.R", local = TRUE)
     output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
     
@@ -223,13 +226,23 @@ filtered_IP_data <- reactive({
                                   div(class = "plot-container", plotlyOutput("plot1")),
                                   div(class = "plot-container", plotlyOutput("plot2")),
                                   div(class = "pie-plot-container", plotlyOutput("plot3")),
-                                  div(class = "pie-plot-container", plotlyOutput("plot4")),
-                                  div(class = "pie-plot-container", plotlyOutput("plot5")),
-                                  div(class = "pie-plot-container", plotlyOutput("plot6")),
-                                  div(class = "plot-container", plotlyOutput("plot7")))
-                                )
-                  ) 
+                                  div(class = "pie-plot-container", plotlyOutput("plot4"))
+                                  )
+                                  ) 
                 ), 
+                      fluidRow(
+                        column(4,
+                           div(class = "plot-container", plotlyOutput("plot5b"))  # Place the new bar plot here
+                           ),
+                  column(8,
+                     fluidRow(
+                         div(class = "pie-plot-container", plotlyOutput("plot5")),
+                         div(class = "pie-plot-container", plotlyOutput("plot6")),
+                         div(class = "plot-container", plotlyOutput("plot7"))
+                 )
+                 )
+             )
+             ),
                 tabItem(tabName = "invited_participants",
                         fluidRow(
                           column(12, align = "center", 
