@@ -1,7 +1,7 @@
-**Introduction**
+## Introduction
 The Stakeholder Metrics Dashboard is an Rshiny App currently being developed by RS + JP in order to provide real-time recruitment data visualizations to the C4CP stakeholders. The app is currently hosted on the dev server of Posit-Connect: `https://appshare-dev.cancer.gov/`. 
 
-**Application Structure**
+## Application Structure
 The main body of the dashboard is contained in the `app.R` file, saved in the `stakeholderMetrics/app` folder. This file is where all UI is defined and where all plots are called and aggregated. Each plot is contained in a separate file, which matches the function named within the file. All plots are generated from data saved in the table: `nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.complete_table`. This table is also a work-in-progress. Queries used to generate the variables within this table are located in the `stakeholderMetrics/bq2_queries/` directory. 
 
 The application has 2 basic functions which generate the graphical interface. The `server` function authenticates the user (this authentication code was written by D. Russ), pulls data from GCP, cleans the data (mostly labeling data, not much cleaning is done), filters data (if filters are used) and creates plots. The `server` function is called exactly once when the app is started. However, the `reactive` components, such as filtering data based on user-identified values, will be re-triggered, once the `applyFilters` button is pressed. Plots will also be re-generated with the newly filtered data.
@@ -10,7 +10,7 @@ The second function of the app is the `ui` component. This is where aesthetics a
 
 Finally, most of the aesthetics of the dashboard are housed in the `customCSS.R` file. This file applies rules globally to the dashboard and its elements such as: dashboard and plot fonts, font sizes, plot bucket sizes, dashboard element color palette.
 
-**Installation and Set up**
+## Installation and Set up
 There is no installation or set up required for a user to begin editing the dashboard application code. There is however, set up required to access the app.
 
 In order for a new user to access the application on Posit Connect:
@@ -20,14 +20,18 @@ In order for a new user to access the application on Posit Connect:
 4. RS/JP will add you to the approved user list
 5. You will receive an email from Posit about your app access
 
-**GH Preferences**
+## GH Preferences
 If you are tasked with making any changes to the dashboard, please assign yourself a specific, detailed issue and create a branch for that issue.
 
 
-**Backend GCP Structure**
+## Backend GCP Structure
 |Dashboard Tab| Datasource|Datasource Update Schedule|
 ---------------|----------|--------------------------|
-Verified |`nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.complete_table`| None, manual. |
+Verified |`nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.complete_table`| `complete query`, 12pm daily|
+Verified | `nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.figure1_activity`| `figure1_activity`, 11am daily |
+Verified | `nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.figure2_age`| `figure2_age`, 11am daily |
+Verified | `nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.figure3_race`| `figure3_race`, 11am daily |
+Invited |`nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.invited_participants_complete`| `invited_participants_complete`, updated 12pm daily|
 
 
 
@@ -35,7 +39,8 @@ Verified |`nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.complete_table`| 
 
 
 
-**How to Publish the App from Rstudio**
+
+## How to Publish the App from Rstudio
 As of 3/12/24, we are publishing the app on the posit dev server: https://appshare-dev.cancer.gov/. The name of the app: Stakeholer Dashboard, Author: Rebecca Sansale.
 How to Publish the app from Rstudio:
 1. Login to the VPN and Posit Connect.
