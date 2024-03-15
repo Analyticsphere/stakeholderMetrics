@@ -112,15 +112,24 @@ filtered_IP_data <- reactive({
         }
 })
 
-    source("./age_double_bar_chart.R", local = TRUE)
-    output$invited_plot1 <- renderPlotly({age_double_bar_chart(ip_age_data = filtered_IP_data(), v_age_data = filtered_verified_data())})
+    source("./age_stacked_bar_chart.R", local = TRUE)
+    output$invited_plot1 <- renderPlotly({age_stacked_bar_chart(ip_age_data = filtered_IP_data(), v_age_data = filtered_verified_data())})
     
-    source("./race_double_bar_chart.R", local = TRUE)
-    output$invited_plot2 <- renderPlotly({race_double_bar_chart(ip_race_data = filtered_IP_data(), v_race_data = filtered_verified_data())})
+    source("./age_percentage_bar_chart.R", local = TRUE)
+    output$invited_plot1b <- renderPlotly({age_percentage_bar_chart(ip_age_data = filtered_IP_data(), v_age_data = filtered_verified_data())})
+    
+    source("./race_stacked_bar_chart.R", local = TRUE)
+    output$invited_plot2 <- renderPlotly({race_stacked_bar_chart(ip_race_data = filtered_IP_data(), v_race_data = filtered_verified_data())})
 
-    source("./sex_double_bar_chart.R", local = TRUE)
-    output$invited_plot3 <- renderPlotly({sex_double_bar_chart(ip_sex_data = filtered_IP_data(), v_sex_data = filtered_verified_data())})
+    source("./race_percentage_bar_chart.R", local = TRUE)
+    output$invited_plot2b <- renderPlotly({race_percentage_bar_chart(ip_race_data = filtered_IP_data(), v_race_data = filtered_verified_data())})
+    
+    source("./sex_stacked_bar_chart.R", local = TRUE)
+    output$invited_plot3 <- renderPlotly({sex_stacked_bar_chart(ip_sex_data = filtered_IP_data(), v_sex_data = filtered_verified_data())})
 
+    source("./sex_percentage_bar_chart.R", local = TRUE)
+    output$invited_plot3b <- renderPlotly({sex_percentage_bar_chart(ip_sex_data = filtered_IP_data(), v_sex_data = filtered_verified_data())})
+    
 }
   
   # Define UI
@@ -282,7 +291,7 @@ filtered_IP_data <- reactive({
                         fluidRow(
                           column(4,
                                  box(solidHeader = FALSE,
-                                     selectInput("IPageFilter", "Age Range:",
+                                     selectInput("IPageFilter", "Age Category:",
                                                  choices = c("All" = ".",
                                                              "40-45" = "40-45",
                                                              "46-50" = "46-50", 
@@ -292,20 +301,20 @@ filtered_IP_data <- reactive({
                                                              "66-70" = "66-70",
                                                              "UNKNOWN" = "UNKNOWN"),
                                                  selected = "All"),
-                                     selectInput("IPsexFilter", "Choose Gender:",
+                                     selectInput("IPsexFilter", "Gender:",
                                                  choices = c("All" = ".",
                                                              "Male" = "Male",
                                                              "Female" = "Female", 
                                                              "Other" = "Other"),
                                                  selected = "All"),
-                                     selectInput("IPraceFilter", "Choose Race:",
+                                     selectInput("IPraceFilter", "Race:",
                                                  choices = c("All" = ".",
                                                              "OTHER" = "OTHER",
                                                              "UNKNOWN" = "UNKNOWN", 
                                                              "WHITE, NON-HISPANIC" = "WHITE, NON-HISPANIC",
                                                              "NA" = "NA"),
                                                  selected = "All"),
-                                     selectInput("IPsiteFilter", "Choose Site:",
+                                     selectInput("IPsiteFilter", "Site:",
                                                  choices = c("All" = ".",
                                                              "HealthPartners" = 531629870,
                                                              "Henry Ford Health System" = 548392715,
@@ -320,15 +329,20 @@ filtered_IP_data <- reactive({
                                                              "National Cancer Institute" = 13, "Other" = 181769837),
                                                  selected = "All"),
                                      actionButton("applyIPfilters", "Apply Filters"))),
-                        column(8,
-                               fluidRow(
-                                 div(class = "plot-container", plotlyOutput("invited_plot1")),
-                                 div(class = "plot-container", plotlyOutput("invited_plot2")),
-                                 div(class = "plot-container", plotlyOutput("invited_plot3"))),
+                        column(4, plotlyOutput("invited_plot1")),
+                        column(4, plotlyOutput("invited_plot1b"))),
+                        fluidRow(
+                                 column(4, ),
+                                 column(4, plotlyOutput("invited_plot2")),
+                                 column(4, plotlyOutput("invited_plot2b"))),
+                        fluidRow(
+                                 column(4, ),
+                                 column(4, plotlyOutput("invited_plot3")),
+                                 column(4, plotlyOutput("invited_plot3b")))
                                )
                         )
                 )
-      )
-    )
 )
+
+
 shinyApp(ui, server)
