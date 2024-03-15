@@ -75,9 +75,6 @@ verified_data <- reactive({
     source("./completed_survey.R", local = TRUE)
     output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
     
-    source("./completed_survey_barchart.R", local = TRUE)
-    output$plot6b <- renderPlotly({completed_survey_barchart(survey_data = filtered_verified_data())})
-    
     source("./income_distribution.R", local = TRUE)
     output$plot7 <- renderPlotly({income_distribution(income_data = filtered_verified_data())})
     
@@ -134,6 +131,25 @@ filtered_IP_data <- reactive({
                   column(12, align = "center", 
                          tags$h3(style = "text-align: center;", 
                                  HTML(glue("Verified Participant Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
+                  )
+                ),
+                fluidRow(
+                  # Fast facts section
+                  column(width = 4,
+                         #class = "my-custom-border",
+                         h3("Fast Facts"),
+                         p("Summary statistics here..."),
+                         # Add more details or UI elements for your fast facts
+                  ),
+                  # Map graphic column
+                  column(width = 8,
+                         #class = "my-custom-border",
+                         tags$img(src = "map_site_color_Mar2023.jpg",
+                                  style = "width:50%; height:auto;
+                                  display:block; margin-left:auto; margin-right:auto;"),
+                         tags$figcaption(style = "text-align:center;
+                                         font-style:italic;",
+                                         "Map of Catchment Coverage by Site as of March 2023")
                   )
                 ),
                 fluidRow(
@@ -235,8 +251,7 @@ filtered_IP_data <- reactive({
                 ), 
                       fluidRow(
                         column(4,
-                           div(class = "plot-container", plotlyOutput("plot5b")),
-                           div(class = "plot-container", plotlyOutput("plot6b"))# Place the new bar plot here
+                           div(class = "plot-container", plotlyOutput("plot5b"))  # Place the new bar plot here
                            ),
                   column(8,
                      fluidRow(

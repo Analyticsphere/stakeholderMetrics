@@ -15,6 +15,12 @@ box-shadow: none !important; /* Removes shadow if any */
 .plot-container .plotly {
 border: none !important;
 }",
+"/* Custom border for specific sections */
+.my-custom-border {
+  border: 1px solid #ddd !important;
+  padding: 20px;
+  border-radius: 5px;
+}",
 "/* Custom CSS to set the background color to white */
     .content-wrapper, .main-footer {
       background-color: #FFFFFF !important;
