@@ -44,7 +44,7 @@ biospecimen_collection_barchart <- function(biocol_data = data) {
                    color = ~CollectionType, colors = "Paired", showlegend = TRUE) %>%
       layout(
         title = "Distribution of Biospecimen Collections By Type",
-        xaxis = list(title = "Collection Type"),
+        xaxis = list(title = "", showticklabels = FALSE),
         yaxis = list(title = "Count"),
         legend = list(title = list(text = 'Collection Type')),
         margin = list(t = 50)

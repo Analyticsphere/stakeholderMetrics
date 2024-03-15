@@ -28,15 +28,23 @@ fig <- plot_ly(msrv_df, labels = ~Msrv_complt, values = ~Count, type = 'pie',
     
 # Customize the layout
 curr.date <- Sys.Date()
-fig <- fig %>% layout(title = c("Survey Completion Status"),
-                          annotations = list(
-                            list(x = 0, y = -0.05, text = paste0("<b>BOH</b>",": Background and Overall Health; ","<b>MRE</b>",": Medications, Reproductive Health, Exercise and Sleep;","<b> SAS</b>",": Smoking, Alcohol, and Sun Exposure;","<b> LAW</b>",": Where You Live and Work"),
-                            showarrow = F, font = list(size = 7),
-                            xanchor = 'left', align = 'left')),
-                          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                          font = list(family = "Noto Sans"),
-                           margin = list(t = 50))
+fig <- fig %>%
+  layout(title = c("Survey Completion Status"),
+         annotations = list(
+         list(x = 0,
+              y = -0.05,
+              text = paste0("<b>BOH</b>",
+                            ": Background and Overall Health; ",
+                              "<b>MRE</b>",
+                              ": Medications, Reproductive Health, Exercise and Sleep;",
+                              "<b> SAS</b>",
+                              ": Smoking, Alcohol, and Sun Exposure;",
+                              "<b> LAW</b>",": Where You Live and Work"),
+                showarrow = F,
+                xref = "paper", # Reference the entire paper area
+                yref = "paper", # Reference the entire paper area
+                font = list(size = 7),
+                xanchor = 'left', align = 'left')))
     
     # Print the plot
     fig
