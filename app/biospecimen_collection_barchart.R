@@ -39,9 +39,20 @@ biospecimen_collection_barchart <- function(biocol_data = data) {
     #descending order of bars in the chart
     all_data$CollectionType <- factor(all_data$CollectionType, levels = all_data$CollectionType)
     
+    #identify number of colors to use  
+    unique_items <- unique(all_data$CollectionType)
+    n_colors <- length(unique_items)+10
+    
+    # Ensure you have a sufficient number of colors for your activities
+    cols <- select_colors(color_palette, n_colors)
+    
+    # Map colors to activities to ensure consistency
+    color_mapping <- setNames(cols, unique_items)
+    
     #plot
     fig <- plot_ly(all_data, x = ~CollectionType, y = ~Count, type = 'bar', 
-                   color = ~CollectionType, colors = "Paired", showlegend = TRUE) %>%
+                   color = ~CollectionType, colors = color_mapping,
+                   showlegend = TRUE) %>%
       layout(
         title = "Distribution of Biospecimen Collections By Type",
         xaxis = list(title = "", showticklabels = FALSE),

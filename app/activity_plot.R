@@ -22,9 +22,15 @@ activity_data$blood_and_all_survey <- ifelse((activity_data$blood ==1 & activity
 activity_data$only_all_survey_complete <- ifelse((activity_data$blood ==0 & activity_data$all_survey_complete==1), 1, 0)
   
   
-agg <- aggregate(list(activity_data$verified, activity_data$blood, activity_data$all_survey_complete, activity_data$only_blood, activity_data$blood_and_all_survey, activity_data$only_all_survey_complete), list(verifiedcount = activity_data$Verified_wkdate) , FUN=sum)
+agg <- aggregate(list(activity_data$verified, activity_data$blood,
+                      activity_data$all_survey_complete, activity_data$only_blood,
+                      activity_data$blood_and_all_survey,
+                      activity_data$only_all_survey_complete),
+                 list(verifiedcount = activity_data$Verified_wkdate) , FUN=sum)
   
-colnames(agg) <- c("verified_date", "verified", "blood", "all_survey_complete", "only_blood", "blood_and_all_survey", "only_all_survey_complete")
+colnames(agg) <- c("verified_date", "verified", "blood",
+                   "all_survey_complete", "only_blood",
+                   "blood_and_all_survey", "only_all_survey_complete")
   
 #cumulative variables
 agg$cumul_verified <- cumsum(agg$verified)
@@ -33,7 +39,8 @@ agg$cumul_all_survey_complete <- cumsum(agg$all_survey_complete)
 agg$cumul_only_blood <- cumsum(agg$only_blood)
 agg$cumul_blood_and_all_survey <- cumsum(agg$blood_and_all_survey)
 agg$cumul_only_all_survey_complete <- cumsum(agg$only_all_survey_complete)
-agg$cumul_verified_no_activity <- agg$cumul_verified - ((agg$cumul_only_blood + agg$cumul_only_all_survey_complete) + agg$cumul_blood_and_all_survey)
+agg$cumul_verified_no_activity <- agg$cumul_verified -
+  ((agg$cumul_only_blood + agg$cumul_only_all_survey_complete) + agg$cumul_blood_and_all_survey)
   
   
 # Sorting the data by VerifiedWeekDate
@@ -55,18 +62,23 @@ agg$activity <- factor(agg$activity,
                          labels = c("Verified", "Blood", "All Modules Complete", "Only Blood", 
                                     "Blood and All Modules", "Only All Modules", "Verified, No Activity"))
   
-  # Rename the columns (optional if they are already named correctly)
+ # Rename the columns
 colnames(agg) <- c("verified_date", "activity", "value")
   
   
-  
-  # Extract unique monthly dates from data
-unique_monthly_dates <- unique(as.Date(format(agg$verified_date, "%Y-%m-01")))
-currentDate <- Sys.Date()
-  
-  
+#identify number of colors to use  
+unique_activities <- unique(agg$activity)
+n_colors <- length(unique_activities)
+
+# Ensure you have a sufficient number of colors for your activities
+cols <- select_colors(color_palette, n_colors)
+
+# Map colors to activities to ensure consistency
+color_mapping <- setNames(cols, unique_activities)
+
+
 Fig_all.plotly <- plot_ly() %>%
-    add_lines(data = agg, x = ~as.Date(verified_date), color = ~activity, colors = c("lightblue", "purple", "red", "blue", "green", "#BEBADA"),
+    add_lines(data = agg, x = ~as.Date(verified_date), color = ~activity, colors = color_mapping,
               y = ~value) %>%
     layout(
       title = list(text = c("Cumulative Number of Participants by Study Activities")),
