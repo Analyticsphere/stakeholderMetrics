@@ -130,6 +130,22 @@ filtered_IP_data <- reactive({
     source("./sex_percentage_bar_chart.R", local = TRUE)
     output$invited_plot3b <- renderPlotly({sex_percentage_bar_chart(ip_sex_data = filtered_IP_data(), v_sex_data = filtered_verified_data())})
     
+    
+    #fast facts!
+    # Reactive expression to call fast_facts function
+    fast_facts_reactive <- reactive({
+      source("./fast_facts.R", local = TRUE)
+      verified_data <- verified_data()  # Assuming this is how you get your verified data
+      fast_facts(verified_data = verified_data)
+    })
+    
+    # Render the fast facts in the UI with HTML for line breaks
+    output$fast_facts_output <- renderUI({
+      fast_facts_text <- fast_facts_reactive()
+      HTML(paste("\u2022", fast_facts_text, collapse = "<br>"))
+    })
+    
+    
 }
   
   # Define UI
@@ -154,9 +170,9 @@ filtered_IP_data <- reactive({
                 fluidRow(
                   # Fast facts section
                   column(width = 4,
-                         #class = "my-custom-border",
-                         h3("Fast Facts"),
-                         p("Summary statistics here..."),
+                         h3("Fast Facts", style = "color: var(--yellow-a);"),  # Title in yellow
+                         div(class = "fast-facts-box", style = "color: var(--yellow-a);",  # Apply yellow color to all text inside
+                         uiOutput("fast_facts_output"))
                          # Add more details or UI elements for your fast facts
                   ),
                   # Map graphic column

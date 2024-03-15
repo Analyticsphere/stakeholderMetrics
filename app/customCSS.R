@@ -21,6 +21,20 @@ border: none !important;
   padding: 20px;
   border-radius: 5px;
 }",
+"/* Custom styling for the fast facts box */
+.fast-facts-box {
+  border: 4px solid var(--yellow-a); /* Thick yellow border */
+  background-color: #FFFFFF; /* White background */
+  padding: 15px; /* Padding inside the box */
+  border-radius: 10px; /* Rounded corners */
+}",
+"/* Custom styling for the Fast Facts title */
+.fast-facts-title {
+  color: var(--yellow-a); /* Yellow text color */
+  font-size: 24px; /* Larger font size */
+  font-weight: bold; /* Bold font */
+}"
+,
 "/* Custom CSS to set the background color to white */
     .content-wrapper, .main-footer {
       background-color: #FFFFFF !important;
