@@ -137,6 +137,25 @@ filtered_IP_data <- reactive({
                   )
                 ),
                 fluidRow(
+                  # Fast facts section
+                  column(width = 4,
+                         #class = "my-custom-border",
+                         h3("Fast Facts"),
+                         p("Summary statistics here..."),
+                         # Add more details or UI elements for your fast facts
+                  ),
+                  # Map graphic column
+                  column(width = 8,
+                         #class = "my-custom-border",
+                         tags$img(src = "map_site_color_Mar2023.jpg",
+                                  style = "width:50%; height:auto;
+                                  display:block; margin-left:auto; margin-right:auto;"),
+                         tags$figcaption(style = "text-align:center;
+                                         font-style:italic;",
+                                         "Map of Catchment Coverage by Site as of March 2023")
+                  )
+                ),
+                fluidRow(
                   column(4,
                          box(solidHeader = FALSE, title = "Choose Filters:", width = 12,
                              selectInput("siteFilter", "Site",
@@ -235,8 +254,8 @@ filtered_IP_data <- reactive({
                 ), 
                       fluidRow(
                         column(4,
-                           div(class = "plot-container", plotlyOutput("plot5b")),
-                           div(class = "plot-container", plotlyOutput("plot6b"))# Place the new bar plot here
+                               div(class = "plot-container", plotlyOutput("plot5b")),
+                               div(class = "plot-container", plotlyOutput("plot6b"))
                            ),
                   column(8,
                      fluidRow(
