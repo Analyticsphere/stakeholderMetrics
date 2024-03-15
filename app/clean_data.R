@@ -21,7 +21,8 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
         state_d_706256705 == "830573274" ~ "Nonbinary",
         state_d_706256705 %in% c("178420302", NA) | state_d_435027713 %in% c("178420302", NA) ~ "Unknown"
       ),
-      biocol_type = case_when(
+      biocol_type = case_when( #leave this as-is, needs to be in this order for the biocol pie chart
+        #i need a separate variable for the bio col bar chart
         d_878865966 == "353358909" & d_167958071 == "353358909" & d_684635302 == "353358909" ~ "All 3 Sample Donations",
         d_878865966 == "353358909" & d_167958071 == "353358909" & d_684635302 == "104430631" ~ "Blood & Urine",
         d_878865966 == "353358909" & d_167958071 == "104430631" & d_684635302 == "353358909" ~ "Blood & Mouthwash",
@@ -29,8 +30,7 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
         d_878865966 == "353358909" & d_167958071 == "104430631" & d_684635302 == "104430631" ~ "Blood Only",
         d_878865966 == "104430631" & d_167958071 == "353358909" & d_684635302 == "104430631" ~ "Urine Only",
         d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "353358909" ~ "Mouthwash Only",
-        d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "104430631" ~ "No Samples"
-      ),
+        d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "104430631" ~ "No Samples"),
       Msrv_complt = case_when(
         d_100767870 == "353358909" ~ "All 4 Survey Sections",
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "BOH only",
