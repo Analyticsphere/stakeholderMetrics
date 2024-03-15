@@ -20,6 +20,12 @@ library(httr)
 source("./customCSS.R", local = TRUE)
 custom_aesthetics <- customCSS()
 
+#source the custom color palette
+#use the "select_colors" function to choose colors
+source("./color_palette.R", local = TRUE)
+color_palette <- color_palette()
+
+
 server <- function(input, output, session){
   
   #call data once for entire dashboard

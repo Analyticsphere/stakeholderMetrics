@@ -31,13 +31,19 @@ completed_survey_barchart <- function(survey_data = data) {
     all_data$SurveyType <- factor(all_data$SurveyType, levels = all_data$SurveyType)
     
     
+    #identify number of colors to use  
+    unique_items <- unique(all_data$SurveyType)
+    n_colors <- length(unique_items)+10
     
-    msrv_counts <- table(survey_data$Msrv_complt)
-    msrv_df <- as.data.frame(msrv_counts)
-    names(msrv_df) <- c("Msrv_complt", "Count")
+    # Ensure you have a sufficient number of colors for your activities
+    cols <- select_colors(color_palette, n_colors)
+    
+    # Map colors to activities to ensure consistency
+    color_mapping <- setNames(cols, unique_items)
     
     fig <- plot_ly(all_data, x = ~SurveyType, y = ~Count, type = 'bar', 
-                   color = ~SurveyType, colors = "Paired", showlegend = TRUE) %>%
+                   color = ~SurveyType, colors = color_mapping,
+                   showlegend = TRUE) %>%
       layout(
         title = "Survey Completion Status By Survey",
         xaxis = list(title = "", showticklabels = FALSE),  # Hide x-axis labels

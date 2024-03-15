@@ -10,18 +10,28 @@ library(plotly)
     return(plotly::plot_ly() %>% 
              layout(title = "Not Enough Data to Display This Chart"))
   } else {
-# Assuming the data is already read and cleaned in your R environment
-# Replace 'data_cleaned' with the name of your cleaned dataframe
+
 # Count the occurrences of each race/ethnicity
 race_counts <- table(race_data$race)
   
 # Convert to a dataframe for Plotly
 race_df <- as.data.frame(race_counts)
 names(race_df) <- c("race", "Count")
+
+#identify number of colors to use  
+unique_items <- unique(race_df$race)
+n_colors <- length(unique(race_df$race))
+
+# Ensure you have a sufficient number of colors for your activities
+cols <- select_colors(color_palette, n_colors)
+
+# Map colors to activities to ensure consistency
+color_mapping <- setNames(cols, unique_items)
   
 # Create a Plotly pie chart
 fig <- plot_ly(race_df, labels = ~race, values = ~Count, type = 'pie',
                textinfo='label',
+               marker = list(colors = color_mapping),
                hoverinfo = 'label+percent',
                insidetextorientation = 'radial',
                domain = list(x = c(0.1, 0.9), y = c(0.1, 0.9)))

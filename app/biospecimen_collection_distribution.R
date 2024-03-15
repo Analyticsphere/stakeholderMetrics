@@ -15,9 +15,21 @@ biocol_counts <- as.data.frame(table(biocol_data$biocol_type))
   
 # Convert to a dataframe for Plotly
 names(biocol_counts) <- c("CollectionType", "Count")
+
+#identify number of colors to use  
+unique_items <- unique(biocol_counts$CollectionType)
+n_colors <- length(unique(biocol_counts$CollectionType))
+
+# Ensure you have a sufficient number of colors for your activities
+cols <- select_colors(color_palette, n_colors)
+
+# Map colors to activities to ensure consistency
+color_mapping <- setNames(cols, unique_items)
   
 # Create a Plotly pie chart
-fig <- plot_ly(biocol_counts, labels = ~CollectionType, values = ~Count, type = 'pie',
+fig <- plot_ly(biocol_counts, labels = ~CollectionType, values = ~Count,
+               type = 'pie',
+               marker = list(colors = color_mapping),
                textinfo='label',
                hoverinfo = 'label+percent',
                insidetextorientation = 'radial',

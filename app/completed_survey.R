@@ -18,9 +18,20 @@ msrv_counts <- table(survey_data$Msrv_complt)
 # Convert to a dataframe for Plotly
 msrv_df <- as.data.frame(msrv_counts)
 names(msrv_df) <- c("Msrv_complt", "Count")
+
+#identify number of colors to use  
+unique_items <- unique(msrv_df$Msrv_complt)
+n_colors <- length(unique(msrv_df$Msrv_complt))+15
+
+# Ensure you have a sufficient number of colors for your activities
+cols <- select_colors(color_palette, n_colors)
+
+# Map colors to activities to ensure consistency
+color_mapping <- setNames(cols, unique_items)
     
 # Create a Plotly pie chart
 fig <- plot_ly(msrv_df, labels = ~Msrv_complt, values = ~Count, type = 'pie',
+               marker = list(colors = color_mapping),
                hoverinfo = 'label+percent',
                textinfo ='label',
                insidetextorientation = 'radial',
