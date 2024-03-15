@@ -75,6 +75,9 @@ verified_data <- reactive({
     source("./completed_survey.R", local = TRUE)
     output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
     
+    source("./completed_survey_barchart.R", local = TRUE)
+    output$plot6b <- renderPlotly({completed_survey_barchart(survey_data = filtered_verified_data())})
+    
     source("./income_distribution.R", local = TRUE)
     output$plot7 <- renderPlotly({income_distribution(income_data = filtered_verified_data())})
     
@@ -251,7 +254,8 @@ filtered_IP_data <- reactive({
                 ), 
                       fluidRow(
                         column(4,
-                           div(class = "plot-container", plotlyOutput("plot5b"))  # Place the new bar plot here
+                               div(class = "plot-container", plotlyOutput("plot5b")),
+                               div(class = "plot-container", plotlyOutput("plot6b"))
                            ),
                   column(8,
                      fluidRow(
