@@ -139,7 +139,7 @@ filtered_IP_data <- reactive({
     output$totalVerifiedBox <- renderValueBox({
       facts <- fast_facts_reactive()
       valueBox(value = tags$p(paste0(facts$total_verified), style = "font-size:75%;"),
-               subtitle = tags$p("Users", style = "font-size: 95%"),
+               subtitle = tags$p("Participants", style = "font-size: 95%"),
                icon = tags$i(class = "fas fa-users", style = "font-size: 40px"))
     })
     
@@ -167,8 +167,8 @@ filtered_IP_data <- reactive({
         first_line <- paste0(income_parts[1], "-")
         second_line <- income_parts[2]
         # Combine lines with a line break for the subtitle
-        formatted_subtitle <- paste0(first_line, second_line, sep = "/n")
-        valueBox(value = tags$p(formatted_subtitle, style = "font-size: 60%;"),
+        formatted_subtitle <- paste0(first_line, second_line)
+        valueBox(value = tags$p(formatted_subtitle, style = "font-size: 40%;"),
                  subtitle = tags$p("Most Common Annual Income", style = "font-size: 75%"),
                  icon = tags$i(class = "fas fa-money-bill", style = "font-size: 40px"))
       })
