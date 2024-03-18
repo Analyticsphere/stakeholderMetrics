@@ -307,14 +307,19 @@ filtered_IP_data <- reactive({
                                          selected = "All"),
                              actionButton("applyFilters", "Apply Filters"))),
                          column(width = 8,
-                                fluidRow(
-                                  div(class = "plot-container", plotlyOutput("plot1")),
-                                  div(class = "plot-container", plotlyOutput("plot2")),
-                                  div(class = "pie-plot-container", plotlyOutput("plot3")),
-                                  div(class = "pie-plot-container", plotlyOutput("plot4"))
-                                  )
-                                  ) 
-                ), 
+                                  div(class = "plots-section-box",
+                                  h3("Demographics", style = "margin-top: 0; color: var(--yellow-a);"),  # Title for the section
+                                  fluidRow(
+                                  column(width = 4, div(class = "plot-container", plotlyOutput("plot2"))),
+                                  column(width = 4, div(class = "plot-container", plotlyOutput("plot2")))
+                                  ),
+                         fluidRow(
+                           column(width = 4, div(class = "plot-container", plotlyOutput("plot7"))),
+                           column(width = 4, div(class = "plot-container", plotlyOutput("plot7")))
+                         )
+                  )
+                )
+              ), 
                       fluidRow(
                         column(4,
                                div(class = "plot-container", plotlyOutput("plot5b")),
@@ -324,7 +329,6 @@ filtered_IP_data <- reactive({
                      fluidRow(
                          div(class = "pie-plot-container", plotlyOutput("plot5")),
                          div(class = "pie-plot-container", plotlyOutput("plot6")),
-                         div(class = "plot-container", plotlyOutput("plot7"))
                  )
                  )
              )
