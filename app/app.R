@@ -130,7 +130,53 @@ filtered_IP_data <- reactive({
     source("./sex_percentage_bar_chart.R", local = TRUE)
     output$invited_plot3b <- renderPlotly({sex_percentage_bar_chart(ip_sex_data = filtered_IP_data(), v_sex_data = filtered_verified_data())})
     
+    fast_facts_reactive <- reactive({
+      source("./fast_facts2.R", local = TRUE)
+      verified_data <- verified_data()  # Assuming this is how you get your verified data
+      fast_facts(verified_data = verified_data)
+    })
+    
+    output$totalVerifiedBox <- renderValueBox({
+      facts <- fast_facts_reactive()
+      valueBox(value = tags$p(paste0(facts$total_verified), style = "font-size:75%;"),
+               subtitle = tags$p("Participants", style = "font-size: 95%"),
+               icon = tags$i(class = "fas fa-users", style = "font-size: 40px"))
+    })
+    
+
+    output$maleVerifiedBox <- renderValueBox({
+      facts <- fast_facts_reactive()
+      valueBox(value = tags$p(paste0(facts$male_verified), style = "font-size: 75%;"),
+               subtitle = tags$p("Male", style = "font-size: 95%"),
+               icon = tags$i(class = "fas fa-mars", style = "font-size: 40px"))
+    })
+
+      output$femaleVerifiedBox <- renderValueBox({
+        facts <- fast_facts_reactive()
+        valueBox(value = tags$p(paste0(facts$female_verified), style = "font-size: 75%;"),
+                 subtitle = tags$p("Female", style = "font-size: 95%"),
+                 icon = tags$i(class = "fas fa-venus", style = "font-size: 40px"))
+      })
+
+
+      output$commonIncomeBox <- renderValueBox({
+        facts <- fast_facts_reactive()
+        # Split the string at the hyphen
+        income_parts <- unlist(strsplit(facts$common_income, "-"))
+        # Prepare the two lines with the hyphen and line break
+        first_line <- paste0(income_parts[1], "-")
+        second_line <- income_parts[2]
+        # Combine lines with a line break for the subtitle
+        formatted_subtitle <- paste0(first_line, second_line)
+        valueBox(value = tags$p(formatted_subtitle, style = "font-size: 40%;"),
+                 subtitle = tags$p("Most Common Annual Income", style = "font-size: 75%"),
+                 icon = tags$i(class = "fas fa-money-bill", style = "font-size: 40px"))
+      })
+      
 }
+    
+    
+
   
   # Define UI
   ui <- dashboardPage(
@@ -154,9 +200,11 @@ filtered_IP_data <- reactive({
                 fluidRow(
                   # Fast facts section
                   column(width = 4,
-                         #class = "my-custom-border",
-                         h3("Fast Facts"),
-                         p("Summary statistics here..."),
+                         h3("Newly Verified March Participant Fast Facts:", style = "color: var(--yellow-a);"),  # Title in yellow
+                         valueBoxOutput("totalVerifiedBox"),
+                         valueBoxOutput("maleVerifiedBox"),
+                         valueBoxOutput("femaleVerifiedBox"),
+                         valueBoxOutput("commonIncomeBox")
                          # Add more details or UI elements for your fast facts
                   ),
                   # Map graphic column

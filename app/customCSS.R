@@ -21,6 +21,34 @@ border: none !important;
   padding: 20px;
   border-radius: 5px;
 }",
+"/* Custom styling for the fast facts box */
+.fast-facts-box {
+  border: 4px solid var(--yellow-a); /* Thick yellow border */
+  background-color: #FFFFFF; /* White background */
+  padding: 15px; /* Padding inside the box */
+  border-radius: 10px; /* Rounded corners */
+}",
+"/* Custom styling for the Fast Facts title */
+.fast-facts-title {
+  color: var(--yellow-a); /* Yellow text color */
+  font-size: 24px; /* Larger font size */
+  font-weight: bold; /* Bold font */
+}",
+".custom-yellow-bg {
+  background-color: var(--yellow-a) !important;
+}",
+"#totalVerifiedBox .small-box {
+  background-color: var(--yellow-a) !important;
+}",
+"#maleVerifiedBox .small-box {
+  background-color: var(--yellow-a) !important;
+}",
+"#femaleVerifiedBox .small-box {
+  background-color: var(--yellow-a) !important;
+}",
+"#commonIncomeBox .small-box {
+  background-color: var(--yellow-a) !important;
+}",
 "/* Custom CSS to set the background color to white */
     .content-wrapper, .main-footer {
       background-color: #FFFFFF !important;
@@ -44,7 +72,7 @@ border: none !important;
   background-color: rgb(49, 159, 190);
 }",
 "/* Accent color for box backgrounds or elements */
-.accent-bg {
+.accent-bg .small-box.bg-yellow {
   background-color: rgb(255, 191, 23);
 }",
 
