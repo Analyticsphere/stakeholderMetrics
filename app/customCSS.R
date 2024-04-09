@@ -1,9 +1,9 @@
 # Define the custom CSS to apply the color palette
 customCSS <- function(){
-c <- paste0(
-#first import the font, need to do this first
-"@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');",
-
+  c <- paste0(
+    #first import the font, need to do this first
+    "@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');",
+    
 #colors, borders:
 " /* Remove borders from selectInput and actionButton */
 .selectize-control, .btn, .box {
@@ -54,14 +54,6 @@ border: none !important;
       background-color: #FFFFFF !important;
     }
   ",
-"/* Custom styling for the plots section box */
-  .plots-section-box {
-    border: 4px solid var(--yellow-a); /* Thick yellow border */
-      background-color: #FFFFFF; /* White background */
-      padding: 15px; /* Padding inside the box */
-      border-radius: 10px; /* Rounded corners */
-      margin-bottom: 20px; /* Space below the box */
-  }",
 "/* Header background color */
 .skin-blue .main-header .navbar {
   background-color: rgb(42, 114, 165);
@@ -105,7 +97,7 @@ h3 {
 "/* Add more space around plot containers */
 .plot-container, .pie-plot-container {
     margin-bottom: 40px; /* Space between plots vertically */
-    padding: 0; /* Optional: Adds space inside the container, around the plot */
+    padding: 10px; /* Optional: Adds space inside the container, around the plot */
 }",
 ##COLORS##
 ":root {
@@ -151,4 +143,3 @@ h3 {
   --brown-d: #E7CCAD;
   --brown-e: #F3E6D6;
 }")}
-
