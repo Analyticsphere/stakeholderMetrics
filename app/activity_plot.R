@@ -76,6 +76,15 @@ cols <- select_colors(color_palette, n_colors)
 # Map colors to activities to ensure consistency
 color_mapping <- setNames(cols, unique_activities)
 
+# Ensure 'verified_date' is in Date format
+agg$verified_date <- as.Date(agg$verified_date)
+
+# Generate unique monthly dates
+# This finds the first date of each month present in your data
+unique_monthly_dates <- seq(min(agg$verified_date), max(agg$verified_date), by="month")
+unique_monthly_dates <- unique(format(unique_monthly_dates, "%Y-%m-01"))
+unique_monthly_dates <- as.Date(unique_monthly_dates)
+
 
 Fig_all.plotly <- plot_ly() %>%
     add_lines(data = agg, x = ~as.Date(verified_date), color = ~activity, colors = color_mapping,

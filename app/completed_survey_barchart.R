@@ -46,13 +46,13 @@ completed_survey_barchart <- function(survey_data = data) {
                    showlegend = TRUE) %>%
       layout(
         title = "Survey Completion Status By Survey",
-        xaxis = list(title = "", showticklabels = FALSE),  # Hide x-axis labels
+        xaxis = list(title = "", showticklabels = TRUE),  # Hide x-axis labels
         yaxis = list(title = "Count"),
         legend = list(title = list(text = 'Survey')),
         margin = list(t = 50),
         annotations = list(
           list(x = 0,
-               y = -0.05,
+               y = -0.1,
                text = paste0("<b>BOH</b>",
                             ": Background and Overall Health; ",
                             "<b>MRE</b>",

@@ -1,9 +1,9 @@
 # Define the custom CSS to apply the color palette
 customCSS <- function(){
-c <- paste0(
-#first import the font, need to do this first
-"@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');",
-
+  c <- paste0(
+    #first import the font, need to do this first
+    "@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');",
+    
 #colors, borders:
 " /* Remove borders from selectInput and actionButton */
 .selectize-control, .btn, .box {
@@ -143,4 +143,3 @@ h3 {
   --brown-d: #E7CCAD;
   --brown-e: #F3E6D6;
 }")}
-
