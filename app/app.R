@@ -193,15 +193,15 @@ ui <- dashboardPage(
       tabItem(tabName = "dashboard",
               fluidRow(
                 column(12, align = "center", 
-                       tags$h3(style = "text-align: center;font-size: 36px;color: var(--yellow-a);", 
+                       tags$h3(style = "text-align: center;font-size: 36px;color: black;", 
                                HTML(glue("Verified Participant Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
                 )
               ),
               fluidRow(
                 # Wrap the Fast facts section in a div with a border
                 div(class="col-md-4", 
-                    style = "border: 15px solid var(--yellow-a); padding: 20px;text-align: left",
-                    h3("Newly Verified March Participant Fast Facts", style = "color: var(--yellow-a);"),
+                    style = "padding: 20px;text-align: left",
+                    h3("Newly Verified March Participant Fast Facts", style = "color: black;"),
                     valueBoxOutput("totalVerifiedBox"),
                     valueBoxOutput("maleVerifiedBox"),
                     valueBoxOutput("femaleVerifiedBox"),
@@ -220,8 +220,8 @@ ui <- dashboardPage(
               # Insert a new fluidRow for the horizontal bar
               fluidRow(
                 column(12,
-                       h1("Demographic Statistics", style = "color:var(--yellow-a)"),
-                       div(style ="height: 15px; background-color: var(--yellow-a); margin: 20px 0;"),  # Adjust the height and color
+                       h1("Demographic Statistics", style = "color: black"),
+                       div(style ="height: 15px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
                        
                 )
               ),
@@ -331,8 +331,8 @@ ui <- dashboardPage(
               # Insert a new fluidRow for the horizontal bar
               fluidRow(
                 column(12,
-                       h1("Survey Completion Statistics", style = "color:var(--yellow-a)"),
-                       div(style ="height: 15px; background-color: var(--yellow-a); margin: 20px 0;"),  # Adjust the height and color
+                       h1("Survey Completion Statistics", style = "color: black"),
+                       div(style ="height: 15px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
                        
                 )
               ),
