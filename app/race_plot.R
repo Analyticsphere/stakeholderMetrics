@@ -18,6 +18,13 @@ race_counts <- table(race_data$race)
 race_df <- as.data.frame(race_counts)
 names(race_df) <- c("race", "Count")
 
+#change the unknown label
+race_df <- race_df %>%
+  mutate(race = case_when(
+    race == "UNKNOWN" ~ "Unknown",
+    TRUE ~ as.character(race)
+    ))
+
 # Apply the function to create a new column with acronyms
 race_df$Acronym <- ifelse(race_df$race == "American Indian or Alaska Native", "AIAN",
                    ifelse(race_df$race == "Asian", "A",
@@ -52,7 +59,7 @@ fig <- plot_ly(race_df, labels = ~race, values = ~Count, type = 'pie',
 
 # Customize the layout
 curr.date <- Sys.Date()
-fig <- fig %>% layout(title = c("Self-Reported Race of Participants Who Completed BOH Section"),
+fig <- fig %>% layout(title = c("Self-reported Race of Participants Who Completed BOH Section"),
                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                       yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                       font = list(family = "Noto Sans"),
