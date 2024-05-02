@@ -12,6 +12,13 @@ library(plotly)
 
     if("age" %in% colnames(age_data)){
     
+#change the unknown label
+age_data <- age_data %>%
+mutate(age = case_when(
+age == "UNKNOWN" ~ "Unknown",
+TRUE ~ as.character(age)
+))
+
 # Create the histogram plot with plotly
   plot <- plot_ly(data = age_data, x = ~age, type = 'histogram',
                   hoverinfo = 'x+y', hoverlabel = list(bgcolor = 'white'),
@@ -25,6 +32,12 @@ library(plotly)
                           font = list(family = "Noto Sans"),
                           margin = list(t = 50))
   plot} else{
+    #change the unknown label
+    age_data <- age_data %>%
+      mutate(Age = case_when(
+        Age == "UNKNOWN" ~ "Unknown",
+        TRUE ~ as.character(Age)
+      ))
     # Create the histogram plot with plotly
     plot <- plot_ly(data = age_data, x = ~Age, type = 'histogram',
                     hoverinfo = 'x+y', hoverlabel = list(bgcolor = 'white'),
