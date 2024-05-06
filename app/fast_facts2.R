@@ -4,7 +4,7 @@ fast_facts <- function(verified_data = data) {
   
   # Convert Verified_wkdate to Date format
   verified_data$verified_date <- as.Date(verified_data$Verified_wkdate, format = "%Y-%m-%d")
-  current_month <- as.Date("2024-03-01")
+  current_month <- as.Date("2024-05-01")
   current_verified_data <- filter(verified_data, verified_date >= current_month)
   
   # Number of newly verified participants
