@@ -26,7 +26,7 @@ TRUE ~ as.character(age)
                   
   #This variable is from the user profile, therefore its self-reported
   # Update layout
-  plot <- plot %>% layout(title = list(text = c("Self Reported Ages of Verified Participants")),
+  plot <- plot %>% layout(title = list(text = c("Self-reported Ages of Verified Participants")),
                           xaxis = list(title = list(text = "Age")),
                           yaxis = list(title = list(text = "Count")),
                           font = list(family = "Noto Sans"),

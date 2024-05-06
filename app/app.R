@@ -201,7 +201,7 @@ ui <- dashboardPage(
                 # Wrap the Fast facts section in a div with a border
                 div(class="col-md-4", 
                     style = "padding: 20px;text-align: left",
-                    h3("Newly Verified March Participant Fast Facts", style = "color: black;"),
+                    h3("Newly Verified May Participant Fast Facts", style = "color: black;"),
                     valueBoxOutput("totalVerifiedBox"),
                     valueBoxOutput("maleVerifiedBox"),
                     valueBoxOutput("femaleVerifiedBox"),
