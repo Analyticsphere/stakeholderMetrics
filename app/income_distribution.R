@@ -44,7 +44,7 @@ library(plotly)
                                   line = list(color = 'black', width = 1)))
     
     plot <- plot %>%
-      layout(title = "Self Reported Income of Verified Participants",
+      layout(title = "Self-reported Income of Participants",
              xaxis = list(title = "Income"),
              yaxis = list(title = "Count"),
              font = list(family = "Noto Sans"),
