@@ -41,7 +41,8 @@ participant_status<- function(status_data=data){
 
     
     #initialize graphic with first site data
-    kp_data <- filter(status_data, status_data$site == "125001209")
+    kp_data <- status_data[status_data$site == "125001209",]
+    
     signed_in <- nrow(kp_data[kp_data$d_230663853 == 353358909,])
     signed_in_population <- kp_data[kp_data$d_230663853 == 353358909,]
     consented <- nrow(signed_in_population[signed_in_population$d_919254129 == 353358909,])

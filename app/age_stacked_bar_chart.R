@@ -6,7 +6,7 @@ age_stacked_bar_chart <- function(ip_age_data = data, v_age_data = data) {
     return(plotly::plot_ly() %>% layout(title = "Not Enough Data to Display This Chart"))
   } else {
     # Combining the age data and setting a unified order for age categories
-    combined_ages <- c(ip_age_data$Age, v_age_data$age)
+    combined_ages <- c(ip_age_data$age, v_age_data$age)
     ordered_ages <- factor(combined_ages, levels = unique(combined_ages[order(combined_ages)]))
     
     ip_age_factor <- data.frame(age_factor = ordered_ages[1:nrow(ip_age_data)])
