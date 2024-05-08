@@ -109,7 +109,7 @@ server <- function(input, output, session){
       invited_participant_data()%>%
         filter((input$IPsiteFilter == "." | site == input$IPsiteFilter) &
                  (input$IPsexFilter == "." | sex == input$IPsexFilter) &
-                 (input$IPageFilter == "." | Age == input$IPageFilter)&
+                 (input$IPageFilter == "." | age == input$IPageFilter)&
                  (input$IPraceFilter == "." | race == input$IPraceFilter))
     }else{
       invited_participant_data()
