@@ -15,6 +15,7 @@ library(forcats)
 library(expss)
 library(jsonlite)
 library(httr)
+library(forecast)
 
 #source the custom aesthetic values for fonts and colors
 source("./customCSS.R", local = TRUE)
@@ -31,8 +32,8 @@ server <- function(input, output, session){
   #call data once for entire dashboard
   #authentication step for Posit
   #this code was written by D Russ
-  #   source("./get_authentication.R", local = TRUE)
-  #    get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+     #source("./get_authentication.R", local = TRUE)
+     # get_authentication(service_account_key = "SERVICE_ACCT_KEY")
   
   #load verified data
   verified_data <- reactive({
@@ -86,6 +87,9 @@ server <- function(input, output, session){
   
   source("./income_distribution.R", local = TRUE)
   output$plot7 <- renderPlotly({income_distribution(income_data = filtered_verified_data())})
+
+  source("./participant_status_funnel.R", local = TRUE)
+  output$plotFunnel <- renderPlotly({participant_status(status_data = invited_participant_data())})
   
   
   invited_participant_data <- reactive({
@@ -207,8 +211,14 @@ ui <- dashboardPage(
                     valueBoxOutput("femaleVerifiedBox"),
                     valueBoxOutput("commonIncomeBox")
                 ),
+                div(class = "grid-container",style ="width:40%display:inline-block",
+                    column(width = 4,
+                           fluidRow(
+                             div(class = "plot-container", plotlyOutput("plotFunnel")))
+                    )
+                ),
                 # Map graphic column
-                column(width = 8,
+                column(width = 4,
                        tags$img(src = "map_site_color_Mar2023.jpg",
                                 style = "width:50%; height:auto;
                                   display:block; margin-left:auto; margin-right:auto;"),
