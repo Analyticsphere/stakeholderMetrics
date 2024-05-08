@@ -52,7 +52,7 @@ color_mapping <- setNames(cols, unique_items)
 fig <- plot_ly(race_df, labels = ~race, values = ~Count, type = 'pie',
                text = race_df$Acronym,
                textinfo = 'text',
-               marker = list(colors = 'blue'),
+               marker = list(colors = color_mapping),
                hoverinfo = 'label+percent',
                insidetextorientation = 'radial',
                domain = list(x = c(0.1, 0.9), y = c(0.1, 0.9)))
