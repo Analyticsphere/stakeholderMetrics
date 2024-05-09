@@ -203,17 +203,17 @@ ui <- dashboardPage(
               ),
               fluidRow(
                 # Wrap the Fast facts section in a div with a border
-                div(class="col-md-4", 
-                    style = "padding: 20px;text-align: left",
-                    h3("Newly Verified May Participant Fast Facts", style = "color: black;"),
-                    valueBoxOutput("totalVerifiedBox"),
-                    valueBoxOutput("maleVerifiedBox"),
-                    valueBoxOutput("femaleVerifiedBox"),
-                    valueBoxOutput("commonIncomeBox")
+                column(width = 2,
+                    style = "padding: 20px;text-align: center",
+                    h3("May Verification Fast Facts", style = "color: black;"),
+                    valueBoxOutput("totalVerifiedBox", width = 12),
+                    valueBoxOutput("maleVerifiedBox", width = 12),
+                    valueBoxOutput("femaleVerifiedBox", width = 12),
+                    valueBoxOutput("commonIncomeBox", width = 12)
                 ),
                 
                 # Map graphic column
-                column(width = 5,
+                column(width = 7,
                        tags$img(src = "map_site_color_Mar2023.jpg",
                                 style = "width:100%; height:auto;
                                   display:block; margin-left:auto; margin-right:auto;"),
@@ -223,6 +223,8 @@ ui <- dashboardPage(
                 ),
                 div(class = "grid-container",style ="width:40%display:inline-block",
                     column(width = 3,
+                           style = "padding: 20px;text-align: center",
+                           h3("Participant Workflow by Site", style = "color: black;"),
                            fluidRow(
                              div(class = "plot-container", plotlyOutput("plotFunnel")))
                     )
