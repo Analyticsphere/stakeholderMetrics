@@ -32,8 +32,8 @@ server <- function(input, output, session){
   #call data once for entire dashboard
   #authentication step for Posit
   #this code was written by D Russ
-     #source("./get_authentication.R", local = TRUE)
-     # get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+  #source("./get_authentication.R", local = TRUE)
+  #get_authentication(service_account_key = "SERVICE_ACCT_KEY")
   
   #load verified data
   verified_data <- reactive({
@@ -211,20 +211,21 @@ ui <- dashboardPage(
                     valueBoxOutput("femaleVerifiedBox"),
                     valueBoxOutput("commonIncomeBox")
                 ),
-                div(class = "grid-container",style ="width:40%display:inline-block",
-                    column(width = 4,
-                           fluidRow(
-                             div(class = "plot-container", plotlyOutput("plotFunnel")))
-                    )
-                ),
+                
                 # Map graphic column
-                column(width = 4,
+                column(width = 5,
                        tags$img(src = "map_site_color_Mar2023.jpg",
-                                style = "width:50%; height:auto;
+                                style = "width:100%; height:auto;
                                   display:block; margin-left:auto; margin-right:auto;"),
                        tags$figcaption(style = "text-align:center;
                                          font-style:italic;margin-bottom: 140px",
                                        "Map of Catchment Coverage by Site as of March 2023")
+                ),
+                div(class = "grid-container",style ="width:40%display:inline-block",
+                    column(width = 3,
+                           fluidRow(
+                             div(class = "plot-container", plotlyOutput("plotFunnel")))
+                    )
                 )
               ),
               # Insert a new fluidRow for the horizontal bar
