@@ -61,6 +61,13 @@ server <- function(input, output, session){
     }
   })
   
+  #load aggregated IP data
+  aggregated_IP_data <- reactive({
+    source("./clean_data.R", local = TRUE)
+    source("./get_data.R", local=TRUE)
+    data <- get_data(table = "participantFunnelGraph") # Fetch your data
+  })
+  
   source("./activity_plot.R", local = TRUE)
   output$plot1 <- renderPlotly({activity_plot(activity_data=filtered_verified_data())})
   
@@ -88,8 +95,8 @@ server <- function(input, output, session){
   source("./income_distribution.R", local = TRUE)
   output$plot7 <- renderPlotly({income_distribution(income_data = filtered_verified_data())})
 
-  source("./participant_status_funnel.R", local = TRUE)
-  output$plotFunnel <- renderPlotly({participant_status(status_data = invited_participant_data())})
+  source("./participant_status_funnel2.R", local = TRUE)
+  output$plotFunnel <- renderPlotly({participant_status(status_data = aggregated_IP_data())})
   
   
   invited_participant_data <- reactive({
@@ -213,7 +220,7 @@ ui <- dashboardPage(
                 ),
                 
                 # Map graphic column
-                column(width = 7,
+                column(width = 6,
                        tags$img(src = "map_site_color_Mar2023.jpg",
                                 style = "width:100%; height:auto;
                                   display:block; margin-left:auto; margin-right:auto;"),
@@ -222,7 +229,7 @@ ui <- dashboardPage(
                                        "Map of Catchment Coverage by Site as of March 2023")
                 ),
                 div(class = "grid-container",style ="width:40%display:inline-block",
-                    column(width = 3,
+                    column(width = 4,
                            style = "padding: 20px;text-align: center",
                            h3("Participant Workflow by Site", style = "color: black;"),
                            fluidRow(
