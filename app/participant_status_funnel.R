@@ -108,7 +108,7 @@ participant_status<- function(status_data=data){
     
     #finalize plot here
     fig <- fig %>%
-      layout(title = "Participant Workflow by Site",
+      layout(
              yaxis = list(categoryarray = c("Signed-In:", "Consented:", "Profile Done:", "Verification:", "Verified:")),
              annotations = list(
                list(x = 0, y = "Signed-In:", xref = "paper", yref = "y",
