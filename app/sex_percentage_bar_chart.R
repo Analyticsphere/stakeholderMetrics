@@ -35,7 +35,8 @@ sex_percentage_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
     invited_color <- 'rgb(45, 159, 190)'    
     
     # Create the percentage bar chart
-    plot_ly(data = count_matrix, x = ~sex_factor, y = ~percentage, type = 'bar', marker = list(color = 'rgb(42, 114, 165)')) %>%
+    plot_ly(data = count_matrix, x = ~sex_factor, y = ~percentage, type = 'scatter',
+            marker = list(color = 'rgb(42, 114, 165)'), mode = 'markers') %>%
       layout(
         yaxis = list(title = 'Percentage'), 
         xaxis = list(title = 'Gender'),

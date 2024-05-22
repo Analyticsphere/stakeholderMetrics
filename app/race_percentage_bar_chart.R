@@ -58,7 +58,8 @@ race_percentage_bar_chart <- function(ip_race_data = data, v_race_data = data) {
     
     # Create the percentage bar chart
     plot_ly(data = count_matrix, x = ~race_factor, y = ~percentage,
-            type = 'bar', marker = list(color = 'rgb(42, 114, 165)')) %>%
+            type = 'scatter', marker = list(color = 'rgb(42, 114, 165)'),
+            mode = 'markers') %>%
       layout(
         yaxis = list(title = 'Percentage'), 
         xaxis = list(title = 'Race'),

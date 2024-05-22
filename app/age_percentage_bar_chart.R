@@ -24,7 +24,10 @@ age_percentage_bar_chart <- function(ip_age_data = data, v_age_data = data) {
       mutate(percentage = 100 * (`Verified` / `Invited`)) %>%
       mutate(percentage = ifelse(is.infinite(percentage) | is.na(percentage), 0, percentage))
     
-    plot_ly(data = count_matrix, x = ~age_factor, y = ~percentage, type = 'bar', marker = list(color = 'rgb(42, 114, 165)')) %>%
+    plot_ly(data = count_matrix, x = ~age_factor, y = ~percentage,
+            mode = 'markers',
+            type = 'scatter',
+            marker = list(color = 'rgb(42, 114, 165)')) %>%
       layout(yaxis = list(title = 'Percentage'), 
              xaxis = list(title = 'Age'),
              title = 'Response Ratio by Age',
