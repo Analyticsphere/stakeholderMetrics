@@ -25,6 +25,11 @@ If you are tasked with making any changes to the dashboard, please assign yourse
 
 
 ## Backend GCP Structure
+Stakeholder Metrics Dashboard Data Pipeline
+<img width="885" alt="Screenshot 2024-06-13 at 10 46 11 AM" src="https://github.com/Analyticsphere/stakeholderMetrics/assets/32822979/2a25c648-e26f-46b3-a01c-a5a7d654c91a">
+
+
+
 |Dashboard Tab| Datasource|Datasource Update Schedule|
 ---------------|----------|--------------------------|
 Verified |`nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.complete_table`| `complete query`, 12pm daily|
