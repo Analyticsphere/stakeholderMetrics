@@ -99,15 +99,15 @@ server <- function(input, output, session){
   output$plotFunnel <- renderPlotly({participant_status(status_data = aggregated_IP_data())})
   
   
-#  invited_participant_data <- reactive({
-#    source("./clean_data.R", local = TRUE)
-#    source("./get_data.R", local=TRUE)
-#    invited_participant_data <- clean_data(get_data(project =
-#                                                      "nih-nci-dceg-connect-bq2-prod",
-#                                                    dataset = "StakeHolderMetrics_RS",
-#                                                    table = "invited_participants_complete"),
-#                                           type = "invited")
-#  })
+  invited_participant_data <- reactive({
+    source("./clean_data.R", local = TRUE)
+    source("./get_data.R", local=TRUE)
+    invited_participant_data <- clean_data(get_data(project =
+                                                      "nih-nci-dceg-connect-bq2-prod",
+                                                    dataset = "StakeHolderMetrics_RS",
+                                                    table = "invited_participants_complete"),
+                                           type = "invited")
+  })
   
   
   filtered_IP_data <- reactive({
@@ -473,7 +473,7 @@ ui <- dashboardPage(
               fluidRow(
                 column(12, align = "center", 
                        tags$h3(style = "text-align: center;", 
-                               HTML(glue("Site-reported Recruitment Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
+                               HTML(glue("2024 Q1 Site-reported Recruitment Dashboard")))
                 )
               ),
               fluidRow(
