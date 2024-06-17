@@ -183,14 +183,15 @@ ui <- dashboardPage(
   dashboardHeader(title = "Connect for Cancer Prevention"),
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Plot Dashboard", tabName = "dashboard"),
-      menuItem("Invited Participant Dashboard", tabName = "invited_participants")
+      menuItem("Verified Participants", tabName = "verified_participants"),
+      menuItem("Invited Participants", tabName = "invited_participants"),
+      menuItem("Site-reported Recruitment", tabName = "site_reported_participants")
     )
   ),
   dashboardBody(
     tags$head(tags$style(HTML(custom_aesthetics))), 
     tabItems(
-      tabItem(tabName = "dashboard",
+      tabItem(tabName = "verified_participants",
               fluidRow(
                 column(12, align = "center", 
                        tags$h3(style = "text-align: center;font-size: 36px;color: var(--yellow-a);", 
@@ -408,8 +409,16 @@ ui <- dashboardPage(
                 column(4, ),
                 column(4, plotlyOutput("invited_plot3")),
                 column(4, plotlyOutput("invited_plot3b")))
+      ),
+      tabItem(tabName = "site_reported_participants",
+              fluidRow(
+                column(12, align = "center", 
+                       tags$h3(style = "text-align: center;", 
+                               HTML(glue("Site-reported Recruitment Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
+                )
+              )
       )
-    )
+      )
   )
 )
 
