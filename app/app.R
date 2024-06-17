@@ -99,15 +99,15 @@ server <- function(input, output, session){
   output$plotFunnel <- renderPlotly({participant_status(status_data = aggregated_IP_data())})
   
   
-  invited_participant_data <- reactive({
-    source("./clean_data.R", local = TRUE)
-    source("./get_data.R", local=TRUE)
-    invited_participant_data <- clean_data(get_data(project =
-                                                      "nih-nci-dceg-connect-bq2-prod",
-                                                    dataset = "StakeHolderMetrics_RS",
-                                                    table = "invited_participants_complete"),
-                                           type = "invited")
-  })
+#  invited_participant_data <- reactive({
+#    source("./clean_data.R", local = TRUE)
+#    source("./get_data.R", local=TRUE)
+#    invited_participant_data <- clean_data(get_data(project =
+#                                                      "nih-nci-dceg-connect-bq2-prod",
+#                                                    dataset = "StakeHolderMetrics_RS",
+#                                                    table = "invited_participants_complete"),
+#                                           type = "invited")
+#  })
   
   
   filtered_IP_data <- reactive({
@@ -140,6 +140,45 @@ server <- function(input, output, session){
   
   source("./sex_percentage_bar_chart.R", local = TRUE)
   output$invited_plot3b <- renderPlotly({sex_percentage_bar_chart(ip_sex_data = filtered_IP_data(), v_sex_data = filtered_verified_data())})
+  
+  #aggregate metrics data
+  aggregate_recruitment_data <- reactive({
+    source("./get_data.R", local=TRUE)
+    aggregate_recruitment_data <- get_data(project ="nih-nci-dceg-connect-bq2-prod",
+                                                    dataset = "StakeHolderMetrics_RS",
+                                                    table = "aggregate_recruitment")
+  })
+  
+  source("./aggregate_race_grouped_bar_chart.R", local = TRUE)
+  output$aggregate_plot1 <- renderPlotly({aggregate_race_grouped_bar_chart(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_race_scatter.R", local = TRUE)
+  output$aggregate_plot1b <- renderPlotly({aggregate_race_scatter(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_sex_grouped_bar_chart.R", local = TRUE)
+  output$aggregate_plot2 <- renderPlotly({aggregate_sex_grouped_bar_chart(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_sex_scatter.R", local = TRUE)
+  output$aggregate_plot2b <- renderPlotly({aggregate_sex_scatter(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_insurance_grouped_bar_chart.R", local = TRUE)
+  output$aggregate_plot3 <- renderPlotly({aggregate_insurance_grouped_bar_chart(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_insurance_scatter.R", local = TRUE)
+  output$aggregate_plot3b <- renderPlotly({aggregate_insurance_scatter(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_ses_grouped_bar_chart.R", local = TRUE)
+  output$aggregate_plot4 <- renderPlotly({aggregate_ses_grouped_bar_chart(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_ses_scatter.R", local = TRUE)
+  output$aggregate_plot4b <- renderPlotly({aggregate_ses_scatter(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_ruca_grouped_bar_chart.R", local = TRUE)
+  output$aggregate_plot5 <- renderPlotly({aggregate_ruca_grouped_bar_chart(data = aggregate_recruitment_data())})
+  
+  source("./aggregate_ruca_scatter.R", local = TRUE)
+  output$aggregate_plot5b <- renderPlotly({aggregate_ruca_scatter(data = aggregate_recruitment_data())})
+  
   
   fast_facts_reactive <- reactive({
     source("./fast_facts2.R", local = TRUE)
@@ -436,7 +475,22 @@ ui <- dashboardPage(
                        tags$h3(style = "text-align: center;", 
                                HTML(glue("Site-reported Recruitment Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
                 )
-              )
+              ),
+              fluidRow(
+                column(6, plotlyOutput("aggregate_plot1")),
+                column(6, plotlyOutput("aggregate_plot1b"))),
+              fluidRow(
+                column(6, plotlyOutput("aggregate_plot2")),
+                column(6, plotlyOutput("aggregate_plot2b"))),
+              fluidRow(
+                column(6, plotlyOutput("aggregate_plot3")),
+                column(6, plotlyOutput("aggregate_plot3b"))),
+              fluidRow(
+                column(6, plotlyOutput("aggregate_plot4")),
+                column(6, plotlyOutput("aggregate_plot4b"))),
+              fluidRow(
+                column(6, plotlyOutput("aggregate_plot5")),
+                column(6, plotlyOutput("aggregate_plot5b")))
       )
       )
   )
