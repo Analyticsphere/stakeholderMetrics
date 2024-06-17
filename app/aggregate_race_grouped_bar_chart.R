@@ -34,16 +34,30 @@ aggregate_race_grouped_bar_chart <- function(data){
     summarize(tv = sum(tv, na.rm = TRUE))
   
   
+  
+  #identify number of colors to use  
+  unique_items <- unique(filtered_data$race_ethnicity)
+  n_colors <- length(unique(unique_items))
+  
+  # Ensure you have a sufficient number of colors for your activities
+  cols <- select_colors(color_palette, n_colors)
+  
+  # Map colors to activities to ensure consistency
+  color_mapping <- setNames(cols, unique_items)
+  
   plot <- plot_ly(
     data = filtered_data,
     x = ~site,
     y = ~tv,
     color = ~race_ethnicity,
+    colors = color_mapping,
     type = 'bar',
-    mode = 'group'
+    mode = 'group',
+    text = ~paste(race_ethnicity),  # Custom text for hover
+    hoverinfo = 'text+x+y'  # Specifies what info to display on hover
   ) %>%
     layout(
-      title = "Site-reported Total Verified Participants by Race",
+      title = "Verified Participants by Race",
       xaxis = list(title = "Site"),
       yaxis = list(title = paste0("Participants")),
       legend = list(title = list(text = "Race"))

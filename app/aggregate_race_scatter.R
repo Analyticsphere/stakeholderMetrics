@@ -33,19 +33,31 @@ aggregate_race_scatter <- function(data){
     group_by(race_ethnicity, site) %>%
     summarize(rr = sum(rr, na.rm = TRUE))
   
+  #identify number of colors to use  
+  unique_items <- unique(filtered_data$race_ethnicity)
+  n_colors <- length(unique(unique_items))
+  
+  # Ensure you have a sufficient number of colors for your activities
+  cols <- select_colors(color_palette, n_colors)
+  
+  # Map colors to activities to ensure consistency
+  color_mapping <- setNames(cols, unique_items)
   
   plot <- plot_ly(
     data = filtered_data,
     x = ~site,
     y = ~rr,
     color = ~race_ethnicity,
+    colors = color_mapping,
     type = 'scatter',
-    mode = 'markers'
+    mode = 'markers',
+    text = ~paste(race_ethnicity),  # Custom text for hover
+    hoverinfo = 'text+x+y'  # Specifies what info to display on hover
   ) %>%
     layout(
-      title = "Site-reported Response Ratio by Race",
+      title = "Response Ratio by Race",
       xaxis = list(title = "Site"),
-      yaxis = list(title = paste0("response ratio")),
+      yaxis = list(title = paste0("Response Ratio")),
       legend = list(title = list(text = "Race"))
     )
   
