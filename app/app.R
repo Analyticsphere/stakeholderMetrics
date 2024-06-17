@@ -61,6 +61,15 @@ server <- function(input, output, session){
     }
   })
   
+  row_count <- reactive({
+    nrow(filtered_verified_data())
+  })
+  
+  output$rowCountText <- renderText({
+    paste("Number of Verified Participants with Current Filters Applied: \n", row_count())
+  })
+  
+  
   #load aggregated IP data
   aggregated_IP_data <- reactive({
     source("./clean_data.R", local = TRUE)
@@ -372,7 +381,9 @@ ui <- dashboardPage(
                                                    "BOH, SAS, and LAW" = "BOH, SAS, and LAW",
                                                    "No Survey Sections" = "No Survey Sections"),
                                        selected = "All"),
-                           actionButton("applyFilters", "Apply Filters"))),
+                           actionButton("applyFilters", "Apply Filters"),
+                           br(),
+                           textOutput("rowCountText"))),
                 div(class = "grid-container",style ="width:40%display:inline-block",
                     column(width = 4,
                            fluidRow(
