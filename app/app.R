@@ -103,6 +103,19 @@ server <- function(input, output, session){
   
   source("./income_distribution.R", local = TRUE)
   output$plot7 <- renderPlotly({income_distribution(income_data = filtered_verified_data())})
+  
+  source("./module_completion_time.R", local = TRUE)
+  output$plot8 <- renderPlotly({module_completion_time(data = filtered_verified_data(), survey = "BOH")})
+  
+  source("./module_completion_time.R", local = TRUE)
+  output$plot9 <- renderPlotly({module_completion_time(data, survey = "SAS")})
+  
+  source("./module_completion_time.R", local = TRUE)
+  output$plot10 <- renderPlotly({module_completion_time(data, survey = "MRE")})
+  
+  source("./module_completion_time.R", local = TRUE)
+  output$plot11 <- renderPlotly({module_completion_time(data, survey = "LAW")})
+  
 
   source("./participant_status_funnel2.R", local = TRUE)
   output$plotFunnel <- renderPlotly({participant_status(status_data = aggregated_IP_data())})
@@ -419,7 +432,20 @@ ui <- dashboardPage(
                          div(class = "plot-container", plotlyOutput("plot1"))
                        )
                 )
+              ),
+              fluidRow(
+                column(6,
+                       div(class = "plot-container", plotlyOutput("plot8")),
+                       div(class = "plot-container", plotlyOutput("plot9"))
+                ),
+                column(6,
+                       fluidRow(
+                         div(class = "plot-container", plotlyOutput("plot10")),
+                         div(class = "plot-container", plotlyOutput("plot11"))
+                       )
+                )
               )
+              
       ),
       tabItem(tabName = "invited_participants",
               fluidRow(
