@@ -20,6 +20,7 @@ aggregate_ses_scatter <- function(data){
       TRUE ~ ses_quartile  # Default case to handle any other values that do not match
     ))
   
+  long_ses$total_verified <- long_ses$total_verified*10 
   
   #identify number of colors to use  
   unique_items <- unique(long_ses$ses_quartile)

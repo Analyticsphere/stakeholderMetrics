@@ -169,6 +169,8 @@ server <- function(input, output, session){
     aggregate_recruitment_data <- get_data(project ="nih-nci-dceg-connect-bq2-prod",
                                                     dataset = "StakeHolderMetrics_RS",
                                                     table = "aggregate_recruitment")
+    aggregate_recruitment_data <- aggregate_recruitment_data %>%
+      filter(site != "HealthPartners")
   })
   
   source("./aggregate_race_grouped_bar_chart.R", local = TRUE)
@@ -542,7 +544,13 @@ ui <- dashboardPage(
               fluidRow(
                 column(12, align = "center", 
                        tags$h3(style = "text-align: center;", 
-                               HTML(glue("2024 Q1 Site-reported Recruitment Dashboard")))
+                               HTML(glue("2024 Q1 Site-reported Recruitment")))
+                )
+              ),
+              fluidRow(
+                column(12, align = "center", 
+                       tags$h5(style = "text-align: center;", 
+                               HTML(glue("Note: Extreme outliers have been removed")))
                 )
               ),fluidRow(
                 column(12, align = "center", 
