@@ -550,8 +550,8 @@ ui <- dashboardPage(
               ),
               fluidRow(
                 column(12, align = "center", 
-                       tags$h4(style = "text-align: center;", 
-                               HTML(glue("Extreme outliers have been removed")))
+                       tags$h5(style = "text-align: center;", 
+                               HTML(glue("Note: Extreme outliers have been removed")))
                 )
               ),
               fluidRow(

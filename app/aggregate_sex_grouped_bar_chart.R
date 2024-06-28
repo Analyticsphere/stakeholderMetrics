@@ -33,12 +33,11 @@ aggregate_sex_grouped_bar_chart <- function(data) {
     colors = color_mapping,
     type = 'bar',
     barmode = 'group',
-    text = ~paste(sex),  # Custom text for hover
-    hoverinfo = 'text+x+y'  # Specifies what info to display on hover
+    hoverinfo = 'x+y'  # Specifies what info to display on hover
   )
   plot <- plot %>%
     layout(
-      title = "Verified Participants by sex",
+      title = "Verified Participants by Sex",
       xaxis = list(title = "Site"),
       yaxis = list(title = paste0("Total Verified Participants")),
       legend = list(title = list(text = "Sex")))

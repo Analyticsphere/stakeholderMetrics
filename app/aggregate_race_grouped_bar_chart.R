@@ -53,8 +53,7 @@ aggregate_race_grouped_bar_chart <- function(data){
     colors = color_mapping,
     type = 'bar',
     mode = 'group',
-    text = ~paste(race_ethnicity),  # Custom text for hover
-    hoverinfo = 'text+x+y'  # Specifies what info to display on hover
+    hoverinfo = 'race_ethnicity+x+y'  # Specifies what info to display on hover
   ) %>%
     layout(
       title = "Verified Participants by Race",

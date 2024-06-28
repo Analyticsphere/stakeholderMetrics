@@ -1,6 +1,6 @@
 aggregate_ses_scatter <- function(data){
   
-  tv_data <- filter(data, population == "total_verified")
+  tv_data <- filter(data, population == "response_ratio")
   relevant_columns <- grep("socioeconomic_status_", colnames(tv_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "site")
   ses_data = tv_data[,relevant_columns]
@@ -20,6 +20,7 @@ aggregate_ses_scatter <- function(data){
       TRUE ~ ses_quartile  # Default case to handle any other values that do not match
     ))
   
+  long_ses$total_verified <- long_ses$total_verified*10 
   
   #identify number of colors to use  
   unique_items <- unique(long_ses$ses_quartile)
