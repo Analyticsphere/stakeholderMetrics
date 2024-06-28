@@ -43,7 +43,6 @@ aggregate_ruca_grouped_bar_chart <- function(data) {
     colors = color_mapping,
     type = 'bar',
     barmode = 'group',
-    text = ~paste(urbanicity_ruca_code),  # Custom text for hover
     hoverinfo = 'text+x+y'  # Specifies what info to display on hover
   )
   plot <- plot %>%

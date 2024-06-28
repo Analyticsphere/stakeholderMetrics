@@ -10,7 +10,7 @@ long_insurance <- insurance_data %>% pivot_longer(cols = insurance_private_comme
                                                   names_prefix = "insurance",
                                                   values_to = "rr")
 
-
+long_insurance$rr <- long_insurance$rr*10
 long_insurance$insurance_type <- substr(long_insurance$insurance_type, 2, nchar(long_insurance$insurance_type))
 
 
@@ -46,7 +46,6 @@ plot <- plot_ly(
   colors = color_mapping,
   type = 'scatter',
   mode = 'markers',
-  text = ~paste(insurance_type),  # Custom text for hover
   hoverinfo = 'text+x+y'  # Specifies what info to display on hover
 ) %>%
   layout(

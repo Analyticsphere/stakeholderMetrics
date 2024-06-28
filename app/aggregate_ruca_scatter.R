@@ -26,7 +26,7 @@ aggregate_ruca_scatter <- function(data){
       TRUE ~ urbanicity_ruca_code  # Default case to handle any other values that do not match
     ))
   
-  
+  long_ruca$rr <- long_ruca$rr*10
   
   #identify number of colors to use  
   unique_items <- unique(long_ruca$urbanicity_ruca_code)
