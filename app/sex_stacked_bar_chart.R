@@ -43,8 +43,8 @@ sex_stacked_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
       add_bars(x = ~sex_factor, y = ~Verified, name = 'Verified', marker = list(color = verified_color)) %>%
       layout(
         yaxis = list(title = 'Counts'), 
-        xaxis = list(title = 'Gender'),
-        title = 'Gender Distribution, Invited vs. Verified Participants',
+        xaxis = list(title = 'Sex'),
+        title = 'Sex Distribution, Invited vs. Verified Participants',
         barmode = 'stack',
         margin = list(b = 50, t = 50)
       )
