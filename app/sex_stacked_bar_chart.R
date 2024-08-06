@@ -30,7 +30,7 @@ sex_stacked_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
     
     # Calculate percentages
     count_matrix <- count_matrix %>%
-      mutate(percentage = 100 * (`Verified` / `Invited`))
+      mutate(percentage = round(100 * (`Verified` / `Invited`), 2))
     
     
     # Define colors

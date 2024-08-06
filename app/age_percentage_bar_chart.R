@@ -21,7 +21,7 @@ age_percentage_bar_chart <- function(ip_age_data = data, v_age_data = data) {
       group_by(age_factor, population) %>%
       summarize(count = n(), .groups = 'drop') %>%
       pivot_wider(names_from = population, values_from = count, values_fill = list(count = 0)) %>%
-      mutate(percentage = 100 * (`Verified` / `Invited`)) %>%
+      mutate(percentage = round(100 * (`Verified` / `Invited`),2)) %>%
       mutate(percentage = ifelse(is.infinite(percentage) | is.na(percentage), 0, percentage))
     
     plot_ly(data = count_matrix, x = ~age_factor, y = ~percentage,
