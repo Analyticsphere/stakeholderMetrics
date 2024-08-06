@@ -41,8 +41,8 @@ sex_percentage_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
             marker = list(color = 'rgb(42, 114, 165)'), mode = 'markers') %>%
       layout(
         yaxis = list(title = 'Percentage'), 
-        xaxis = list(title = 'Gender'),
-        title = 'Response Ratio by Gender',
+        xaxis = list(title = 'Sex'),
+        title = 'Response Ratio by Sex',
         margin = list(b = 50, t = 50)
       )
   }
