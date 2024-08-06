@@ -61,6 +61,7 @@ server <- function(input, output, session){
     }
   })
   
+  #calculating the number of verified participants by the filtering
   row_count <- reactive({
     nrow(filtered_verified_data())
   })
@@ -68,6 +69,7 @@ server <- function(input, output, session){
   output$rowCountText <- renderText({
     paste("Number of Verified Participants with Current Filters Applied: \n", row_count())
   })
+
   
   
   #load aggregated IP data
@@ -76,6 +78,7 @@ server <- function(input, output, session){
     source("./get_data.R", local=TRUE)
     data <- get_data(table = "participantFunnelGraph") # Fetch your data
   })
+  
   
   source("./activity_plot.R", local = TRUE)
   output$plot1 <- renderPlotly({activity_plot(activity_data=filtered_verified_data())})
@@ -145,6 +148,16 @@ server <- function(input, output, session){
     }
   })
   
+  #calculating the number of invited participants by filter
+  IP_row_count <- reactive({
+    nrow(filtered_IP_data())
+  })
+  
+  output$IP_rowCountText <- renderText({
+    paste("Number of Invited Participants with Current Filters Applied: \n", IP_row_count())
+  })
+  
+  
   source("./age_stacked_bar_chart.R", local = TRUE)
   output$invited_plot1 <- renderPlotly({age_stacked_bar_chart(ip_age_data = filtered_IP_data(), v_age_data = filtered_verified_data())})
   
@@ -169,8 +182,6 @@ server <- function(input, output, session){
     aggregate_recruitment_data <- get_data(project ="nih-nci-dceg-connect-bq2-prod",
                                                     dataset = "StakeHolderMetrics_RS",
                                                     table = "aggregate_recruitment")
-    aggregate_recruitment_data <- aggregate_recruitment_data %>%
-      filter(site != "HealthPartners")
   })
   
   source("./aggregate_race_grouped_bar_chart.R", local = TRUE)
@@ -528,7 +539,9 @@ ui <- dashboardPage(
                                                    "National Cancer Institute" = 517700004,
                                                    "National Cancer Institute" = 13, "Other" = 181769837),
                                        selected = "All"),
-                           actionButton("applyIPfilters", "Apply Filters"))),
+                           actionButton("applyIPfilters", "Apply Filters"),
+                           br(),
+                           textOutput("IP_rowCountText"))),
                 column(4, plotlyOutput("invited_plot1")),
                 column(4, plotlyOutput("invited_plot1b"))),
               fluidRow(
