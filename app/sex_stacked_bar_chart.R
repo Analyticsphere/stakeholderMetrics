@@ -6,10 +6,13 @@ sex_stacked_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
     return(plotly::plot_ly() %>% layout(title = "Not Enough Data to Display This Chart"))
   } else {
     # Convert sex variable to a factor with specific levels
+    ip_sex_data$sex[ip_sex_data$sex == "Nonbinary"] <- "Other"
+    v_sex_data$sex[v_sex_data$sex == "Nonbinary"] <- "Other"
+    
     ip_sex_factor <- data.frame(sex_factor = factor(ip_sex_data$sex,
-                                                    levels = c("Female", "Nonbinary", "Male", "Unknown")))
+                                                    levels = c("Female", "Other", "Male", "Unknown")))
     v_sex_factor <- data.frame(sex_factor = factor(v_sex_data$sex,
-                                                   levels = c("Female", "Nonbinary", "Male", "Unknown")))
+                                                   levels = c("Female", "Other", "Male", "Unknown")))
     
     # Label the data
     ip_sex_factor$population <- "Invited"
