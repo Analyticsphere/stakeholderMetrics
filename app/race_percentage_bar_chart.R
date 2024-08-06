@@ -42,7 +42,7 @@ race_percentage_bar_chart <- function(ip_race_data = data, v_race_data = data) {
     
     #make percentages
     count_matrix <- count_matrix %>%
-      mutate(percentage = 100 * (`Verified` / `Invited`))
+      mutate(percentage = round(100 * (`Verified` / `Invited`),2))
     
     
     # Prepare the annotation text for percentages using the updated count_matrix
