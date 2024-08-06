@@ -323,7 +323,10 @@ ui <- dashboardPage(
                     valueBoxOutput("totalVerifiedBox", width = 12),
                     valueBoxOutput("maleVerifiedBox", width = 12),
                     valueBoxOutput("femaleVerifiedBox", width = 12),
-                    valueBoxOutput("commonIncomeBox", width = 12)
+                    valueBoxOutput("commonIncomeBox", width = 12),
+                    tags$figcaption(style = "text-align:center;
+                                         font-style:italic;margin-bottom: 140px",
+                                    "Note: participant-reported data.")
                 ),
                 
                 # Map graphic column
