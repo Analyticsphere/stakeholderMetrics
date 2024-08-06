@@ -312,7 +312,7 @@ ui <- dashboardPage(
               fluidRow(
                 column(12, align = "center", 
                        tags$h3(style = "text-align: center;font-size: 36px;color: black;", 
-                               HTML(glue("Verified Participant Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
+                               HTML(glue("Verified Participant Data as of {format(Sys.Date(), '%B %d, %Y')}")))
                 )
               ),
               fluidRow(
@@ -499,7 +499,10 @@ ui <- dashboardPage(
               fluidRow(
                 column(12, align = "center", 
                        tags$h3(style = "text-align: center;", 
-                               HTML(glue("Invited Participant Dashboard as of {format(Sys.Date(), '%B %d, %Y')}")))
+                               HTML(glue("Invited Participant Data as of {format(Sys.Date(), '%B %d, %Y')}"))),
+                       br(),
+                       tags$h5(style = "text-align: center;", 
+                               HTML(glue("Note: All invited participant data is site-reported")))
                 )
               ),
               fluidRow(
