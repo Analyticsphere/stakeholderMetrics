@@ -33,6 +33,8 @@ hp_aggregate_ruca_scatter <- function(data){
   hp_data <- hp_data %>%
     filter(rr<1)
   
+  hp_data$rr <- round(hp_data$rr,2)
+  
   #identify number of colors to use  
   unique_items <- unique(hp_data$urbanicity_ruca_code)
   n_colors <- length(unique(unique_items))

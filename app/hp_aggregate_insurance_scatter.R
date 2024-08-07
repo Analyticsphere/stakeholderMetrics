@@ -30,6 +30,7 @@ hp_aggregate_insurance_scatter <- function(data){
     ))
   long_insurance$date <- as.Date(paste(long_insurance$year, long_insurance$month, "01", sep = "-"), "%Y-%m-%d")
   
+  long_insurance$rr <- round(long_insurance$rr,2)
   
   #identify number of colors to use  
   unique_items <- unique(long_insurance$insurance_type)

@@ -11,6 +11,7 @@ long_insurance <- insurance_data %>% pivot_longer(cols = insurance_private_comme
                                                   values_to = "rr")
 
 long_insurance$rr <- long_insurance$rr*10
+long_insurance$rr <- round(long_insurance$rr,2)
 long_insurance$insurance_type <- substr(long_insurance$insurance_type, 2, nchar(long_insurance$insurance_type))
 
 

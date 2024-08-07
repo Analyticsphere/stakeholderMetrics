@@ -27,6 +27,7 @@ aggregate_ruca_scatter <- function(data){
     ))
   
   long_ruca$rr <- long_ruca$rr*10
+  long_ruca$rr <- round(long_ruca$rr,2)
   
   #identify number of colors to use  
   unique_items <- unique(long_ruca$urbanicity_ruca_code)

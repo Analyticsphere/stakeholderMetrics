@@ -24,6 +24,8 @@ hp_aggregate_ses_scatter <- function(data){
   
   hp_data$date <- as.Date(paste(hp_data$year, hp_data$month, "01", sep = "-"), "%Y-%m-%d")
   
+  hp_data$rr <- round(hp_data$rr,2)
+  
   #manually remove outliers
   hp_data <- hp_data %>%
     filter(!(rr > 1))
