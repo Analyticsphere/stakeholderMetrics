@@ -111,13 +111,13 @@ server <- function(input, output, session){
   output$plot8 <- renderPlotly({module_completion_time(data = filtered_verified_data(), survey = "BOH")})
   
   source("./module_completion_time.R", local = TRUE)
-  output$plot9 <- renderPlotly({module_completion_time(data, survey = "SAS")})
+  output$plot9 <- renderPlotly({module_completion_time(data= filtered_verified_data(), survey = "SAS")})
   
   source("./module_completion_time.R", local = TRUE)
-  output$plot10 <- renderPlotly({module_completion_time(data, survey = "MRE")})
+  output$plot10 <- renderPlotly({module_completion_time(data= filtered_verified_data(), survey = "MRE")})
   
   source("./module_completion_time.R", local = TRUE)
-  output$plot11 <- renderPlotly({module_completion_time(data, survey = "LAW")})
+  output$plot11 <- renderPlotly({module_completion_time(data= filtered_verified_data(), survey = "LAW")})
   
 
   source("./participant_status_funnel2.R", local = TRUE)
