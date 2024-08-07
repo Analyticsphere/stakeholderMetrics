@@ -33,6 +33,9 @@ aggregate_race_scatter <- function(data){
     group_by(race_ethnicity, site) %>%
     summarize(rr = sum(rr, na.rm = TRUE))
   
+  #round to 2 places
+  filtered_data$rr <- round(filtered_data$rr,2)
+
   #identify number of colors to use  
   unique_items <- unique(filtered_data$race_ethnicity)
   n_colors <- length(unique(unique_items))

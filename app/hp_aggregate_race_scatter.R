@@ -43,6 +43,7 @@ hp_aggregate_race_scatter <- function(data){
     filter(!(date == "2022-12-01") & race_ethnicity != "Black") %>%
     filter(!(date == "2023-06-01"))
   
+  filtered_data$rr <- round(filtered_data$rr,2)
   
   
   #identify number of colors to use  
