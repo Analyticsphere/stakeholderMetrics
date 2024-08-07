@@ -45,8 +45,11 @@ participant_status<- function(status_data=data){
           y = c("Signed-In:", "Consented:", "Profile Done:", "Verification:", "Verified:"),
           x = c(status_data$signed_in[i], status_data$consented[i], status_data$profile_done[i],
                 status_data$verification[i], status_data$verified[i]),
+          text = c(status_data$signed_in[i], status_data$consented[i], status_data$profile_done[i],
+                   status_data$verification[i], status_data$verified[i]),
           textposition = "inside",
           textinfo = "none",
+          hoverinfo= "text",
           marker = list(color = cols[i])
         )
     }
