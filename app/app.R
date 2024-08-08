@@ -290,6 +290,13 @@ server <- function(input, output, session){
              icon = tags$i(class = "fas fa-money-bill", style = "font-size: 40px"))
   })
   
+  
+  output$raceVerifiedBox <- renderValueBox({
+    facts <- fast_facts_reactive()
+    valueBox(value = tags$p(paste0(facts$common_race), style = "font-size: 75%;"),
+             subtitle = tags$p("Most Common Race", style = "font-size: 95%"),
+             icon = tags$i(class = "fas fa-users", style = "font-size: 40px"))
+  })
 }
 
 
@@ -324,6 +331,7 @@ ui <- dashboardPage(
                     valueBoxOutput("maleVerifiedBox", width = 12),
                     valueBoxOutput("femaleVerifiedBox", width = 12),
                     valueBoxOutput("commonIncomeBox", width = 12),
+                    valueBoxOutput("raceVerifiedBox", width = 12),
                     tags$figcaption(style = "text-align:center;
                                          font-style:italic;margin-bottom: 140px",
                                     "Note: participant-reported data.")
