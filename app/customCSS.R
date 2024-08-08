@@ -49,6 +49,9 @@ border: none !important;
 "#commonIncomeBox .small-box {
   background-color: var(--blue-a) !important;
 }",
+"#raceVerifiedBox .small-box {
+  background-color: var(--blue-a) !important;
+}",
 "/* Custom CSS to set the background color to white */
     .content-wrapper, .main-footer {
       background-color: #FFFFFF !important;

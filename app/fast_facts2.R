@@ -47,11 +47,21 @@ fast_facts <- function(verified_data = data) {
     most_common_income <- gsub("/year", "", most_common_income)
   }
   
+  # Determine the most common race
+  race_counts <- table(current_verified_data$race)
+  race_counts <- race_counts[race_counts > 0 & !names(race_counts) %in% c("NA", "Unknown")]
+  if (length(race_counts) == 0) {
+    most_common_race <- "Not available"
+  } else {
+    most_common_race <- names(which.max(race_counts))
+  }
+  
   return(list(
     total_verified = n_verified,
     male_verified = n_male,
     female_verified = n_female,
     common_campaign = paste(most_common_campaign_name, "(", n_recruited_by_campaign, "participants)"),
-    common_income = most_common_income
+    common_income = most_common_income,
+    common_race = most_common_race
   ))
 }
