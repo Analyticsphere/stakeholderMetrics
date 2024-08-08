@@ -179,9 +179,11 @@ server <- function(input, output, session){
   #aggregate metrics data
   aggregate_recruitment_data <- reactive({
     source("./get_data.R", local=TRUE)
-    aggregate_recruitment_data <- get_data(project ="nih-nci-dceg-connect-bq2-prod",
+    source("./clean_data.R", local=TRUE)
+    aggregate_recruitment_data <- clean_data(get_data(project ="nih-nci-dceg-connect-bq2-prod",
                                                     dataset = "StakeHolderMetrics_RS",
-                                                    table = "aggregate_recruitment")
+                                                    table = "aggregate_recruitment"),
+                                                    type = "aggregate")
   })
   
   source("./aggregate_race_grouped_bar_chart.R", local = TRUE)
