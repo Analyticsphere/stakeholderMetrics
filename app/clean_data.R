@@ -57,7 +57,7 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
       ))
   
   
-}else{
+}else if( type == "invited"){
 data <- expss::apply_labels(data,#RcrtES_Site_v1r0
                                    site = c("HealthPartners"= 531629870,
                                                    "Henry Ford Health System"=548392715,
@@ -88,5 +88,19 @@ data <- expss::apply_labels(data,#RcrtES_Site_v1r0
     ))
 
 
+}else if(type == "aggregate"){
+  # Replace NAs with 0s for all numeric columns
+  data <- data %>%
+    mutate(across(where(is.numeric), ~ replace_na(., 0)))
+  
+  # Divide HealthPartners data by 100
+  data <- data %>%
+    mutate(across(where(is.numeric), ~ if_else(site == "HealthPartners", . / 100, .)))
+
+  # Multiply all numeric variables by 100 where population is "response_ratio" and site is not "HealthPartners"
+  data <- data %>%
+    mutate(across(where(is.numeric), ~ if_else(site != "HealthPartners" &
+                                              population == "response_ratio", . * 10, .)))
+  
 }
 }
