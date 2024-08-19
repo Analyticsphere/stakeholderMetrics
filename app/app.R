@@ -179,9 +179,11 @@ server <- function(input, output, session){
   #aggregate metrics data
   aggregate_recruitment_data <- reactive({
     source("./get_data.R", local=TRUE)
-    aggregate_recruitment_data <- get_data(project ="nih-nci-dceg-connect-bq2-prod",
+    source("./clean_data.R", local=TRUE)
+    aggregate_recruitment_data <- clean_data(get_data(project ="nih-nci-dceg-connect-bq2-prod",
                                                     dataset = "StakeHolderMetrics_RS",
-                                                    table = "aggregate_recruitment")
+                                                    table = "aggregate_recruitment"),
+                                                    type = "aggregate")
   })
   
   source("./aggregate_race_grouped_bar_chart.R", local = TRUE)
@@ -216,35 +218,35 @@ server <- function(input, output, session){
   
   
   #HP aggregate data
-  source("./hp_aggregate_race_grouped_bar_chart.R", local = TRUE)
-  output$hp_aggregate_plot1 <- renderPlotly({hp_aggregate_race_grouped_bar_chart(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_race_scatter.R", local = TRUE)
-  output$hp_aggregate_plot1b <- renderPlotly({hp_aggregate_race_scatter(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_sex_grouped_bar_chart.R", local = TRUE)
-  output$hp_aggregate_plot2 <- renderPlotly({hp_aggregate_sex_grouped_bar_chart(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_sex_scatter.R", local = TRUE)
-  output$hp_aggregate_plot2b <- renderPlotly({hp_aggregate_sex_scatter(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_insurance_grouped_bar_chart.R", local = TRUE)
-  output$hp_aggregate_plot3 <- renderPlotly({hp_aggregate_insurance_grouped_bar_chart(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_insurance_scatter.R", local = TRUE)
-  output$hp_aggregate_plot3b <- renderPlotly({hp_aggregate_insurance_scatter(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_ses_grouped_bar_chart.R", local = TRUE)
-  output$hp_aggregate_plot4 <- renderPlotly({hp_aggregate_ses_grouped_bar_chart(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_ses_scatter.R", local = TRUE)
-  output$hp_aggregate_plot4b <- renderPlotly({hp_aggregate_ses_scatter(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_ruca_grouped_bar_chart.R", local = TRUE)
-  output$hp_aggregate_plot5 <- renderPlotly({hp_aggregate_ruca_grouped_bar_chart(data = aggregate_recruitment_data())})
-  
-  source("./hp_aggregate_ruca_scatter.R", local = TRUE)
-  output$hp_aggregate_plot5b <- renderPlotly({hp_aggregate_ruca_scatter(data = aggregate_recruitment_data())})
+  # source("./hp_aggregate_race_grouped_bar_chart.R", local = TRUE)
+  # output$hp_aggregate_plot1 <- renderPlotly({hp_aggregate_race_grouped_bar_chart(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_race_scatter.R", local = TRUE)
+  # output$hp_aggregate_plot1b <- renderPlotly({hp_aggregate_race_scatter(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_sex_grouped_bar_chart.R", local = TRUE)
+  # output$hp_aggregate_plot2 <- renderPlotly({hp_aggregate_sex_grouped_bar_chart(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_sex_scatter.R", local = TRUE)
+  # output$hp_aggregate_plot2b <- renderPlotly({hp_aggregate_sex_scatter(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_insurance_grouped_bar_chart.R", local = TRUE)
+  # output$hp_aggregate_plot3 <- renderPlotly({hp_aggregate_insurance_grouped_bar_chart(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_insurance_scatter.R", local = TRUE)
+  # output$hp_aggregate_plot3b <- renderPlotly({hp_aggregate_insurance_scatter(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_ses_grouped_bar_chart.R", local = TRUE)
+  # output$hp_aggregate_plot4 <- renderPlotly({hp_aggregate_ses_grouped_bar_chart(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_ses_scatter.R", local = TRUE)
+  # output$hp_aggregate_plot4b <- renderPlotly({hp_aggregate_ses_scatter(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_ruca_grouped_bar_chart.R", local = TRUE)
+  # output$hp_aggregate_plot5 <- renderPlotly({hp_aggregate_ruca_grouped_bar_chart(data = aggregate_recruitment_data())})
+  # 
+  # source("./hp_aggregate_ruca_scatter.R", local = TRUE)
+  # output$hp_aggregate_plot5b <- renderPlotly({hp_aggregate_ruca_scatter(data = aggregate_recruitment_data())})
   
   
   fast_facts_reactive <- reactive({
@@ -601,28 +603,28 @@ ui <- dashboardPage(
               fluidRow(
                 column(6, plotlyOutput("aggregate_plot5")),
                 column(6, plotlyOutput("aggregate_plot5b"))),
-              fluidRow(
-                column(12,
-                       h1("HealthPartners-reported Aggregate Recruitment Metrics", style = "color: black"),
-                       div(style ="height: 15px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
-                       
-                )
-              ),
-              fluidRow(
-                column(6, plotlyOutput("hp_aggregate_plot1")),
-                column(6, plotlyOutput("hp_aggregate_plot1b"))),
-              fluidRow(
-                column(6, plotlyOutput("hp_aggregate_plot2")),
-                column(6, plotlyOutput("hp_aggregate_plot2b"))),
-              fluidRow(
-                column(6, plotlyOutput("hp_aggregate_plot3")),
-                column(6, plotlyOutput("hp_aggregate_plot3b"))),
-              fluidRow(
-                column(6, plotlyOutput("hp_aggregate_plot4")),
-                column(6, plotlyOutput("hp_aggregate_plot4b"))),
-              fluidRow(
-                column(6, plotlyOutput("hp_aggregate_plot5")),
-                column(6, plotlyOutput("hp_aggregate_plot5b")))
+              # fluidRow(
+              #   column(12,
+              #          h1("HealthPartners-reported Aggregate Recruitment Metrics", style = "color: black"),
+              #          div(style ="height: 15px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
+              #          
+              #   )
+              # ),
+              # fluidRow(
+              #   column(6, plotlyOutput("hp_aggregate_plot1")),
+              #   column(6, plotlyOutput("hp_aggregate_plot1b"))),
+              # fluidRow(
+              #   column(6, plotlyOutput("hp_aggregate_plot2")),
+              #   column(6, plotlyOutput("hp_aggregate_plot2b"))),
+              # fluidRow(
+              #   column(6, plotlyOutput("hp_aggregate_plot3")),
+              #   column(6, plotlyOutput("hp_aggregate_plot3b"))),
+              # fluidRow(
+              #   column(6, plotlyOutput("hp_aggregate_plot4")),
+              #   column(6, plotlyOutput("hp_aggregate_plot4b"))),
+              # fluidRow(
+              #   column(6, plotlyOutput("hp_aggregate_plot5")),
+              #   column(6, plotlyOutput("hp_aggregate_plot5b")))
       )
       )
   )
