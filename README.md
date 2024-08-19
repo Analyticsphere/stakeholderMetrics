@@ -48,6 +48,7 @@ Invited |`nih-nci-dceg-connect-bq2-prod.StakeHolderMetrics_RS.invited_participan
 
 
 ## How to Publish the App from Rstudio
+**Note! Before publishing the app, ensure that Daniel Russ's OAuth code has been uncommented! Users must complete the OAuth dance. However, when editing the dashboard locally, comment this code as it is unnecessary and will break the app.
 As of 3/12/24, we are publishing the app on the posit dev server: https://appshare-dev.cancer.gov/. The name of the app: Stakeholer Dashboard, Author: Rebecca Sansale.
 How to Publish the app from Rstudio:
 1. Login to the VPN and Posit Connect.
