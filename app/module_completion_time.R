@@ -8,15 +8,17 @@ module_completion_time <- function(data = data, survey ="BOH"){
 
     if(survey == "LAW"){
     LAW <- data %>%
-      filter(!is.na(law_start_date) & !is.na(law_end_date))
+      filter(!is.na(law_start_date) & !is.na(law_completion_date))
     
     #compute time difference
     LAW <- LAW %>%
       mutate(
         law_start_date = as.POSIXct(law_start_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC"),
-        law_end_date = as.POSIXct(law_end_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC"),
-        time_difference = difftime(law_start_date, law_end_date, units="mins")
-      )      
+        law_end_date = as.POSIXct(law_completion_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC")
+      )
+    
+    LAW$time_difference = difftime(LAW$law_start_date, LAW$law_completion_date, units="mins")
+
     # Filter the data to include only completion times between 0 and 300 minutes
     LAW <- LAW %>%
       filter(time_difference >= 0 & time_difference <= 300)
@@ -35,15 +37,17 @@ module_completion_time <- function(data = data, survey ="BOH"){
     # Display the plotly plot
     plotly_plot}else if(survey == "SAS"){
       SAS <- data %>%
-        filter(!is.na(sas_start_date) & !is.na(sas_end_date))
+        filter(!is.na(sas_start_date) & !is.na(sas_completion_date))
       
       #compute time difference
       SAS <- SAS %>%
         mutate(
           sas_start_date = as.POSIXct(sas_start_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC"),
-          sas_end_date = as.POSIXct(sas_end_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC"),
-          time_difference = difftime(sas_start_date, sas_end_date, units="mins")
-        )      
+          sas_end_date = as.POSIXct(sas_completion_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC")
+        )
+      
+      SAS$time_difference = difftime(SAS$sas_start_date, SAS$sas_completion_date, units="mins")
+      
       # Filter the data to include only completion times between 0 and 300 minutes
       SAS <- SAS %>%
         filter(time_difference >= 0 & time_difference <= 300)
@@ -64,14 +68,15 @@ module_completion_time <- function(data = data, survey ="BOH"){
     }else if(survey == "BOH"){
       #remove NA values
       BOH <- data %>%
-        filter(!is.na(boh_start_date) & !is.na(boh_end_date))
+        filter(!is.na(boh_start_date) & !is.na(boh_completion_date))
       
       BOH <- BOH %>%
         mutate(
           boh_start_date = as.POSIXct(boh_start_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC"),
-          boh_end_date = as.POSIXct(boh_end_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC"),
-          time_difference = difftime(boh_start_date, boh_end_date, units="mins")
+          boh_end_date = as.POSIXct(boh_completion_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC")
         )
+      
+      BOH$time_difference = difftime(BOH$boh_start_date, BOH$boh_completion_date, units="mins")
       
       # Filter the data to include only completion times between 0 and 300 minutes
       BOH <- BOH %>%
@@ -92,14 +97,15 @@ module_completion_time <- function(data = data, survey ="BOH"){
       plotly_plot
     }else if(survey == "MRE"){
       MRE <- data %>%
-        filter(!is.na(mre_start_date) & !is.na(mre_end_date))
+        filter(!is.na(mre_start_date) & !is.na(mre_completion_date))
       
       MRE <- MRE %>%
         mutate(
           mre_start_date = as.POSIXct(mre_start_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC"),
-          mre_start_date = as.POSIXct(mre_end_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC"),
-          time_difference = difftime(mre_start_date, mre_end_date, units="mins")
-        )      
+          mre_end_date = as.POSIXct(mre_completion_date, format="%Y-%m-%dT%H:%M:%OSZ", tz="UTC")) 
+      
+      MRE$time_difference = difftime(MRE$mre_start_date, MRE$mre_completion_date, units="mins")
+      
       # Filter the data to include only completion times between 0 and 300 minutes
       MRE <- MRE %>%
         filter(time_difference >= 0 & time_difference <= 300)
