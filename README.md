@@ -14,7 +14,7 @@ Finally, most of the aesthetics of the dashboard are housed in the `customCSS.R`
 There is no installation or set up required for a user to begin editing the dashboard application code. There is however, set up required to access the app.
 
 In order for a new user to access the application on Posit Connect:
-1. Navigate to: `https://appshare-dev.cancer.gov/`
+1. Navigate to: `https://appshare-dev.cancer.gov/`. **NOTE**: You must be on the VPN to see the app at this link.
 2. Login using your NIH credentials
 3. Alert RS or JP that you have logged-in and are ready to be invited to the app
 4. RS/JP will add you to the approved user list
