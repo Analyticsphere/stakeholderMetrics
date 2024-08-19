@@ -28,6 +28,8 @@ If you are tasked with making any changes to the dashboard, please assign yourse
 Stakeholder Metrics Dashboard Data Pipeline
 <img width="885" alt="Screenshot 2024-06-13 at 10 46 11 AM" src="https://github.com/Analyticsphere/stakeholderMetrics/assets/32822979/2a25c648-e26f-46b3-a01c-a5a7d654c91a">
 
+Stakeholder Metrics Dashboard Scheduled Query Structure
+<img width="915" alt="Screenshot 2024-08-19 at 1 04 49 PM" src="https://github.com/user-attachments/assets/ec4ddb3b-2950-4a65-b39f-b7f57909ff1a">
 
 
 |Dashboard Tab| Datasource|Datasource Update Schedule|
