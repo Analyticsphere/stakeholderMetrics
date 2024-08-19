@@ -31,7 +31,8 @@ aggregate_race_scatter <- function(data){
       race_ethnicity %in% race_mapping$Unknown ~ "Unknown"
     )) %>%
     group_by(race_ethnicity, site) %>%
-    summarize(rr = sum(rr, na.rm = TRUE))
+    summarize(rr = sum(rr, na.rm = TRUE)) %>%
+    filter(rr <= 1)
   
   #round to 2 places
   filtered_data$rr <- round(filtered_data$rr,2)

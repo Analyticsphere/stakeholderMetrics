@@ -213,7 +213,7 @@ server <- function(input, output, session){
   source("./aggregate_ruca_grouped_bar_chart.R", local = TRUE)
   output$aggregate_plot5 <- renderPlotly({aggregate_ruca_grouped_bar_chart(data = aggregate_recruitment_data())})
   
-#  source("./aggregate_ruca_scatter.R", local = TRUE)
+  source("./aggregate_ruca_scatter.R", local = TRUE)
   output$aggregate_plot5b <- renderPlotly({aggregate_ruca_scatter(data = aggregate_recruitment_data())})
   
   

@@ -13,7 +13,7 @@ long_insurance <- insurance_data %>% pivot_longer(cols = insurance_private_comme
 long_insurance$rr <- long_insurance$rr*10
 long_insurance$rr <- round(long_insurance$rr,2)
 long_insurance$insurance_type <- substr(long_insurance$insurance_type, 2, nchar(long_insurance$insurance_type))
-
+long_insurance <- long_insurance%>% filter(rr <= 1) 
 
 long_insurance <- long_insurance %>%
   mutate(insurance_type = case_when(
