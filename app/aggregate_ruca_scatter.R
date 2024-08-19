@@ -24,10 +24,12 @@ aggregate_ruca_scatter <- function(data){
       urbanicity_ruca_code == "urbanicity_ruca_code_10" ~ "Code 10",
       urbanicity_ruca_code == "urbanicity_missing" ~ "Code Unknown",
       TRUE ~ urbanicity_ruca_code  # Default case to handle any other values that do not match
-    ))
+    )) 
+
   
   long_ruca$rr <- long_ruca$rr*10
   long_ruca$rr <- round(long_ruca$rr,2)
+  long_ruca <- long_ruca %>% filter(rr <=1)
   
   #identify number of colors to use  
   unique_items <- unique(long_ruca$urbanicity_ruca_code)

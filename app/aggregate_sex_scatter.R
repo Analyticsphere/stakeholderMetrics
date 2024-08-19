@@ -17,6 +17,7 @@ aggregate_sex_scatter <- function(data){
       sex == "unknown" ~ "Unknown"))
   
   long_sex$rr <- round(long_sex$rr,2)
+  long_sex <- long_sex %>% filter(rr <=1)
   
   #identify number of colors to use  
   unique_items <- unique(long_sex$sex)

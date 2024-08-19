@@ -22,6 +22,7 @@ aggregate_ses_scatter <- function(data){
   
   long_ses$rr <- long_ses$rr*10 
   long_ses$rr <- round(long_ses$rr,2) 
+  long_ses <- long_ses %>% filter(rr <= 1)
   
   #identify number of colors to use  
   unique_items <- unique(long_ses$ses_quartile)
