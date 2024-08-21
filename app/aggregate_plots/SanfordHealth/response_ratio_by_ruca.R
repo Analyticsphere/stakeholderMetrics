@@ -1,23 +1,38 @@
 response_ratio_by_ruca <- function(data){
   
   rr_data <- filter(data, population == "response_ratio")
-  rr_data <- filter(rr_data, site == "HealthPartners")
+  rr_data <- filter(rr_data, site == "Sanford Health")
   relevant_columns <- grep("urbanicity_", colnames(rr_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  ruca_data = rr_data[,relevant_columns]
+  rr_data = rr_data[,relevant_columns]
   
   
-  long_ruca <- ruca_data %>% pivot_longer(cols = urbanicity_ruca_code_1:urbanicity_missing,
+  rr_data <- rr_data %>% pivot_longer(cols = urbanicity_ruca_code_1:urbanicity_missing,
                                           names_to = "urbanicity_ruca_code", 
                                           names_prefix = "socioeconomic_status_",
                                           values_to = "rr")
+  rr_data$month <- rr_data$month/10
+  rr_data$year <- rr_data$year/10
   
-  long_ruca <- filter(long_ruca, month != 6)
-  long_ruca$date <- as.Date(paste(long_ruca$year, long_ruca$month, "01", sep = "-"), format = "%Y-%m-%d")
+  rr_data <- rr_data %>%
+    mutate(rr = case_when(
+      year == 2024 ~ rr / 100,  # Divide by 100 for year 2024
+      year == 2023 ~ rr / 100,  # Divide by 100 for year 2024
+      TRUE ~ rr  # Keep rr unchanged for all other cases
+    ))
+  
+  
+  #fix month, rr and year
+  rr_data$rr <- round(rr_data$rr,2)
+  rr_data <- rr_data %>% filter(rr <=1)
+
+  rr_data$month <- ifelse(rr_data$month ==0, 1, rr_data$month)
+  
+  rr_data$date <- as.Date(paste(rr_data$year, rr_data$month, "01", sep = "-"), format = "%Y-%m-%d")
   
   
   
-  long_ruca <- long_ruca %>%
+  rr_data <- rr_data %>%
     mutate(urbanicity_ruca_code = case_when(
       urbanicity_ruca_code == "urbanicity_ruca_code_1" ~ "Code 1",
       urbanicity_ruca_code == "urbanicity_ruca_code_2" ~ "Code 2",
@@ -34,12 +49,10 @@ response_ratio_by_ruca <- function(data){
     )) 
   
   
-  long_ruca$rr <- long_ruca$rr/10
-  long_ruca$rr <- round(long_ruca$rr,2)
-  long_ruca <- long_ruca %>% filter(rr <=1)
+
   
   #identify number of colors to use  
-  unique_items <- unique(long_ruca$urbanicity_ruca_code)
+  unique_items <- unique(rr_data$urbanicity_ruca_code)
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for your activities
@@ -50,7 +63,7 @@ response_ratio_by_ruca <- function(data){
   
   
   plot <- plot_ly(
-    data = long_ruca,
+    data = rr_data,
     x = ~date,
     y = ~rr,
     color = ~urbanicity_ruca_code,

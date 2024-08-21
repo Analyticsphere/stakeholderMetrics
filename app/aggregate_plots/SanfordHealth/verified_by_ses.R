@@ -1,25 +1,24 @@
 verified_by_ses <- function(data) {
   
   tv_data <- filter(data, population == "total_verified")
-  tv_data <- filter(tv_data, site == "HealthPartners")
+  tv_data <- filter(tv_data, site == "Sanford Health")
   relevant_columns <- grep("socioeconomic_status_", colnames(tv_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  ses_data = tv_data[,relevant_columns]
+  tv_data = tv_data[,relevant_columns]
   
   
-  long_ses <- ses_data %>% pivot_longer(cols = socioeconomic_status_first_quartile:socioeconomic_status_missing,
+  tv_data <- tv_data %>% pivot_longer(cols = socioeconomic_status_first_quartile:socioeconomic_status_missing,
                                         names_to = "ses_quartile", 
                                         names_prefix = "socioeconomic_status_",
                                         values_to = "total_verified")
  
-  long_ses <- filter(long_ses, month != 6)
-  
+
   #create date variable
-  long_ses$date <- as.Date(paste(long_ses$year, long_ses$month, "01", sep = "-"), format = "%Y-%m-%d")
+  tv_data$date <- as.Date(paste(tv_data$year, tv_data$month, "01", sep = "-"), format = "%Y-%m-%d")
   
   
   
-  long_ses <- long_ses %>%
+  tv_data <- tv_data %>%
     mutate(ses_quartile = case_when(
       ses_quartile == "first_quartile" ~ "First Quartile",
       ses_quartile == "second_quartile" ~ "Second Quartile",
@@ -31,7 +30,7 @@ verified_by_ses <- function(data) {
   
   
   #identify number of colors to use  
-  unique_items <- unique(long_ses$ses_quartile)
+  unique_items <- unique(tv_data$ses_quartile)
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for your activities
@@ -42,7 +41,7 @@ verified_by_ses <- function(data) {
   
   
   plot <- plot_ly(
-    data = long_ses,
+    data = tv_data,
     x = ~date,
     y = ~total_verified,
     color = ~ses_quartile,

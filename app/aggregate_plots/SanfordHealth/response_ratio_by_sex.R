@@ -1,30 +1,34 @@
 response_ratio_by_sex <- function(data){
   
   rr_data <- filter(data, population == "response_ratio")
-  rr_data <- filter(rr_data, site == "HealthPartners")
+  rr_data <- filter(rr_data, site == "Sanford Health")
   relevant_columns <- grep("sex_", colnames(rr_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  sex_data = rr_data[,relevant_columns]
+  rr_data = rr_data[,relevant_columns]
   
-  long_sex <- sex_data %>% pivot_longer(cols = sex_female:sex_unknown,
+  rr_data <- rr_data %>% pivot_longer(cols = sex_female:sex_unknown,
                                         names_to = "sex", 
                                         names_prefix = "sex_",
                                         values_to = "rr")
-  long_sex <- filter(long_sex, month != 6)
-  long_sex$date <- as.Date(paste(long_sex$year, long_sex$month, "01", sep = "-"), format = "%Y-%m-%d")
+  rr_data$year <- rr_data$year/10
+  rr_data$month <- rr_data$month/10
+  rr_data$rr <- rr_data$rr/100
   
   
-  long_sex <- long_sex %>%
+  rr_data$date <- as.Date(paste(rr_data$year, rr_data$month, "01", sep = "-"), format = "%Y-%m-%d")
+  
+  
+  rr_data <- rr_data %>%
     mutate(sex = case_when(
       sex == "female" ~ "Female",
       sex == "male" ~ "Male",
       sex == "unknown" ~ "Unknown"))
   
-  long_sex$rr <- round(long_sex$rr,2)
-  long_sex <- long_sex %>% filter(rr <=1)
+  rr_data$rr <- round(rr_data$rr,2)
+  rr_data <- rr_data %>% filter(rr <=1)
   
   #identify number of colors to use  
-  unique_items <- unique(long_sex$sex)
+  unique_items <- unique(rr_data$sex)
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for your activities
@@ -35,7 +39,7 @@ response_ratio_by_sex <- function(data){
   
   
   plot <- plot_ly(
-    data = long_sex,
+    data = rr_data,
     x = ~date,
     y = ~rr,
     color = ~sex,

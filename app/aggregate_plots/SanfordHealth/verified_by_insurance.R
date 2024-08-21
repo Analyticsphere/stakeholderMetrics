@@ -1,26 +1,25 @@
 verified_by_insurance<- function(data) {
   
   tv_data <- filter(data, population == "total_verified")
-  tv_data <- filter(tv_data, site == "HealthPartners")
+  tv_data <- filter(tv_data, site == "Sanford Health")
   relevant_columns <- grep("insurance_", colnames(tv_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  insurance_data = tv_data[,relevant_columns]
+  tv_data = tv_data[,relevant_columns]
   
   
-  long_insurance <- insurance_data %>% pivot_longer(cols = insurance_private_commercial_employer_or_direct_pay:insurance_unknown,
+  tv_data <- tv_data %>% pivot_longer(cols = insurance_private_commercial_employer_or_direct_pay:insurance_unknown,
                                                     names_to = "insurance_type", 
                                                     names_prefix = "insurance",
                                                     values_to = "total_verified")
   
-  long_insurance$insurance_type <- substr(long_insurance$insurance_type, 2, nchar(long_insurance$insurance_type))
+  tv_data$insurance_type <- substr(tv_data$insurance_type, 2, nchar(tv_data$insurance_type))
   
-  long_insurance <- filter(long_insurance, month != 6)
   
   #create date variable
-  long_insurance$date <- as.Date(paste(long_insurance$year, long_insurance$month, "01", sep = "-"), format = "%Y-%m-%d")
+  tv_data$date <- as.Date(paste(tv_data$year, tv_data$month, "01", sep = "-"), format = "%Y-%m-%d")
   
   
-  long_insurance <- long_insurance %>%
+  tv_data <- tv_data %>%
     mutate(insurance_type = case_when(
       insurance_type == "private_commercial_employer_or_direct_pay" ~ "Private, Commercial, Employer or Direct Pay",
       insurance_type == "medicare" ~ "Medicare",
@@ -35,7 +34,7 @@ verified_by_insurance<- function(data) {
   
   
   #identify number of colors to use  
-  unique_items <- unique(long_insurance$insurance_type)
+  unique_items <- unique(tv_data$insurance_type)
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for your activities
@@ -44,7 +43,7 @@ verified_by_insurance<- function(data) {
   # Map colors to activities to ensure consistency
   color_mapping <- setNames(cols, unique_items)
   plot <- plot_ly(
-    data = long_insurance,
+    data = tv_data,
     x = ~date,
     y = ~total_verified,
     color = ~insurance_type,

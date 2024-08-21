@@ -1,27 +1,46 @@
 response_ratio_by_insurance <- function(data){
   
   rr_data <- filter(data, population == "response_ratio")
-  rr_data <- filter(data, site == "Sanford Health")
+  rr_data <- filter(rr_data, site == "Sanford Health")
   relevant_columns <- grep("insurance", colnames(rr_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  insurance_data = rr_data[,relevant_columns]
+  rr_data = rr_data[,relevant_columns]
   
-  long_insurance <- insurance_data %>% pivot_longer(cols = insurance_private_commercial_employer_or_direct_pay:insurance_unknown,
+  rr_data <- rr_data %>% pivot_longer(cols = insurance_private_commercial_employer_or_direct_pay:insurance_unknown,
                                                     names_to = "insurance_type", 
                                                     names_prefix = "insurance",
                                                     values_to = "rr")
-  long_insurance <- long_insurance[,c("year", "month", "rr", "insurance_type")]
+  #include only what i want
+  rr_data <- rr_data[,c("year", "month", "rr", "insurance_type")]
 
-  long_insurance$rr <- round(long_insurance$rr,2)
-  long_insurance <- long_insurance%>% filter(rr <= 1) 
+  #convert dates
+  rr_data$month <- rr_data$month/10
+  rr_data$year <- rr_data$year/10
+  
+  #weirdness with a date
+  rr_data$month <- ifelse(rr_data$month == 0, 1, rr_data$month)
+  
+  #2022, 2023 and 2024 rr are too large, divide by 100
+  #except for 2024 month 1
+  rr_data <- rr_data %>%
+    mutate(rr = case_when(
+      year %in% c(2022, 2023) ~ rr / 100,  # Divide by 100 for years 2022 and 2023
+      year == 2024 & month == 2 ~ rr / 100,  # Divide by 100 for February 2024
+      TRUE ~ rr  # Keep rr unchanged for all other cases
+    ))
   
   
-  long_insurance$date <- as.Date(paste(long_insurance$year, long_insurance$month, "01", sep = "-"), format = "%Y-%m-%d")
+  #round and filter rr
+  rr_data$rr <- round(rr_data$rr,2)
+  rr_data <- rr_data%>% filter(rr <= 1) 
   
+  #create date variable
+  rr_data$date <- as.Date(paste(rr_data$year, rr_data$month, "01", sep = "-"), format = "%Y-%m-%d")
   
-  long_insurance$insurance_type <- substr(long_insurance$insurance_type, 2, nchar(long_insurance$insurance_type))
+  #edit insurance labels
+  rr_data$insurance_type <- substr(rr_data$insurance_type, 2, nchar(rr_data$insurance_type))
   
-  long_insurance <- long_insurance %>%
+  rr_data <- rr_data %>%
     mutate(insurance_type = case_when(
       insurance_type == "private_commercial_employer_or_direct_pay" ~ "Private, Commercial, Employer or Direct Pay",
       insurance_type == "medicare" ~ "Medicare",
@@ -36,7 +55,7 @@ response_ratio_by_insurance <- function(data){
   
   
   #identify number of colors to use  
-  unique_items <- unique(long_insurance$insurance_type)
+  unique_items <- unique(rr_data$insurance_type)
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for your activities
@@ -46,7 +65,7 @@ response_ratio_by_insurance <- function(data){
   color_mapping <- setNames(cols, unique_items)
   
   plot <- plot_ly(
-    data = long_insurance,
+    data = rr_data,
     x = ~date,
     y = ~rr,
     color = ~insurance_type,
