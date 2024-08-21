@@ -93,10 +93,6 @@ data <- expss::apply_labels(data,#RcrtES_Site_v1r0
   data <- data %>%
     mutate(across(where(is.numeric), ~ replace_na(., 0)))
   
-  # Divide HealthPartners data by 100
-  data <- data %>%
-    mutate(across(where(is.numeric), ~ if_else(site == "HealthPartners", . / 100, .)))
-
   # Multiply all numeric variables by 100 where population is "response_ratio" and site is not "HealthPartners"
   data <- data %>%
     mutate(across(where(is.numeric), ~ if_else(site != "HealthPartners" &
