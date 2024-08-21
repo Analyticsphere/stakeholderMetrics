@@ -280,6 +280,40 @@ server <- function(input, output, session){
    output$sf_aggregate_plot5b <- renderPlotly({response_ratio_by_ruca(data = aggregate_recruitment_data())})
    
 
+   #MF aggregate data
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/verified_by_race.R", local = TRUE)
+   output$mf_aggregate_plot1 <- renderPlotly({verified_by_race(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/response_ratio_by_race.R", local = TRUE)
+   output$mf_aggregate_plot1b <- renderPlotly({response_ratio_by_race(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/verified_by_sex.R", local = TRUE)
+   output$mf_aggregate_plot2 <- renderPlotly({verified_by_sex(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/response_ratio_by_sex.R", local = TRUE)
+   output$mf_aggregate_plot2b <- renderPlotly({response_ratio_by_sex(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/verified_by_insurance.R", local = TRUE)
+   output$mf_aggregate_plot3 <- renderPlotly({verified_by_insurance(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/response_ratio_by_insurance.R", local = TRUE)
+   output$mf_aggregate_plot3b <- renderPlotly({response_ratio_by_insurance(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/verified_by_ses.R", local = TRUE)
+   output$mf_aggregate_plot4 <- renderPlotly({verified_by_ses(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/response_ratio_by_ses.R", local = TRUE)
+   output$mf_aggregate_plot4b <- renderPlotly({response_ratio_by_ses(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/verified_by_ruca.R", local = TRUE)
+   output$mf_aggregate_plot5 <- renderPlotly({verified_by_ruca(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/MarshfieldClinicHealthSystem/response_ratio_by_ruca.R", local = TRUE)
+   output$mf_aggregate_plot5b <- renderPlotly({response_ratio_by_ruca(data = aggregate_recruitment_data())})
+   
+   
+   
+   
   
   fast_facts_reactive <- reactive({
     source("./fast_facts2.R", local = TRUE)
@@ -657,7 +691,28 @@ ui <- dashboardPage(
                 column(6, plotlyOutput("sf_aggregate_plot4b"))),
               fluidRow(
                 column(6, plotlyOutput("sf_aggregate_plot5")),
-                column(6, plotlyOutput("sf_aggregate_plot5b")))
+                column(6, plotlyOutput("sf_aggregate_plot5b"))),
+              fluidRow(
+                column(12,
+                       h4("Marshfield-reported Aggregate Recruitment Metrics", style = "color: black"),
+                       div(style ="height: 7px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
+                )
+              ),
+              fluidRow(
+                column(6, plotlyOutput("mf_aggregate_plot1")),
+                column(6, plotlyOutput("mf_aggregate_plot1b"))),
+              fluidRow(
+                column(6, plotlyOutput("mf_aggregate_plot2")),
+                column(6, plotlyOutput("mf_aggregate_plot2b"))),
+              fluidRow(
+                column(6, plotlyOutput("mf_aggregate_plot3")),
+                column(6, plotlyOutput("mf_aggregate_plot3b"))),
+              fluidRow(
+                column(6, plotlyOutput("mf_aggregate_plot4")),
+                column(6, plotlyOutput("mf_aggregate_plot4b"))),
+              fluidRow(
+                column(6, plotlyOutput("mf_aggregate_plot5")),
+                column(6, plotlyOutput("mf_aggregate_plot5b")))
       )
       )
   )
