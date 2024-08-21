@@ -131,8 +131,7 @@ server <- function(input, output, session){
                                                       "nih-nci-dceg-connect-bq2-prod",
                                                     dataset = "StakeHolderMetrics_RS",
                                                     table = "invited_participants_complete"),
-                                           type = "invited")
-  })
+                                           type = "invited")})
   
   
   filtered_IP_data <- reactive({
@@ -606,40 +605,20 @@ ui <- dashboardPage(
               fluidRow(
                 column(12, align = "center", 
                        tags$h3(style = "text-align: center;", 
-                               HTML(glue("2024 Q1 Site-reported Recruitment")))
+                               HTML(glue("Site-reported Recruitment")))
                 )
               ),
               fluidRow(
-                column(12, align = "center", 
-                       tags$h5(style = "text-align: center;", 
-                               HTML(glue("Note: Extreme outliers have been removed")))
-                )
-              ),fluidRow(
                 column(12, align = "center", 
                        tags$h5(style = "text-align: center;", 
                                HTML(glue("Note: Extreme outliers have been removed.
                                          All values shown are aggregate.")))
                 )
               ),
-              fluidRow(
-                column(6, plotlyOutput("aggregate_plot1")),
-                column(6, plotlyOutput("aggregate_plot1b"))),
-              fluidRow(
-                column(6, plotlyOutput("aggregate_plot2")),
-                column(6, plotlyOutput("aggregate_plot2b"))),
-              fluidRow(
-                column(6, plotlyOutput("aggregate_plot3")),
-                column(6, plotlyOutput("aggregate_plot3b"))),
-              fluidRow(
-                column(6, plotlyOutput("aggregate_plot4")),
-                column(6, plotlyOutput("aggregate_plot4b"))),
-              fluidRow(
-                column(6, plotlyOutput("aggregate_plot5")),
-                column(6, plotlyOutput("aggregate_plot5b"))),
                fluidRow(
                  column(12,
-                        h1("HealthPartners-reported Aggregate Recruitment Metrics", style = "color: black"),
-                        div(style ="height: 15px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
+                        h4("HealthPartners-reported Aggregate Recruitment Metrics", style = "color: black"),
+                        div(style ="height: 7px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
                         
                  )
                ),
@@ -657,7 +636,28 @@ ui <- dashboardPage(
                  column(6, plotlyOutput("hp_aggregate_plot4b"))),
                fluidRow(
                  column(6, plotlyOutput("hp_aggregate_plot5")),
-                 column(6, plotlyOutput("hp_aggregate_plot5b")))
+                 column(6, plotlyOutput("hp_aggregate_plot5b"))),
+              fluidRow(
+                column(12,
+                       h4("Sanford-reported Aggregate Recruitment Metrics", style = "color: black"),
+                       div(style ="height: 7px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
+                )
+              ),
+              fluidRow(
+                column(6, plotlyOutput("sf_aggregate_plot1")),
+                column(6, plotlyOutput("sf_aggregate_plot1b"))),
+              fluidRow(
+                column(6, plotlyOutput("sf_aggregate_plot2")),
+                column(6, plotlyOutput("sf_aggregate_plot2b"))),
+              fluidRow(
+                column(6, plotlyOutput("sf_aggregate_plot3")),
+                column(6, plotlyOutput("sf_aggregate_plot3b"))),
+              fluidRow(
+                column(6, plotlyOutput("sf_aggregate_plot4")),
+                column(6, plotlyOutput("sf_aggregate_plot4b"))),
+              fluidRow(
+                column(6, plotlyOutput("sf_aggregate_plot5")),
+                column(6, plotlyOutput("sf_aggregate_plot5b")))
       )
       )
   )

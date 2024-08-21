@@ -5,20 +5,20 @@ verified_by_race <- function(data){
   tv_data <- filter(tv_data, site == "HealthPartners")
   relevant_columns <- grep("race_ethnicity_", colnames(tv_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  race_data = tv_data[,relevant_columns]
+  tv_data = tv_data[,relevant_columns]
   
   
   #convert data from wide to long
-  long_race <- race_data %>% pivot_longer(cols = race_ethnicity_white_hispanic:race_ethnicity_unknown_ethnicity_unknown,
+  tv_data <- tv_data %>% pivot_longer(cols = race_ethnicity_white_hispanic:race_ethnicity_unknown_ethnicity_unknown,
                                           names_to = "race_ethnicity", 
                                           names_prefix = "race_ethnicity_",
                                           values_to = "tv")
-  long_race <- filter(long_race, month != 6)
+  tv_data <- filter(tv_data, month != 6)
   
-  long_race <- long_race[,c("year", "month", "tv", "race_ethnicity")]
+  tv_data <- tv_data[,c("year", "month", "tv", "race_ethnicity")]
   
   #create date variable
-  long_race$date <- as.Date(paste(long_race$year, long_race$month, "01", sep = "-"), format = "%Y-%m-%d")
+  tv_data$date <- as.Date(paste(tv_data$year, tv_data$month, "01", sep = "-"), format = "%Y-%m-%d")
   
   #only want race, no ethnicity information
   race_mapping <- list(
@@ -32,7 +32,7 @@ verified_by_race <- function(data){
   )
   
   # aggregate, map, and summarize the data
-  filtered_data <- long_race %>%
+  tv_data <- tv_data %>%
     mutate(race_ethnicity = case_when(
       race_ethnicity %in% race_mapping$White ~ "White",
       race_ethnicity %in% race_mapping$Black ~ "Black",
@@ -47,7 +47,7 @@ verified_by_race <- function(data){
   
   
   #identify number of colors to use  
-  unique_items <- unique(filtered_data$race_ethnicity)
+  unique_items <- unique(tv_data$race_ethnicity)
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for all races
@@ -58,7 +58,7 @@ verified_by_race <- function(data){
   
   #plot
   plot <- plot_ly(
-    data = filtered_data,
+    data = tv_data,
     x = ~date,
     y = ~tv,
     color = ~race_ethnicity,
