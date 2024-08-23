@@ -1,4 +1,4 @@
-verified_by_ruca <- function(data) {
+verified_by_ruca_hp <- function(data) {
   
   tv_data <- filter(data, population == "total_verified")
   tv_data <- filter(tv_data, site == "HealthPartners")

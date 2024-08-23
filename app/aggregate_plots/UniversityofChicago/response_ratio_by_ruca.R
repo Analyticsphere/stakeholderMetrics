@@ -1,22 +1,38 @@
-verified_by_ruca_sf <- function(data) {
+response_ratio_by_ruca_uc <- function(data){
   
-  tv_data <- filter(data, population == "total_verified")
-  tv_data <- filter(tv_data, site == "Sanford Health")
-  relevant_columns <- grep("urbanicity_", colnames(tv_data), value = TRUE)
+  rr_data <- filter(data, population == "response_ratio")
+  rr_data <- filter(rr_data, site == "University of Chicago")
+  relevant_columns <- grep("urbanicity_", colnames(rr_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  tv_data = tv_data[,relevant_columns]
+  rr_data = rr_data[,relevant_columns]
   
   
-  tv_data <- tv_data %>% pivot_longer(cols = urbanicity_ruca_code_1:urbanicity_missing,
+  rr_data <- rr_data %>% pivot_longer(cols = urbanicity_ruca_code_1:urbanicity_missing,
                                           names_to = "urbanicity_ruca_code", 
                                           names_prefix = "socioeconomic_status_",
-                                          values_to = "total_verified")
+                                          values_to = "rr")
+  rr_data$month <- rr_data$month/10
+  rr_data$year <- rr_data$year/10
+  
+  rr_data <- rr_data %>%
+    mutate(rr = case_when(
+      year %in% c(2022,2023) ~ rr / 100,  # Divide by 100 for year 2024
+      year == 2024 & month ==1 ~ rr / 100,  # Divide by 100 for year 2024
+      TRUE ~ rr  # Keep rr unchanged for all other cases
+    ))
+  
+  
+  #fix month, rr and year
+  rr_data$rr <- round(rr_data$rr,2)
+  rr_data <- rr_data %>% filter(rr <=1)
 
-  #create date variable
-  tv_data$date <- as.Date(paste(tv_data$year, tv_data$month, "01", sep = "-"), format = "%Y-%m-%d")
+  rr_data$month <- ifelse(rr_data$month ==0, 1, rr_data$month)
+  
+  rr_data$date <- as.Date(paste(rr_data$year, rr_data$month, "01", sep = "-"), format = "%Y-%m-%d")
   
   
-  tv_data <- tv_data %>%
+  
+  rr_data <- rr_data %>%
     mutate(urbanicity_ruca_code = case_when(
       urbanicity_ruca_code == "urbanicity_ruca_code_1" ~ "Code 1",
       urbanicity_ruca_code == "urbanicity_ruca_code_2" ~ "Code 2",
@@ -30,10 +46,13 @@ verified_by_ruca_sf <- function(data) {
       urbanicity_ruca_code == "urbanicity_ruca_code_10" ~ "Code 10",
       urbanicity_ruca_code == "urbanicity_missing" ~ "Code Unknown",
       TRUE ~ urbanicity_ruca_code  # Default case to handle any other values that do not match
-    ))
+    )) 
+  
+  
+
   
   #identify number of colors to use  
-  unique_items <- unique(tv_data$urbanicity_ruca_code)
+  unique_items <- unique(rr_data$urbanicity_ruca_code)
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for your activities
@@ -42,21 +61,25 @@ verified_by_ruca_sf <- function(data) {
   # Map colors to activities to ensure consistency
   color_mapping <- setNames(cols, unique_items)
   
+  
   plot <- plot_ly(
-    data = tv_data,
+    data = rr_data,
     x = ~date,
-    y = ~total_verified,
+    y = ~rr,
     color = ~urbanicity_ruca_code,
     colors = color_mapping,
-    type = 'bar',
-    barmode = 'group',
+    type = 'scatter',
+    mode = 'markers',
+    text = ~paste(urbanicity_ruca_code),  # Custom text for hover
     hoverinfo = 'text+x+y'  # Specifies what info to display on hover
-  )
-  plot <- plot %>%
+  ) %>%
     layout(
-      title = "Verified Participants by RUCA Code",
+      title = "Response Ratio by Urbanicity",
       xaxis = list(title = "Date"),
-      yaxis = list(title = paste0("Total Verified Participants")),
-      legend = list(title = list(text = "RUCA Code")))
+      yaxis = list(title = paste0("Response Ratio")),
+      legend = list(title = list(text = "RUCA code"))
+    )
+  
   plot
+  
 }

@@ -1,7 +1,7 @@
-response_ratio_by_sex_mf <- function(data){
+response_ratio_by_sex_uc <- function(data){
   
   rr_data <- filter(data, population == "response_ratio")
-  rr_data <- filter(rr_data, site == "Marshfield Clinic Health System")
+  rr_data <- filter(rr_data, site == "University of Chicago")
   relevant_columns <- grep("sex_", colnames(rr_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
   rr_data = rr_data[,relevant_columns]

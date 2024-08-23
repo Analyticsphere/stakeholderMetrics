@@ -1,4 +1,4 @@
-response_ratio_by_ruca <- function(data){
+response_ratio_by_ruca_hp <- function(data){
   
   rr_data <- filter(data, population == "response_ratio")
   rr_data <- filter(rr_data, site == "HealthPartners")

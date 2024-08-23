@@ -1,4 +1,4 @@
-response_ratio_by_insurance <- function(data){
+response_ratio_by_insurance_sf <- function(data){
   
   rr_data <- filter(data, population == "response_ratio")
   rr_data <- filter(rr_data, site == "Sanford Health")

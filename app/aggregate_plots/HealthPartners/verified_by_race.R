@@ -1,11 +1,11 @@
-verified_by_race <- function(data){
-  
+verified_by_race_hp <- function(data){
 
-  tv_data <- filter(data, population == "total_verified")
-  tv_data <- filter(tv_data, site == "HealthPartners")
-  relevant_columns <- grep("race_ethnicity_", colnames(tv_data), value = TRUE)
+
+  hp_tv_data <- filter(data, population == "total_verified")
+  hp_tv_data <- filter(hp_tv_data, site == "HealthPartners")
+  relevant_columns <- grep("race_ethnicity_", colnames(hp_tv_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  race_data = tv_data[,relevant_columns]
+  race_data = hp_tv_data[,relevant_columns]
   
   
   #convert data from wide to long
@@ -77,3 +77,4 @@ verified_by_race <- function(data){
   plot
   
 }
+
