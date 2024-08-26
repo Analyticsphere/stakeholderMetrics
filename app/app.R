@@ -317,6 +317,37 @@ server <- function(input, output, session){
    output$uc_aggregate_plot5b <- renderPlotly({response_ratio_by_ruca_uc(data = aggregate_recruitment_data())})
    
    
+   #HF aggregate data
+   source("./aggregate_plots/HenryFord/verified_by_race.R", local = TRUE)
+   output$hf_aggregate_plot1 <- renderPlotly({verified_by_race_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/response_ratio_by_race.R", local = TRUE)
+   output$hf_aggregate_plot1b <- renderPlotly({response_ratio_by_race_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/verified_by_sex.R", local = TRUE)
+   output$hf_aggregate_plot2 <- renderPlotly({verified_by_sex_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/response_ratio_by_sex.R", local = TRUE)
+   output$hf_aggregate_plot2b <- renderPlotly({response_ratio_by_sex_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/verified_by_insurance.R", local = TRUE)
+   output$hf_aggregate_plot3 <- renderPlotly({verified_by_insurance_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/response_ratio_by_insurance.R", local = TRUE)
+   output$hf_aggregate_plot3b <- renderPlotly({response_ratio_by_insurance_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/verified_by_ses.R", local = TRUE)
+   output$hf_aggregate_plot4 <- renderPlotly({verified_by_ses_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/response_ratio_by_ses.R", local = TRUE)
+   output$hf_aggregate_plot4b <- renderPlotly({response_ratio_by_ses_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/verified_by_ruca.R", local = TRUE)
+   output$hf_aggregate_plot5 <- renderPlotly({verified_by_ruca_hf(data = aggregate_recruitment_data())})
+   
+   source("./aggregate_plots/HenryFord/response_ratio_by_ruca.R", local = TRUE)
+   output$hf_aggregate_plot5b <- renderPlotly({response_ratio_by_ruca_hf(data = aggregate_recruitment_data())})
+   
    
   
   fast_facts_reactive <- reactive({
@@ -650,7 +681,7 @@ ui <- dashboardPage(
                 column(12, align = "center", 
                        tags$h5(style = "text-align: center;", 
                                HTML(glue("Note: Extreme outliers have been removed.
-                                         All values shown are aggregate.")))
+                                         All values shown are cumulative.")))
                 )
               ),
                fluidRow(
@@ -737,7 +768,28 @@ ui <- dashboardPage(
                 column(6, plotlyOutput("uc_aggregate_plot4b"))),
               fluidRow(
                 column(6, plotlyOutput("uc_aggregate_plot5")),
-                column(6, plotlyOutput("uc_aggregate_plot5b")))
+                column(6, plotlyOutput("uc_aggregate_plot5b"))),
+              fluidRow(
+                column(12,
+                       h4("Henry Ford Health-reported Aggregate Recruitment Metrics", style = "color: black"),
+                       div(style ="height: 7px; background-color: black; margin: 20px 0;"),  # Adjust the height and color
+                )
+              ),
+              fluidRow(
+                column(6, plotlyOutput("hf_aggregate_plot1")),
+                column(6, plotlyOutput("hf_aggregate_plot1b"))),
+              fluidRow(
+                column(6, plotlyOutput("hf_aggregate_plot2")),
+                column(6, plotlyOutput("hf_aggregate_plot2b"))),
+              fluidRow(
+                column(6, plotlyOutput("hf_aggregate_plot3")),
+                column(6, plotlyOutput("hf_aggregate_plot3b"))),
+              fluidRow(
+                column(6, plotlyOutput("hf_aggregate_plot4")),
+                column(6, plotlyOutput("hf_aggregate_plot4b"))),
+              fluidRow(
+                column(6, plotlyOutput("hf_aggregate_plot5")),
+                column(6, plotlyOutput("hf_aggregate_plot5b")))
       )
       )
   )
