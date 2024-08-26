@@ -1,8 +1,8 @@
-verified_by_race <- function(data){
+verified_by_race_sf <- function(data){
   
 
   tv_data <- filter(data, population == "total_verified")
-  tv_data <- filter(tv_data, site == "HealthPartners")
+  tv_data <- filter(tv_data, site == "Sanford Health")
   relevant_columns <- grep("race_ethnicity_", colnames(tv_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
   tv_data = tv_data[,relevant_columns]

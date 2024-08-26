@@ -1,7 +1,7 @@
-verified_by_insurance_mf<- function(data) {
+verified_by_insurance_uc<- function(data) {
   
   tv_data <- filter(data, population == "total_verified")
-  tv_data <- filter(tv_data, site == "Marshfield Clinic Health System")
+  tv_data <- filter(tv_data, site == "University of Chicago")
   relevant_columns <- grep("insurance_", colnames(tv_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
   tv_data = tv_data[,relevant_columns]
@@ -60,3 +60,4 @@ verified_by_insurance_mf<- function(data) {
       legend = list(title = list(text = "Insurance")))
   plot
 }
+

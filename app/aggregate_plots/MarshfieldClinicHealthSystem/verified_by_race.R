@@ -1,4 +1,4 @@
-verified_by_race <- function(data){
+verified_by_race_mf <- function(data){
   
 
   tv_data <- filter(data, population == "total_verified")

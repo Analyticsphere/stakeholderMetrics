@@ -1,4 +1,4 @@
-response_ratio_by_ses <- function(data){
+response_ratio_by_ses_mf <- function(data){
   
   rr_data <- filter(data, population == "response_ratio")
   rr_data <- filter(rr_data, site == "Marshfield Clinic Health System")
