@@ -1,21 +1,31 @@
-response_ratio_by_race_hp <- function(data){
+response_ratio_by_race_hf <- function(data){
   
-  hp_rr_data <- filter(data, population == "response_ratio")
-  hp_rr_data <- filter(hp_rr_data, site == "HealthPartners")
-  relevant_columns <- grep("race_ethnicity_", colnames(hp_rr_data), value = TRUE)
+  rr_data <- filter(data, population == "response_ratio")
+  rr_data <- filter(rr_data, site == "Henry Ford")
+  relevant_columns <- grep("race_ethnicity_", colnames(rr_data), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  race_data = hp_rr_data[,relevant_columns]
+  rr_data = rr_data[,relevant_columns]
   
+  rr_data$month <- rr_data$month/10
+  rr_data$year <- rr_data$year/10
   
-  long_race <- race_data %>% pivot_longer(cols = race_ethnicity_white_hispanic:race_ethnicity_unknown_ethnicity_unknown,
+  #wide to long
+  rr_data <- rr_data %>% pivot_longer(cols = race_ethnicity_white_hispanic:race_ethnicity_unknown_ethnicity_unknown,
                                           names_to = "race_ethnicity", 
                                           names_prefix = "race_ethnicity_",
                                           values_to = "rr")
+  rr_data <- rr_data %>%
+    mutate(rr = case_when(
+      year %in% c(2022, 2023) ~ rr / 100,  # Divide by 100 for years 2022 and 2023
+      year == 2024 & month == 1 ~ rr / 100,  # Divide by 100 for February 2024
+      TRUE ~ rr  # Keep rr unchanged for all other cases
+    ))
   
-  long_race <- long_race[,c("year", "month", "race_ethnicity", "rr")]
+  rr_data <- rr_data[,c("year", "month", "race_ethnicity", "rr")]
+
   
   #create date variable
-  long_race$date <- as.Date(paste(long_race$year, long_race$month, "01", sep = "-"), format = "%Y-%m-%d")
+  rr_data$date <- as.Date(paste(rr_data$year, rr_data$month, "01", sep = "-"), format = "%Y-%m-%d")
   
   
   race_mapping <- list(
@@ -29,7 +39,7 @@ response_ratio_by_race_hp <- function(data){
   )
   
   # Filter, map, and summarize the data
-  filtered_data <- long_race %>%
+  rr_data <- rr_data %>%
     mutate(race_ethnicity = case_when(
       race_ethnicity %in% race_mapping$White ~ "White",
       race_ethnicity %in% race_mapping$Black ~ "Black",
@@ -44,10 +54,10 @@ response_ratio_by_race_hp <- function(data){
     filter(rr <= 1)
   
   #round to 2 places
-  filtered_data$rr <- round(filtered_data$rr,2)
+  rr_data$rr <- round(rr_data$rr,2)
   
   #identify number of colors to use  
-  unique_items <- unique(filtered_data$race_ethnicity)
+  unique_items <- unique(rr_data$race_ethnicity)
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for your activities
@@ -57,7 +67,7 @@ response_ratio_by_race_hp <- function(data){
   color_mapping <- setNames(cols, unique_items)
   
   plot <- plot_ly(
-    data = filtered_data,
+    data = rr_data,
     x = ~date,
     y = ~rr,
     color = ~race_ethnicity,
@@ -77,4 +87,3 @@ response_ratio_by_race_hp <- function(data){
   plot
   
 }
-
