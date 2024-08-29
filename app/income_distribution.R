@@ -11,18 +11,31 @@ library(plotly)
   } else {
 
     # Specify the order of income categories
+    # ordered_income_levels <- c(
+    #   "Less than $10,000/year",
+    #   "$10,000-$24,999/year",
+    #   "$25,000-$34,999/year",
+    #   "$35,000-$49,999/year",
+    #   "$50,000-$74,999/year",
+    #   "$75,000-$99,999/year",
+    #   "$100,000-$149,999/year",
+    #   "$150,000-$199,999/year",
+    #   "$200,000 or more/year",
+    #   "Declined",
+    #   "Unavailable/Unknown",
+    #   "Unknown"
+    # )
     ordered_income_levels <- c(
-      "Less than $10,000/year",
-      "$10,000-$24,999/year",
-      "$25,000-$34,999/year",
-      "$35,000-$49,999/year",
-      "$50,000-$74,999/year",
-      "$75,000-$99,999/year",
-      "$100,000-$149,999/year",
-      "$150,000-$199,999/year",
-      "$200,000 or more/year",
+      "< $10K",
+      "$10-24K",
+      "$25-34K",
+      "$35-49K",
+      "$50-74K",
+      "$75-99K",
+      "$100-149K",
+      "$150-199K",
+      "> $200K",
       "Declined",
-      "Unavailable/Unknown",
       "Unknown"
     )
     
@@ -44,7 +57,7 @@ library(plotly)
                                   line = list(color = 'black', width = 1)))
     
     plot <- plot %>%
-      layout(title = "Self-reported Income of Participants",
+      layout(title = "Self-reported Annual Income of Participants",
              xaxis = list(title = "Income"),
              yaxis = list(title = "Count"),
              font = list(family = "Noto Sans"),
