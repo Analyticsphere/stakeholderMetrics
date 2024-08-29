@@ -59,7 +59,7 @@ fig <- plot_ly(race_df, labels = ~race, values = ~Count, type = 'pie',
 
 # Customize the layout
 curr.date <- Sys.Date()
-fig <- fig %>% layout(title = c("Self-reported Race of Participants Who Completed BOH Section"),
+fig <- fig %>% layout(title = c("Self-reported Race of Participants \nWho Completed BOH Section"),
                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                       yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                       font = list(family = "Noto Sans"),
