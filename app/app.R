@@ -29,12 +29,15 @@ color_palette <- color_palette()
 
 server <- function(input, output, session){
   
-  #call data once for entire dashboard
-  #authentication step for Posit
-  #this code was written by D Russ
-  #source("./get_authentication.R", local = TRUE)
-  #get_authentication(service_account_key = "SERVICE_ACCT_KEY")
   
+  # Authentication step for Posit - written by D Russ
+  is_posit_connect <- Sys.getenv("RSTUDIO_PRODUCT") == "CONNECT"
+  if (is_posit_connect) {
+    source("./get_authentication.R", local = TRUE)
+    get_authentication(service_account_key = "SERVICE_ACCT_KEY")
+  }
+  
+  #call data once for entire dashboard
   #load verified data
   verified_data <- reactive({
     source("./clean_data.R", local = TRUE)
@@ -81,7 +84,7 @@ server <- function(input, output, session){
   
   
   source("./activity_plot.R", local = TRUE)
-  output$plot1 <- renderPlotly({activity_plot(activity_data=filtered_verified_data())})
+  output$plot1 <- renderPlotly({activity_plot(activity_data = filtered_verified_data())})
   
   source("./age_plot.R", local = TRUE)
   output$plot2 <- renderPlotly({age_plot(age_data = filtered_verified_data())})
@@ -432,7 +435,7 @@ ui <- dashboardPage(
                 )
               ),
               fluidRow(
-                column(4,
+                column(4, offset = 2,
                        box(solidHeader = FALSE, title = "Choose Filters:", width = 12,
                            selectInput("siteFilter", "Site",
                                        choices = c("All" = ".",
@@ -478,7 +481,11 @@ ui <- dashboardPage(
                                                    "Skipped this question" = "Skipped this question",
                                                    "UNKNOWN" = "UNKNOWN", 
                                                    "White" = "White"),
-                                       selected = "All"),
+                                       selected = "All")
+                       )
+                ),
+                column(4,  # Second column starts immediately after the first with no offset
+                       box(solidHeader = FALSE, width = 12,
                            selectInput("campaignFilter", "Campaign",
                                        choices = c("All" = ".",
                                                    "Random" = 926338735,
@@ -521,19 +528,23 @@ ui <- dashboardPage(
                            actionButton("applyFilters", "Apply Filters"),
                            br(),
                            textOutput("rowCountText"))),
+              ),
+              fluidRow(
+                column(12,
                 div(class = "grid-container",style ="width:40%display:inline-block",
-                    column(width = 4,
+                    column(width = 6,
                            fluidRow(
                              div(class = "plot-container", plotlyOutput("plot7")),
                              div(class = "plot-container", plotlyOutput("plot2")))
                     )
                 ),
                 div(class = "grid-container",style ="width:40%display:inline-block",
-                    column(width = 4,
+                    column(width = 6,
                            fluidRow(
                              div(class = "pie-plot-container", plotlyOutput("plot3")),
                              div(class = "pie-plot-container", plotlyOutput("plot4")))
                     )
+                )
                 )
               ), 
               # Insert a new fluidRow for the horizontal bar
@@ -545,17 +556,21 @@ ui <- dashboardPage(
                 )
               ),
               fluidRow(
-                column(4,
+                column(6,
                        div(class = "plot-container", plotlyOutput("plot5b")),
                        div(class = "plot-container", plotlyOutput("plot6b"))
                 ),
-                column(8,
+                column(6,
                        fluidRow(
                          div(class = "pie-plot-container", plotlyOutput("plot5")),
-                         div(class = "pie-plot-container", plotlyOutput("plot6")),
-                         div(class = "plot-container", plotlyOutput("plot1"))
+                         div(class = "pie-plot-container", plotlyOutput("plot6"))
                        )
-                )
+                ),
+              ),
+              fluidRow(
+                column(8, offset = 2,
+                       div(class = "plot-container", plotlyOutput("plot1"))
+                      )
               ),
               fluidRow(
                 column(6,
