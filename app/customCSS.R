@@ -101,6 +101,18 @@ h3 {
 .plot-container, .pie-plot-container {
     margin-bottom: 40px; /* Space between plots vertically */
     padding: 10px; /* Optional: Adds space inside the container, around the plot */
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding-bottom: 75%; /* 4:3 Aspect Ratio (height/width = 3/4 = 75%) */
+    height: 0;
+}
+.plot-container > div, .pie-plot-container > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }",
 ##COLORS##
 ":root {
