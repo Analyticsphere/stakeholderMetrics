@@ -96,7 +96,8 @@ Fig_all.plotly <- plot_ly() %>%
                    ticktext = format(unique_monthly_dates, "%y-%m-%d"),
                    showline = TRUE),
       yaxis = list(title = list(text ="Number of Participants"),
-                   showline = TRUE),
+                   showline = TRUE,
+                   scaleratio = 4), # This sets the y-axis scaling to be 4 times the x-axis
       legend = list(x = 0, y = 1, traceorder = "normal"),
       font = list(family = "Noto Sans"),
       showlegend = TRUE,
