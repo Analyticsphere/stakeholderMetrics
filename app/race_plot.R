@@ -26,11 +26,11 @@ race_df <- race_df %>%
     ))
 
 # Apply the function to create a new column with acronyms
-race_df$Acronym <- ifelse(race_df$race == "American Indian or Alaska Native", "AIAN",
+race_df$Acronym <- ifelse(race_df$race == "American Indian or\n Alaska Native", "AIAN",
                    ifelse(race_df$race == "Asian", "A",
-                   ifelse(race_df$race == "Black, African American, or African", "BAAA",
-                   ifelse(race_df$race == "Hawaiian or other Pacific Islander", "HPI",
-                   ifelse(race_df$race == "Hispanic, Latino, or Spanish", "HLS",
+                   ifelse(race_df$race == "Black, African American,\n or African", "BAAA",
+                   ifelse(race_df$race == "Hawaiian or other\n Pacific Islander", "HPI",
+                   ifelse(race_df$race == "Hispanic, Latino,\n  or Spanish", "HLS",
                    ifelse(race_df$race == "Middle Eastern or North African", "MENA",
                    ifelse(race_df$race == "Multi-race", "Multi",
                    ifelse(race_df$race == "Other", "Other",
@@ -59,7 +59,9 @@ fig <- plot_ly(race_df, labels = ~race, values = ~Count, type = 'pie',
 
 # Customize the layout
 curr.date <- Sys.Date()
-fig <- fig %>% layout(title = c("Self-reported Race of Participants \nWho Completed BOH Section"),
+fig <- fig %>% layout(
+  #title = c("Self-reported Race of Participants \nWho Completed BOH Section"),
+                      autosize = TRUE,
                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                       yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                       font = list(family = "Noto Sans"),
