@@ -25,8 +25,8 @@ module_completion_time <- function(data = data, survey ="BOH"){
     
     # Plot the histogram of filtered completion times using plotly
     plot <- ggplot(LAW, aes(x = time_difference)) +
-      geom_histogram(binwidth = 2,fill = color_palette$blue[1], color = color_palette$blue[1], alpha = 0.7) +
-      labs(title = "LAW Survey Completion Times (0 to 300 minutes)",
+      geom_histogram(binwidth = 5,fill = color_palette$blue[1], color = color_palette$blue[1], alpha = 0.7) +
+      labs(#title = "LAW Survey Completion Times (0 to 300 minutes)",
            x = "Completion Time (minutes)",
            y = "Frequency") +
       theme_minimal()
@@ -54,8 +54,8 @@ module_completion_time <- function(data = data, survey ="BOH"){
       
       # Plot the histogram of filtered completion times using plotly
       plot <- ggplot(SAS, aes(x = time_difference)) +
-        geom_histogram(binwidth = 2, fill = color_palette$blue[1], color = color_palette$blue[1], alpha = 0.7) +
-        labs(title = "SAS Survey Completion Times (0 to 300 minutes)",
+        geom_histogram(binwidth = 5, fill = color_palette$blue[1], color = color_palette$blue[1], alpha = 0.7) +
+        labs(#title = "SAS Survey Completion Times (0 to 300 minutes)",
              x = "Completion Time (minutes)",
              y = "Frequency") +
         theme_minimal()
@@ -85,7 +85,7 @@ module_completion_time <- function(data = data, survey ="BOH"){
       # Plot the histogram of filtered completion times using plotly
       plot <- ggplot(BOH, aes(x = time_difference)) +
         geom_histogram(binwidth = 5, fill = color_palette$blue[1], color = color_palette$blue[1], alpha = 0.7) +
-        labs(title = "BOH Survey Completion Times (0 to 300 minutes)",
+        labs(#title = "BOH Survey Completion Times (0 to 300 minutes)",
              x = "Completion Time (minutes)",
              y = "Frequency") +
         theme_minimal()
@@ -112,8 +112,8 @@ module_completion_time <- function(data = data, survey ="BOH"){
       
       # Plot the histogram of filtered completion times using plotly
       plot <- ggplot(MRE, aes(x = time_difference)) +
-        geom_histogram(binwidth = 2,fill = color_palette$blue[1], color = color_palette$blue[1], alpha = 0.7) +
-        labs(title = "MRE Survey Completion Times (0 to 300 minutes)",
+        geom_histogram(binwidth = 5,fill = color_palette$blue[1], color = color_palette$blue[1], alpha = 0.7) +
+        labs(#title = "MRE Survey Completion Times (0 to 300 minutes)",
              x = "Completion Time (minutes)",
              y = "Frequency") +
         theme_minimal()
