@@ -39,10 +39,10 @@ fig <- plot_ly(biocol_counts, labels = ~CollectionType, values = ~Count,
 curr.date <- Sys.Date()
 
 fig <- fig %>% layout(
-  title = list(
-    text = c("Distribution of Biospecimen Collections"),
-    font = list(family = "Noto Sans")
-  ),
+  # title = list(
+  #   text = c("Distribution of Biospecimen Collections"),
+  #   font = list(family = "Noto Sans")
+  # ),
   xaxis = list(showgrid = FALSE,
     zeroline = FALSE,
     showticklabels = FALSE
@@ -52,7 +52,7 @@ fig <- fig %>% layout(
     zeroline = FALSE,
     showticklabels = FALSE
   ),
-  showlegend = TRUE,
+  showlegend = FALSE,
   font = list(family = "Noto Sans"),
   margin = list(t = 50)
 )
