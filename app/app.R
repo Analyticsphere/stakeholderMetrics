@@ -79,7 +79,7 @@ server <- function(input, output, session){
   aggregated_IP_data <- reactive({
     source("./clean_data.R", local = TRUE)
     source("./get_data.R", local=TRUE)
-    data <- get_data(table = "participantFunnelGraph") # Fetch your data
+    data <- get_data(table = "verification_funnel") # Fetch your data
   })
   
   ## Generate Verified Participant Figures -------------------------------------
@@ -535,7 +535,9 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
     sidebarMenu(
       menuItem("Verified Participants",     tabName = "verified_participants"),
       menuItem("Invited Participants",      tabName = "invited_participants"),
-      menuItem("Site-reported Recruitment", tabName = "site_reported_participants")
+      if (FALSE) {
+        menuItem("Site-reported Recruitment", tabName = "site_reported_participants")
+      }
     )
   ),
 
@@ -603,13 +605,15 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
                 fluidRow(
                   column(12, offset=0,
                          box(title = "Map of Catchment Coverage", width = 12,  solidHeader = TRUE, status = "primary",
-                             tags$img(src = "map_site_color_Mar2023.jpg", style = "width:100%; height:auto;"),
+                             tags$img(src = "map_site_color_Mar2023.png", style = "width:100%; height:auto;"),
                              tags$figcaption("Map of Catchment Coverage by Site as of March 2023",
                                              style = "text-align:center; font-style:italic")
                          )
                   )
                 ),
-                
+                fluidRow(
+                  div(HTML("*Note: This map is static. A reactive version is coming soon."), style = "horizontal-align: right;")
+                ),
 #### Row: Demographic Statistics Section Break ---------------------------------
                 
                 fluidRow(
@@ -626,7 +630,10 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
                          box(title = "Select Filters:", status = "primary", width = 12, solidHeader = FALSE, 
                              fluidRow(
                                column(4,  # First column
-                                      selectInput("siteFilter", "Site", choices = c("All" = ".", "HealthPartners" = 531629870, "Henry Ford Health System" = 548392715, "Kaiser Permanente Colorado" = 125001209, "Kaiser Permanente Georgia" = 327912200, "Kaiser Permanente Hawaii" = 300267574, "Kaiser Permanente Northwest" = 452412599, "Marshfield Clinic Health System" = 303349821, "Sanford Health" = 657167265, "University of Chicago Medicine" = 809703864, "Other" = 181769837), selected = "All"),
+                                      # For Demo:
+                                      selectInput("siteFilter", "Site", choices = c("All" = "."), selected = "All"), 
+                                      # For non-demo:
+                                      # selectInput("siteFilter", "Site", choices = c("All" = "."), selected = "All"), #choices = c("All" = ".", "HealthPartners" = 531629870, "Henry Ford Health System" = 548392715, "Kaiser Permanente Colorado" = 125001209, "Kaiser Permanente Georgia" = 327912200, "Kaiser Permanente Hawaii" = 300267574, "Kaiser Permanente Northwest" = 452412599, "Marshfield Clinic Health System" = 303349821, "Sanford Health" = 657167265, "University of Chicago Medicine" = 809703864, "Baylor Scott & White Health" = 472940358, "Other" = 181769837), selected = "All"),
                                       selectInput("sexFilter", "Gender", choices = c("All" = ".", "Male" = "Male", "Female" = "Female", "Nonbinary" = "Nonbinary", "Unknown" = "Unknown"), selected = "All"),
                                       selectInput("ageFilter", "Age", choices = c("All" = ".", "40-45" = "40-45", "46-50" = "46-50", "51-55" = "51-55", "56-60" = "56-60", "61-65" = "61-65", "66-70" = "66-70", "Unknown" = "UNKNOWN"), selected = "All")
                                ),
@@ -638,7 +645,7 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
                                column(4,  # Third column
                                       selectInput("surveycompleteFilter", "Survey Completion Level", choices = c("All" = ".", "BOH only" = "BOH only", "BOH and MRE" = "BOH and MRE", "BOH and SAS" = "BOH and SAS", "BOH and LAW" = "BOH and LAW", "BOH, MRE, and SAS" = "BOH, MRE, and SAS", "BOH, MRE, and LAW" = "BOH, MRE, and LAW", "BOH, SAS, and LAW" = "BOH, SAS, and LAW", "No Survey Sections" = "No Survey Sections"), selected = "All"),
                                       actionButton("applyFilters", "Apply Filters"),
-                                      br(),
+                                      br(), br(),
                                       textOutput("rowCountText")
                                )
                              )
@@ -682,7 +689,7 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
                 
                 fluidRow(
                   column(2),
-                  box(width = 8, solidHeader = FALSE, 
+                  box(title = "Survey Module Key:", width = 8, solidHeader = FALSE, 
                              column(width = 6,
                                     markdown(
                                             "**BOH**: Background & Overall Health \n
@@ -731,73 +738,70 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
                   column(12, align = "center", 
                          tags$h3(style = "text-align: center;", 
                                  HTML(glue("Invited Participant Data as of {format(Sys.Date(), '%B %d, %Y')}"))),
-                         br(),
                          tags$h5(style = "text-align: center;", 
-                                 HTML(glue("Note: All invited participant data is site-reported")))
+                                 HTML(glue("Note: All invited participant data are site-reported."))),
+                         br(),
                   )
                 ),
                 
 #### Row: Filters --------------------------------------------------------------
                 fluidRow(
-                  column(4,
-                         box(solidHeader = FALSE,
-                             selectInput("IPageFilter", "Age Category:",
-                                         choices = c("All" = ".",
-                                                     "40-45" = "40-45",
-                                                     "46-50" = "46-50", 
-                                                     "51-55" = "51-55",
-                                                     "56-60" = "56-60",
-                                                     "61-65" = "61-65",
-                                                     "66-70" = "66-70",
-                                                     "UNKNOWN" = "UNKNOWN"),
-                                         selected = "All"),
-                             selectInput("IPsexFilter", "Gender:",
-                                         choices = c("All" = ".",
-                                                     "Male" = "Male",
-                                                     "Female" = "Female", 
-                                                     "Other" = "Other"),
-                                         selected = "All"),
-                             selectInput("IPraceFilter", "Race:",
-                                         choices = c("All" = ".",
-                                                     "OTHER" = "OTHER",
-                                                     "UNKNOWN" = "UNKNOWN", 
-                                                     "WHITE, NON-HISPANIC" = "WHITE, NON-HISPANIC",
-                                                     "NA" = "NA"),
-                                         selected = "All"),
-                             selectInput("IPsiteFilter", "Site:",
-                                         choices = c("All" = ".",
-                                                     "HealthPartners" = 531629870,
-                                                     "Henry Ford Health System" = 548392715,
-                                                     "Kaiser Permanente Colorado" = 125001209,
-                                                     "Kaiser Permanente Georgia" = 327912200,
-                                                     "Kaiser Permanente Hawaii" = 300267574,
-                                                     "Kaiser Permanente Northwest" = 452412599,
-                                                     "Marshfield Clinic Health System" = 303349821,
-                                                     "Sanford Health" = 657167265, 
-                                                     "University of Chicago Medicine" = 809703864,
-                                                     "National Cancer Institute" = 517700004,
-                                                     "National Cancer Institute" = 13, "Other" = 181769837),
-                                         selected = "All"),
-                             actionButton("applyIPfilters", "Apply Filters"),
-                             br(),
-                             textOutput("IP_rowCountText"))),
-                  column(4, plotlyOutput("invited_plot1")),
-                  column(4, plotlyOutput("invited_plot1b"))),
+                  column(12,
+                           box(title = "Select Filters:", status = "primary", width = 12, solidHeader = FALSE, 
+                               fluidRow(
+                                 column(5, offset = 1,
+                                    selectInput("IPageFilter", "Age Category:", choices = c("All" = ".", "40-45" = "40-45", "46-50" = "46-50", "51-55" = "51-55", "56-60" = "56-60", "61-65" = "61-65", "66-70" = "66-70", "UNKNOWN" = "UNKNOWN"), selected = "All"),
+                                    selectInput("IPsexFilter", "Gender:", choices = c("All" = ".", "Male" = "Male", "Female" = "Female", "Other" = "Other"), selected = "All")
+                                 ),
+                                 column(5, offset = 1,
+                                    selectInput("IPraceFilter", "Race:", choices = c("All" = ".", "OTHER" = "OTHER", "UNKNOWN" = "UNKNOWN", "WHITE, NON-HISPANIC" = "WHITE, NON-HISPANIC", "NA" = "NA"), selected = "All"),
+                                    selectInput("IPsiteFilter", "Site:", choices = c("All" = ".", "HealthPartners" = 531629870, "Henry Ford Health System" = 548392715, "Kaiser Permanente Colorado" = 125001209, "Kaiser Permanente Georgia" = 327912200, "Kaiser Permanente Hawaii" = 300267574, "Kaiser Permanente Northwest" = 452412599, "Marshfield Clinic Health System" = 303349821, "Sanford Health" = 657167265, "University of Chicago Medicine" = 809703864, "Other" = 181769837), selected = "All"),
+                                    actionButton("applyIPfilters", "Apply Filters"),
+                                    br(),
+                                    textOutput("IP_rowCountText")
+                                 )
+                               )
+
+                            )
+                        )
+                  ),
+
+                  # fluidRow(column(4, offset = 1, plotlyOutput("invited_plot1")),
+                  #          column(4, plotlyOutput("invited_plot1b"))
+                  #          ),
+                  fluidRow(
+                    column(6,
+                           aspect_box(title = "Age Distribution: Invited vs. Verified Participants", content = plotlyOutput("invited_plot1", height = "100%", width = "100%"), aspect_ratio = "16x9", max_width = 600, min_width = 100)
+                    ),
+                    column(6,
+                           aspect_box(title = "Response Ratio by Age", content = plotlyOutput("invited_plot1b", height = "100%", width = "100%"), aspect_ratio = "16x9", max_width = 600, min_width = 100)
+                    )
+                  ),
+
                 
 #### Row: --------------------------------------------------------
                 fluidRow(
-                  column(4, ),
-                  column(4, plotlyOutput("invited_plot2")),
-                  column(4, plotlyOutput("invited_plot2b"))),
+                    column(6,
+                          aspect_box(title = "Race Distribution: Invited vs. Verified Participants", content = plotlyOutput("invited_plot2", height = "100%", width = "100%"), aspect_ratio = "16x9", max_width = 600, min_width = 100)
+                        ),
+                    column(6,
+                          aspect_box(title = "Response Ratio By Race", content = plotlyOutput("invited_plot2b", height = "100%", width = "100%"), aspect_ratio = "16x9", max_width = 600, min_width = 100)
+                        )
+                    ),
                 
 #### Row: --------------------------------------------------------
                 fluidRow(
-                  column(4, ),
-                  column(4, plotlyOutput("invited_plot3")),
-                  column(4, plotlyOutput("invited_plot3b")))
+                  column(6,
+                         aspect_box(title = "Sex Distribution: Invited vs. Verified Participants", content = plotlyOutput("invited_plot3", height = "100%", width = "100%"), aspect_ratio = "16x9", max_width = 600, min_width = 100)
+                  ),
+                  column(6,
+                         aspect_box(title = "Response Ratio by Sex", content = plotlyOutput("invited_plot3b", height = "100%", width = "100%"), aspect_ratio = "16x9", max_width = 600, min_width = 100)
+                  )
+                ),
+
         ),
         
-        
+# if (FALSE) {  
 ### Tab: Site-reported participants -------------------------------------------
         tabItem(tabName = "site_reported_participants",
                 fluidRow(
