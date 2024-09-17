@@ -54,7 +54,8 @@ fig <- fig %>% layout(
   ),
   showlegend = FALSE,
   font = list(family = "Noto Sans"),
-  margin = list(t = 50)
+  margin = list(b = 50, t = 50, l = -100, r = 50),
+  autosize = TRUE
 )
   
   # Print the plot
