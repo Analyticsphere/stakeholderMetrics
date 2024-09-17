@@ -1,5 +1,5 @@
-#double bar chart
-#sex
+# Race Distribution, Invited vs. Verified Participants
+
 # Function to create a side-by-side bar chart comparing two categories
 race_stacked_bar_chart <- function(ip_race_data = data, v_race_data = data) {
   library(tidyverse)
@@ -70,9 +70,10 @@ race_stacked_bar_chart <- function(ip_race_data = data, v_race_data = data) {
       layout(
         yaxis = list(title = 'Counts'), 
         xaxis = list(title = 'Race'),
-        title = 'Race Distribution, Invited vs. Verified Participants',
+        # title = 'Race Distribution, Invited vs. Verified Participants',
         barmode = 'stack',
-        margin = list(b = 50, t = 50)
+        margin = list(b = 50, t = 50),
+        autosize = TRUE
       )
   }
 }

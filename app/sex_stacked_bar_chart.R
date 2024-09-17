@@ -1,3 +1,5 @@
+# 'Sex Distribution, Invited vs. Verified Participants'
+
 sex_stacked_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
   library(tidyverse)
   library(plotly)
@@ -44,9 +46,10 @@ sex_stacked_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
       layout(
         yaxis = list(title = 'Counts'), 
         xaxis = list(title = 'Sex'),
-        title = 'Sex Distribution, Invited vs. Verified Participants',
+        # title = 'Sex Distribution, Invited vs. Verified Participants',
         barmode = 'stack',
-        margin = list(b = 50, t = 50)
+        margin = list(b = 50, t = 50),
+        autosize = TRUE
       )
   }
 }

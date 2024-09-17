@@ -1,3 +1,5 @@
+# Age Distribution, Invited vs. Verified Participants
+
 age_stacked_bar_chart <- function(ip_age_data = data, v_age_data = data) {
   library(tidyverse)
   library(plotly)
@@ -30,7 +32,7 @@ age_stacked_bar_chart <- function(ip_age_data = data, v_age_data = data) {
       add_bars(x = ~age_factor, y = ~Verified, name = 'Verified', marker = list(color = verified_color)) %>%
       layout(yaxis = list(title = 'Counts'), 
              xaxis = list(title = 'Age'),
-             title = 'Age Distribution, Invited vs. Verified Participants',
+             # title = 'Age Distribution, Invited vs. Verified Participants',
              barmode = 'stack',
              margin = list(t = 50, b = 50))
     fig
