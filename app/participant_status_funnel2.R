@@ -6,15 +6,16 @@ participant_status <- function(status_data = data) {
   # Create a mapping between conceptIDs and site names using tribble
   site_map <- tibble::tribble(
     ~site_name,                  ~site_id,
-    "KP Colorado",               "125001209",
-    "KP Hawaii",                 "300267574",
-    "Marshfield",                "303349821",
-    "KP Georgia",                "327912200",
-    "KP Northwest",              "452412599",
     "Health Partners",           "531629870",
     "Henry Ford Health System",  "548392715",
+    "KP Colorado",               "125001209",
+    "KP Georgia",                "327912200",
+    "KP Hawaii",                 "300267574",
+    "KP Northwest",              "452412599",
+    "Marshfield",                "303349821",
     "Sanford",                   "657167265",
-    "University of Chicago",     "809703864"
+    "University of Chicago",     "809703864",
+    "Baylor Scott & White",      "472940358"
   )
   
   
@@ -36,11 +37,15 @@ participant_status <- function(status_data = data) {
     fig <- fig %>%
       add_trace(
         name = status_data$site_name[i],
-        y = c("Signed-In:", "Consented:", "Profile Done:", "Verification:", "Verified:"),
+        y = c("Signed-In:", "Consented:", "Profile Done:", 
+              #"Verification:", 
+              "Verified:"),
         x = c(status_data$signed_in[i], status_data$consented[i], status_data$profile_done[i],
-              status_data$verification[i], status_data$verified[i]),
+              #status_data$verification[i], 
+              status_data$verified[i]),
         text = c(status_data$signed_in[i], status_data$consented[i], status_data$profile_done[i],
-                 status_data$verification[i], status_data$verified[i]),
+                 #status_data$verification[i], 
+                 status_data$verified[i]),
         textposition = "inside",
         textinfo = "none",
         hoverinfo = "text",
@@ -54,7 +59,9 @@ participant_status <- function(status_data = data) {
       yaxis = list(
         type = 'category',  # Ensure y-axis is treated as categorical
         categoryorder = 'array',  # Specify the order of categories
-        categoryarray = c("Signed-In:", "Consented:", "Profile Done:", "Verification:", "Verified:")
+        categoryarray = c("Signed-In:", "Consented:", "Profile Done:", 
+                          #"Verification:", 
+                          "Verified:")
       ),
       annotations = list(
         # Adjust annotations to display to the left of the chart
@@ -67,14 +74,14 @@ participant_status <- function(status_data = data) {
         list(x = 0.05, y = "Profile Done:", xref = "paper", yref = "y",
              text = paste0("Profile Done:\n", sum(status_data$profile_done)),
              showarrow = FALSE, xanchor = "right", yanchor = "middle"),
-        list(x = 0.05, y = "Verification:", xref = "paper", yref = "y",
-             text = paste0("Verification:\n", sum(status_data$verification)),
-             showarrow = FALSE, xanchor = "right", yanchor = "middle"),
+        # list(x = 0.05, y = "Verification:", xref = "paper", yref = "y",
+        #      text = paste0("Verification:\n", sum(status_data$verification)),
+        #      showarrow = FALSE, xanchor = "right", yanchor = "middle"),
         list(x = 0.05, y = "Verified:", xref = "paper", yref = "y", 
              text = paste0("Verified:\n", sum(status_data$verified)),
              showarrow = FALSE, xanchor = "right", yanchor = "middle")
       ),
-      margin = list(l = 120, t = 50, b = 50, r = 50),  # Adjust margins
+      margin = list(l = 100, t = 20, b = 20, r = 20),  # Adjust margins
       autosize = TRUE
     )
   
