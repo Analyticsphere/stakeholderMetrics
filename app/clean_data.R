@@ -10,8 +10,10 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
                                                    "Marshfield Clinic Health System" = 303349821,
                                                    "Sanford Health" = 657167265, 
                                                    "University of Chicago Medicine" = 809703864,
+                                                   "Baylor Scott and White Health" = 472940358,
                                                    "National Cancer Institute" = 517700004,
-                                                   "National Cancer Institute" = 13,"Other" = 181769837))
+                                                   "National Cancer Institute" = 13,
+                                                   "Other" = 181769837))
   
   data <- data %>%
     mutate(
@@ -32,7 +34,7 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
         d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "353358909" ~ "Mouthwash Only",
         d_878865966 == "104430631" & d_167958071 == "104430631" & d_684635302 == "104430631" ~ "No Samples"),
       Msrv_complt = case_when(
-        d_100767870 == "353358909" ~ "All 4 Survey Sections",
+        d_100767870 == "353358909" ~ "All Modules",
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "BOH only",
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "BOH and MRE",
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 == "231311385" & d_663265240 != "231311385" ~ "BOH and SAS",
@@ -40,7 +42,7 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 == "231311385" & d_663265240 != "231311385" ~ "BOH, MRE, and SAS",
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 == "231311385" & d_976570371 != "231311385" & d_663265240 == "231311385" ~ "BOH, MRE, and LAW",
         d_100767870 == "104430631" & d_949302066 == "231311385" & d_536735468 != "231311385" & d_976570371 == "231311385" & d_663265240 == "231311385" ~ "BOH, SAS, and LAW",
-        d_100767870 == "104430631" & d_949302066 != "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "No Survey Sections"),
+        d_100767870 == "104430631" & d_949302066 != "231311385" & d_536735468 != "231311385" & d_976570371 != "231311385" & d_663265240 != "231311385" ~ "No Modules"),
       income = case_when(
         income == "374508062" ~ "< 10K",
         income == "976555124" ~ "10-24K",
@@ -60,16 +62,17 @@ data <- expss::apply_labels(data,d_827220437 = "Site",#RcrtES_Site_v1r0
 }else if( type == "invited"){
 data <- expss::apply_labels(data,#RcrtES_Site_v1r0
                                    site = c("HealthPartners"= 531629870,
-                                                   "Henry Ford Health System"=548392715,
-                                                   "Kaiser Permanente Colorado" = 125001209,
-                                                   "Kaiser Permanente Georgia" = 327912200,
-                                                   "Kaiser Permanente Hawaii" = 300267574,
-                                                   "Kaiser Permanente Northwest" = 452412599,
-                                                   "Marshfield Clinic Health System" = 303349821,
-                                                   "Sanford Health" = 657167265, 
-                                                   "University of Chicago Medicine" = 809703864,
-                                                   "National Cancer Institute" = 517700004,
-                                                   "National Cancer Institute" = 13,"Other" = 181769837))
+                                            "Henry Ford Health System"=548392715,
+                                            "Kaiser Permanente Colorado" = 125001209,
+                                            "Kaiser Permanente Georgia" = 327912200,
+                                            "Kaiser Permanente Hawaii" = 300267574,
+                                            "Kaiser Permanente Northwest" = 452412599,
+                                            "Marshfield Clinic Health System" = 303349821,
+                                            "Sanford Health" = 657167265, 
+                                            "University of Chicago Medicine" = 809703864,
+                                            "Baylor Scott and White Health" = 472940358,
+                                            "National Cancer Institute" = 517700004,
+                                            "National Cancer Institute" = 13,"Other" = 181769837))
   data <- data %>%
     mutate(
       sex = case_when(
