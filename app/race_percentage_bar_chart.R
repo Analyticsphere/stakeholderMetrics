@@ -1,3 +1,4 @@
+# Response Ratio by Race
 race_percentage_bar_chart <- function(ip_race_data = data, v_race_data = data) {
   library(tidyverse)
   library(plotly)
@@ -63,8 +64,9 @@ race_percentage_bar_chart <- function(ip_race_data = data, v_race_data = data) {
       layout(
         yaxis = list(title = 'Percentage'), 
         xaxis = list(title = 'Race'),
-        title = 'Response Ratio by Race',
-        margin = list(b = 50, t = 50)
+        # title = 'Response Ratio by Race',
+        margin = list(b = 50, t = 50),
+        autosize = TRUE
       )
   }
 }

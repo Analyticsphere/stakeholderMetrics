@@ -1,3 +1,4 @@
+# Response Ratio by Sex
 sex_percentage_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
   library(tidyverse)
   library(plotly)
@@ -42,8 +43,9 @@ sex_percentage_bar_chart <- function(ip_sex_data = data, v_sex_data = data) {
       layout(
         yaxis = list(title = 'Percentage'), 
         xaxis = list(title = 'Sex'),
-        title = 'Response Ratio by Sex',
-        margin = list(b = 50, t = 50)
+        # title = 'Response Ratio by Sex',
+        margin = list(b = 50, t = 50),
+        autosize = TRUE
       )
   }
 }

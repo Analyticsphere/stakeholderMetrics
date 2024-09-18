@@ -1,3 +1,4 @@
+# Response Ratio by Age
 age_percentage_bar_chart <- function(ip_age_data = data, v_age_data = data) {
   library(tidyverse)
   library(plotly)
@@ -30,7 +31,10 @@ age_percentage_bar_chart <- function(ip_age_data = data, v_age_data = data) {
             marker = list(color = 'rgb(42, 114, 165)')) %>%
       layout(yaxis = list(title = 'Percentage'), 
              xaxis = list(title = 'Age'),
-             title = 'Response Ratio by Age',
-             margin = list(t = 50, b = 50))
+             # title = 'Response Ratio by Age',
+             margin = list(t = 50, b = 50),
+             autosize = TRUE
+             )
+             
   }
 }

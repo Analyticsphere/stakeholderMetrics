@@ -90,7 +90,7 @@ Fig_all.plotly <- plot_ly() %>%
     add_lines(data = agg, x = ~as.Date(verified_date), color = ~activity, colors = color_mapping,
               y = ~value) %>%
     layout(
-      title = list(text = c("Cumulative Number of Participants by Study Activities")),
+      #title = list(text = c("Cumulative Number of Participants by Study Activities")),
       xaxis = list(title = list(text ="Date"),
                    tickvals = unique_monthly_dates,
                    ticktext = format(unique_monthly_dates, "%y-%m-%d"),

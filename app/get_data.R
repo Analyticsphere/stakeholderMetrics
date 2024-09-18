@@ -1,4 +1,4 @@
-get_data <- function(project = 'nih-nci-dceg-connect-bq2-prod', dataset = 'StakeHolderMetrics_RS', table = 'complete_table'){
+get_data <- function(project = 'nih-nci-dceg-connect-prod-6d04', dataset = 'StakeholderMetrics', table = 'complete_verified'){
 
   
 query <- glue("SELECT * FROM `", project, ".", dataset, ".", table, "`" , sep = " ")

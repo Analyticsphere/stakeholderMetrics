@@ -1,3 +1,5 @@
+# Site-Reported Age, Invited vs. Verified Participant Distribution
+
 age_double_bar_chart<- function(ip_age_data = data, v_age_data = data){
   library(tidyverse) 
   library(dplyr) 
@@ -64,7 +66,7 @@ age_double_bar_chart<- function(ip_age_data = data, v_age_data = data){
                  marker = list(color = verified_color)) %>%
         layout(yaxis = list(title = 'Counts'), 
                xaxis = list(title = 'Age'),
-               title = 'Site-Reported Age, Invited vs. Verified Participant Distribution',
+               # title = 'Site-Reported Age, Invited vs. Verified Participant Distribution',
                barmode = 'group',
                margin = list(t = 50, b = 50, r = 200), 
                annotations = list(

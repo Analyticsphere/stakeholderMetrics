@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');
+
+
+/* CSS for a fixed-width layout */
+.fixed-width-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 15px;
+  width: 100%;
+}
+
+/* Custom border for specific sections */
+.my-custom-border {
+  border: 1px solid #ddd !important;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+/* Custom styling for the fast facts box */
+.fast-facts-box {
+  border: 4px solid var(--blue-a); /* Thick blue border */
+  background-color: #FFFFFF;       /* White background */
+  padding: 15px;                   /* Padding inside the box */
+  border-radius: 10px;             /* Rounded corners */
+}
+
+/* Custom styling for the Fast Facts title */
+.fast-facts-title {
+  color: var(--blue-a); /* Blue text color */
+  font-size: 24px;      /* Larger font size */
+  font-weight: bold;    /* Bold font */
+}
+
+/* Custom background colors for specific elements */
+.custom-blue-bg {
+  background-color: var(--blue-a) !important;
+}
+
+
+/* Custom styling for the Fast Facts title */
+.fast-facts-title {
+  color: var(--blue-a); /* Yellow text color */
+  font-size: 24px;      /* Larger font size */
+  font-weight: bold;    /* Bold font */
+}
+.custom-blue-bg {
+  background-color: var(--blue-a) !important;
+}
+.small-box {
+  background-color: var(--blue-a) !important;
+}
+
+/* Custom CSS to set the background color to white */
+.content-wrapper, .main-footer {
+  background-color: #FFFFFF !important;
+}
+
+/* Logo area background color */
+.skin-blue .main-header .logo {
+  background-color: rgb(42, 114, 165) !important;  /* Color for the logo area */
+  color: white;
+}
+      
+/* Header background color */
+.skin-blue .main-header .navbar {
+  background-color: rgb(42, 114, 165);
+}
+
+/* Sidebar background color */
+.skin-blue .main-sidebar {
+  background-color: rgb(42, 114, 165);
+}
+
+/* Box header background color */
+.box.box-solid>.box-header {
+  background-color: rgb(49, 159, 190);
+}
+
+/* Accent color for box backgrounds or elements */
+.accent-bg .small-box.bg-yellow {
+  background-color: rgb(255, 191, 23);
+}
+
+/* Apply Noto Sans font to selectize inputs, dropdowns, labels, and action buttons */
+.selectize-input, .selectize-dropdown, .shiny-input-container label {
+  font-family: 'Noto Sans' !important;
+}
+.btn {
+  background-color: #ffbf17 !important; 
+  color: #164C71 !important; 
+  font-family: Montserrat, Avant Garde, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* Apply Noto Sans font to the main dashboard title */
+.skin-blue .main-header .logo,
+.skin-blue .main-header .navbar-brand {
+  font-family: 'Noto Sans' !important;
+  font-size: 13px;
+}
+
+/* Apply Noto Sans font to sidebar menu items */
+.skin-blue .sidebar-menu li a {
+  font-family: 'Noto Sans' !important;
+}
+
+/* Increase bottom margin for main title */
+h3 {
+  margin-bottom: 50px; /* Adjust this value as needed */
+}
+
+/* Ensure proper spacing and prevent overlap */
+.layout-columns {
+  display: flex;
+  gap: 20px;  /* Add space between columns */
+  flex-wrap: wrap;  /* Wrap columns on smaller screens */
+}
+
+/* Ensure rows are spaced apart and prevent overlap */
+.layout-rows {
+  display: grid;
+  grid-template-columns: 1fr;  /* Single column layout by default */
+  row-gap: 30px;  /* Add gap between rows to prevent overlap */
+}
+
+/* Aspect ratio classes for boxes */
+/* Flexbox container for aspect boxes */
+.aspect-box-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Allows wrapping when space is too small */
+}
+
+/* Each aspect box takes up equal space */
+.aspect-box {
+  flex: 1;
+  margin: 10px;
+  box-sizing: border-box; /* Ensures padding and borders are included in the box size */
+}
+
+/* Media query to stack boxes when the screen is smaller */
+@media (max-width: 700px) {
+  .aspect-box {
+    flex: 100%; /* Stack vertically, taking full width */
+    margin: 10px 0; /* Add vertical spacing */
+  }
+}
+
+/* General styles for all aspect ratio boxes */
+.box-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevent content from overflowing */
+}
+
+/* Aspect ratios for boxes */
+
+/* 4x3 aspect ratio */
+.box-4x3 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 75%; /* 3/4 = 0.75 or 75% */
+  height: 0;
+}
+
+/* 16x9 aspect ratio */
+.box-16x9 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 9/16 = 0.5625 or 56.25% */
+  height: 0;
+}
+
+/* 1x1 aspect ratio (square) */
+.box-1x1 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* 1/1 = 1 or 100% */
+  height: 0;
+}
+
+/* 3x4 aspect ratio (taller than wide) */
+.box-3x4 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 133.33%; /* 4/3 = 1.3333 or 133.33% */
+  height: 0;
+}
+
+/* Add vertical spacing between boxes */
+.box {
+  margin-bottom: 20px; /* Increase/decrease the value as needed */
+}
+
+      
+/* Custom color variables */
+:root {
+  --blue-a: #2973A5;
+  --blue-b: #648EB4;
+  --blue-c: #8BAAC7;
+  --blue-d: #B1C7D9;
+  --blue-e: #D8E3EC;
+
+  --darkblue-a: #164C71;
+  --darkblue-b: #51708A;
+  --darkblue-c: #7C94A8;
+  --darkblue-d: #A8B7C5;
+  --darkblue-e: #D3DBE2;
+
+  --yellow-a: #FDBE19;
+  --yellow-b: #F6CC6C;
+  --yellow-c: #F8D991;
+  --yellow-d: #FBE5B5;
+  --yellow-e: #FDF2DA;
+
+  --skyblue-a: #309EBD;
+  --skyblue-b: #74B0C7;
+  --skyblue-c: #97C4D5;
+  --skyblue-d: #B9D7E3;
+  --skyblue-e: #DDECF1;
+
+  --turq-a: #3C989E;
+  --turq-b: #77ACB0;
+  --turq-c: #99C0C4;
+  --turq-d: #BBD5D7;
+  --turq-e: #DDEAEC;
+
+  --grey-a: #565C65;
+  --grey-b: #797D83;
+  --grey-c: #9A9DA3;
+  --grey-d: #BBBEC1;
+  --grey-e: #DDDEE0;
+
+  --brown-a: #CC7D15;
+  --brown-b: #CD995B;
+  --brown-c: #DAB384;
+  --brown-d: #E7CCAD;
+  --brown-e: #F3E6D6;
+}

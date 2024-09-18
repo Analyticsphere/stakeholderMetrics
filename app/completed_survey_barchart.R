@@ -43,28 +43,29 @@ completed_survey_barchart <- function(survey_data = data) {
     
     fig <- plot_ly(all_data, x = ~SurveyType, y = ~Count, type = 'bar', 
                    color = ~SurveyType, colors = color_mapping,
-                   showlegend = TRUE) %>%
+                   showlegend = FALSE) %>%
       layout(
-        title = "Survey Completion Status By Survey",
+        autosize = TRUE,
+        #title = "Survey Completion Status By Survey",
         xaxis = list(title = "", showticklabels = TRUE),  # Hide x-axis labels
         yaxis = list(title = "Count"),
-        legend = list(title = list(text = 'Survey')),
-        margin = list(t = 50),
-        annotations = list(
-          list(x = 0,
-               y = -0.1,
-               text = paste0("<b>BOH</b>",
-                            ": Background and Overall Health; ",
-                            "<b>MRE</b>",
-                            ": Medications, Reproductive Health, Exercise and Sleep;",
-                            "<b> SAS</b>",
-                            ": Smoking, Alcohol, and Sun Exposure;",
-                            "<b> LAW</b>",": Where You Live and Work"),
-               showarrow = F,
-               xref = "paper", # Reference the entire paper area
-               yref = "paper", # Reference the entire paper area
-               font = list(size = 7),
-               xanchor = 'left', align = 'left'))
+        #legend = list(title = list(text = 'Survey')),
+        margin = list(t = 50)
+        # annotations = list(
+        #   list(x = 0,
+        #        y = -0.1,
+        #        text = paste0("<b>BOH</b>",
+        #                     ": Background and Overall Health; ",
+        #                     "<b>MRE</b>",
+        #                     ": Medications, Reproductive Health, Exercise and Sleep;",
+        #                     "<b> SAS</b>",
+        #                     ": Smoking, Alcohol, and Sun Exposure;",
+        #                     "<b> LAW</b>",": Where You Live and Work"),
+        #        showarrow = F,
+        #        xref = "paper", # Reference the entire paper area
+        #        yref = "paper", # Reference the entire paper area
+        #        font = list(size = 7),
+        #        xanchor = 'left', align = 'left'))
       )
     
     fig

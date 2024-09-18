@@ -52,12 +52,12 @@ biospecimen_collection_barchart <- function(biocol_data = data) {
     #plot
     fig <- plot_ly(all_data, x = ~CollectionType, y = ~Count, type = 'bar', 
                    color = ~CollectionType, colors = color_mapping,
-                   showlegend = TRUE) %>%
+                   showlegend = FALSE) %>%
       layout(
-        title = "Distribution of Biospecimen Collections By Type",
+        #title = "Distribution of Biospecimen Collections By Type",
         xaxis = list(title = "", showticklabels = TRUE),
         yaxis = list(title = "Count"),
-        legend = list(title = list(text = 'Collection Type')),
+        # legend = list(title = list(text = 'Collection Type')),
         margin = list(t = 50)
       )
     
