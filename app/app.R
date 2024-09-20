@@ -1,3 +1,6 @@
+# TODO Preaggregate on back-end and ensure cell-size suppression prior to accessing 
+# the data, rather than handling that in R
+
 # Dependencies -----------------------------------------------------------------
 ## Libraries -------------------------------------------------------------------
 rm(list=ls())
@@ -199,82 +202,39 @@ server <- function(input, output, session){
     apply_plotly_config(plot, filters, "participant_status_funnel")  # Apply the config
   })
   
-  
-  # source("./activity_plot.R", local = TRUE)
-  # output$plot1 <- renderPlotly({activity_plot(activity_data = filtered_verified_data())})
-  # 
-  # source("./age_plot.R", local = TRUE)
-  # output$plot2 <- renderPlotly({age_plot(age_data = filtered_verified_data())})
-  # 
-  # source("./race_plot.R", local = TRUE)
-  # output$plot3 <- renderPlotly({race_plot(race_data = filtered_verified_data())})
-  # 
-  # source("./sex_distribution.R", local = TRUE)
-  # output$plot4 <- renderPlotly({sex_distribution(sex_data = filtered_verified_data())})
-  # 
-  # source("./biospecimen_collection_distribution.R", local = TRUE)
-  # output$plot5 <- renderPlotly({biospecimen_collection_distribution(biocol_data = filtered_verified_data())})
-  # 
-  # source("./biospecimen_collection_barchart.R", local = TRUE)
-  # output$plot5b <- renderPlotly({biospecimen_collection_barchart(biocol_data = filtered_verified_data())})
-  # 
-  # source("./completed_survey.R", local = TRUE)
-  # output$plot6 <- renderPlotly({completed_survey(survey_data = filtered_verified_data())})
-  # 
-  # source("./completed_survey_barchart.R", local = TRUE)
-  # output$plot6b <- renderPlotly({completed_survey_barchart(survey_data = filtered_verified_data())})
-  # 
-  # source("./income_distribution.R", local = TRUE)
-  # output$plot7 <- renderPlotly({income_distribution(income_data = filtered_verified_data())})
-  # 
-  # source("./module_completion_time.R", local = TRUE)
-  # output$plot8 <- renderPlotly({module_completion_time(data = filtered_verified_data(), survey = "BOH")})
-  # 
-  # source("./module_completion_time.R", local = TRUE)
-  # output$plot9 <- renderPlotly({module_completion_time(data= filtered_verified_data(), survey = "SAS")})
-  # 
-  # source("./module_completion_time.R", local = TRUE)
-  # output$plot10 <- renderPlotly({module_completion_time(data= filtered_verified_data(), survey = "MRE")})
-  # 
-  # source("./module_completion_time.R", local = TRUE)
-  # output$plot11 <- renderPlotly({module_completion_time(data= filtered_verified_data(), survey = "LAW")})
-  # 
-  # source("./participant_status_funnel2.R", local = TRUE)
-  # output$plotFunnel <- renderPlotly({participant_status(status_data = aggregated_IP_data())})
-  
   ## Load verified participants date -------------------------------------------
-  invited_participant_data <- reactive({
+  invited_recruit_data <- reactive({
     source("./clean_data.R", local = TRUE)
     source("./get_data.R", local=TRUE)
-    invited_participant_data <- clean_data(get_data(project = "nih-nci-dceg-connect-bq2-prod",
+    invited_recruit_data <- clean_data(get_data(project = "nih-nci-dceg-connect-bq2-prod",
                                                     dataset = "StakeHolderMetrics_RS",
                                                     table = "invited_participants_complete"),
                                            type = "invited")})
   
   
   filtered_IP_data <- reactive({
-    req(invited_participant_data())
+    req(invited_recruit_data())
     if(input$applyIPfilters){
-      invited_participant_data()%>%
+      invited_recruit_data()%>%
         filter((input$IPsiteFilter == "." | site == input$IPsiteFilter) &
                  (input$IPsexFilter == "." | sex == input$IPsexFilter) &
                  (input$IPageFilter == "." | age == input$IPageFilter)&
                  (input$IPraceFilter == "." | race == input$IPraceFilter))
     }else{
-      invited_participant_data()
+      invited_recruit_data()
     }
   })
   
-  #calculating the number of invited participants by filter
+  #calculating the number of invited recruits by filter
   IP_row_count <- reactive({
     nrow(filtered_IP_data())
   })
   
   output$IP_rowCountText <- renderText({
-    paste("Number of Invited Participants with Current Filters Applied: \n", IP_row_count())
+    paste("Number of Invited Recruits with Current Filters Applied: \n", IP_row_count())
   })
   
-  # Generate Invited Participants Figures --------------------------------------
+  # Generate Invited Recruits Figures --------------------------------------
   source("./age_stacked_bar_chart.R", local = TRUE)
   output$invited_plot1 <- renderPlotly({age_stacked_bar_chart(ip_age_data = filtered_IP_data(), v_age_data = filtered_verified_data())})
   
@@ -534,7 +494,7 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
   dashboardSidebar(
     sidebarMenu(
       menuItem("Verified Participants",     tabName = "verified_participants"),
-      menuItem("Invited Participants",      tabName = "invited_participants"),
+      menuItem("Invited Recruits",          tabName = "invited_participants"),
       if (FALSE) {
         menuItem("Site-reported Recruitment", tabName = "site_reported_participants")
       }
@@ -569,13 +529,6 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
                 
                 
 #### Row: Value Boxes and Workflow Plot in One Row -----------------------------
-                
-                # fluidRow(
-                #   column(width = 3, valueBoxOutput("totalVerifiedBox", width = 12)),
-                #   column(width = 3, valueBoxOutput("maleVerifiedBox", width = 12)),
-                #   column(width = 3, valueBoxOutput("femaleVerifiedBox", width = 12)),
-                #   column(width = 3, valueBoxOutput("commonIncomeBox", width = 12))
-                # ),
 
                 fluidRow(
                   column(4,
@@ -730,14 +683,14 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
         
 
 
-### Tab: Invited Participants  ---------------------------------------------
+### Tab: Invited Recruits  ---------------------------------------------
         tabItem(tabName = "invited_participants",
                 
 #### Row: Header -------------------------------------------------------
                 fluidRow(
                   column(12, align = "center", 
                          tags$h3(style = "text-align: center;", 
-                                 HTML(glue("Invited Participant Data as of {format(Sys.Date(), '%B %d, %Y')}"))),
+                                 HTML(glue("Invited Recruit Data as of {format(Sys.Date(), '%B %d, %Y')}"))),
                          tags$h5(style = "text-align: center;", 
                                  HTML(glue("Note: All invited participant data are site-reported."))),
                          br(),
@@ -779,7 +732,7 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
                   ),
 
                 
-#### Row: --------------------------------------------------------
+#### Row: Race Plots -----------------------------------------------------------
                 fluidRow(
                     column(6,
                           aspect_box(title = "Race Distribution: Invited vs. Verified Participants", content = plotlyOutput("invited_plot2", height = "100%", width = "100%"), aspect_ratio = "16x9", max_width = 600, min_width = 100)
@@ -789,7 +742,7 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
                         )
                     ),
                 
-#### Row: --------------------------------------------------------
+#### Row: Sex Plots ------------------------------------------------------------
                 fluidRow(
                   column(6,
                          aspect_box(title = "Sex Distribution: Invited vs. Verified Participants", content = plotlyOutput("invited_plot3", height = "100%", width = "100%"), aspect_ratio = "16x9", max_width = 600, min_width = 100)
@@ -801,7 +754,6 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
 
         ),
         
-# if (FALSE) {  
 ### Tab: Site-reported participants -------------------------------------------
         tabItem(tabName = "site_reported_participants",
                 fluidRow(
