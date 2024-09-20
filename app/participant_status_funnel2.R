@@ -5,27 +5,19 @@ participant_status <- function(status_data = data) {
   
   # Create a mapping between conceptIDs and site names using tribble
   site_map <- tibble::tribble(
-    ~site_name,                  ~site_id,
-    "Health Partners",           "531629870",
-    "Henry Ford Health System",  "548392715",
-    "KP Colorado",               "125001209",
-    "KP Georgia",                "327912200",
-    "KP Hawaii",                 "300267574",
-    "KP Northwest",              "452412599",
-    "Marshfield",                "303349821",
-    "Sanford",                   "657167265",
-    "University of Chicago",     "809703864",
-    "Baylor Scott & White",      "472940358"
+    ~site_name,                  ~site_id,     ~color,
+    "HealthPartners",            "531629870",  "#F6CC6C",
+    "Henry Ford",                "548392715",  "#164C71",
+    "KP Georgia",                "327912200",  "#309EBD",
+    "KP Hawaii",                 "300267574",  "#3C989E",
+    "KP Northwest",              "452412599",  "#565C65",
+    "Marshfield",                "303349821",  "#CC7D15",
+    "Sanford",                   "657167265",  "#648EB4",
+    "KP Colorado",               "125001209",  "#FDBE19",
+    "University of Chicago",     "809703864",  "#51708A",
+    "Baylor Scott & White",      "472940358",  "#2973A5"
   )
-  
-  
-  # Identify number of colors to use  
-  unique_items <- unique(site_map$site_name)
-  n_colors <- length(unique_items)
-  
-  # Ensure you have a sufficient number of colors for your activities
-  cols <- select_colors(color_palette, n_colors)
-  
+
   # Merge to get the site names
   status_data <- left_join(status_data, site_map, by = c("site" = "site_id"))
   
@@ -49,7 +41,7 @@ participant_status <- function(status_data = data) {
         textposition = "inside",
         textinfo = "none",
         hoverinfo = "text",
-        marker = list(color = cols[i])
+        marker = list(color = site_map$color[i])
       )
   }
   
