@@ -33,7 +33,7 @@ source("./app/clean_data.R", local=TRUE)
 data <- get_data(project = project, dataset = dataset, table = table)
 data <- clean_data(data, type = "aggregate")
 
-# Visualize Data ===============================================================
+## Visualize Data ==============================================================
 source("./app/color_palette.R") # Rebecca's code to prescribe colors
 source("./app/aggregate_plots/HealthPartners/verified_by_sex.R")
 plot <- verified_by_sex_hp(data)
