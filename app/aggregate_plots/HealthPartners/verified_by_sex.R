@@ -28,7 +28,7 @@ verified_by_sex_hp <- function(data) {
   n_colors <- length(unique(unique_items))
   
   # Ensure you have a sufficient number of colors for your activities
-  cols <- select_colors(color_palette, n_colors)
+  cols <- select_colors(color_palette(), n_colors)
   
   # Map colors to activities to ensure consistency
   color_mapping <- setNames(cols, unique_items)
