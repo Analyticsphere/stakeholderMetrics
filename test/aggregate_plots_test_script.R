@@ -1,6 +1,6 @@
 ## Description =================================================================
 # Title:        Aggregate Plots Test Script
-# Authors:      Leila Orzag, Jake Peters
+# Authors:      Leila Orszag, Jake Peters
 # Date:         2024-09-26
 # Objective:    We'll use this script to improve the visualization of the
 #               Aggregate Recruitment Data. The goal will be to inform decision
