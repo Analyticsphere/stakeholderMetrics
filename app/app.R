@@ -495,7 +495,7 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
     sidebarMenu(
       menuItem("Verified Participants",     tabName = "verified_participants"),
       menuItem("Invited Recruits",          tabName = "invited_participants"),
-      if (FALSE) {
+      if (TRUE) {
         menuItem("Site-reported Recruitment", tabName = "site_reported_participants")
       }
     )
