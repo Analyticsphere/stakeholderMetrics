@@ -21,7 +21,6 @@ project <- "nih-nci-dceg-connect-bq2-prod"
 dataset <- "StakeHolderMetrics_RS"
 table   <- "aggregate_recruitment"
 
-
 ## Dependencies ================================================================
 library(dplyr)
 library(DBI)
@@ -42,3 +41,4 @@ print(plot)
 
 # Leila, I think the next step is to open this plotting function and modify it 
 # so that it produces a line plot rather than a bar plot. 
+
