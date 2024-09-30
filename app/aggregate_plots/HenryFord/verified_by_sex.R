@@ -37,6 +37,7 @@ verified_by_sex_hf <- function(data) {
     y = total_verified,
     color = sex,
     colors = color_mapping,
+    mode = "markers",
     type = 'scatter',
   )
   plot <- plot %>%
