@@ -37,7 +37,7 @@ verified_by_sex_hf <- function(data) {
     y = ~total_verified,
     color = ~sex,
     colors = color_mapping,
-    type = 'bar',
+    type = 'scatter',
     barmode = 'group',
     hoverinfo = 'x+y'  # Specifies what info to display on hover
   )
