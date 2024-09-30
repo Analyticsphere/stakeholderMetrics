@@ -33,13 +33,11 @@ verified_by_sex_hf <- function(data) {
   
   plot <- plot_ly(
     data = tv_data,
-    x = ~date,
-    y = ~total_verified,
-    color = ~sex,
+    x = date,
+    y = total_verified,
+    color = sex,
     colors = color_mapping,
     type = 'scatter',
-    barmode = 'group',
-    hoverinfo = 'x+y'  # Specifies what info to display on hover
   )
   plot <- plot %>%
     layout(
