@@ -28,6 +28,7 @@ library(bigrquery)
 library(glue)
 library(tidyr)
 library(plotly)
+library(stringr)
 
 ## Fetch data ==================================================================
 source("./app/get_data.R", local=TRUE)      # Rebecca already wrote these for us
@@ -38,9 +39,10 @@ data <- clean_data(data, type = "aggregate")
 ## Visualize Data ==============================================================
 source("./app/color_palette.R") # Rebecca's code to prescribe colors
 source("./app/aggregate_plots/HealthPartners/verified_by_sex.R")
-plot <- verified_by_sex_hp(data)
+plot <- verified_by_sex(data, "total_verified", "HealthPartners")
 print(plot)
 
 # Leila, I think the next step is to open this plotting function and modify it 
 # so that it produces a line plot rather than a bar plot. 
+
 

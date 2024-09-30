@@ -258,8 +258,8 @@ server <- function(input, output, session){
   aggregate_recruitment_data <- reactive({
     source("./get_data.R", local=TRUE)
     source("./clean_data.R", local=TRUE)
-    aggregate_recruitment_data <- clean_data(get_data(project ="nih-nci-dceg-connect-prod-6d04",
-                                                    dataset = "StakeholderMetrics",
+    aggregate_recruitment_data <- clean_data(get_data(project ="nih-nci-dceg-connect-bq2-prod",
+                                                    dataset = "StakeHolderMetrics_RS",
                                                     table = "aggregate_recruitment"),
                                                     type = "aggregate")
   })
@@ -495,7 +495,7 @@ ui <- dashboardPage(title="Stakeholder Metrics Dashboard",
     sidebarMenu(
       menuItem("Verified Participants",     tabName = "verified_participants"),
       menuItem("Invited Recruits",          tabName = "invited_participants"),
-      if (TRUE) {
+      if (FALSE) {
         menuItem("Site-reported Recruitment", tabName = "site_reported_participants")
       }
     )

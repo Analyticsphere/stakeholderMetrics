@@ -23,6 +23,8 @@ verified_by_sex_hp <- function(data) {
       sex == "male" ~ "Male",
       sex == "unknown" ~ "Unknown"))
   
+  long_sex = long_sex[order(long_sex$date), ]
+  
   #identify number of colors to use  
   unique_items <- unique(long_sex$sex)
   n_colors <- length(unique(unique_items))
@@ -32,17 +34,17 @@ verified_by_sex_hp <- function(data) {
   
   # Map colors to activities to ensure consistency
   color_mapping <- setNames(cols, unique_items)
-  
+
   plot <- plot_ly(
     data = long_sex,
     x = ~date,
     y = ~total_verified,
     color = ~sex,
     colors = color_mapping,
-    type = 'bar',
-    barmode = 'group',
-    hoverinfo = 'x+y'  # Specifies what info to display on hover
-  )
+    type = 'scatter',
+    mode = 'lines + markers',
+    hoverinfo = 'x+y') # Specifies what info to display on hover
+
   plot <- plot %>%
     layout(
       title = "Verified Participants by Sex",
@@ -51,3 +53,4 @@ verified_by_sex_hp <- function(data) {
       legend = list(title = list(text = "Sex")))
   plot
 }
+
