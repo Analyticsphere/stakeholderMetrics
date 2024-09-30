@@ -1,6 +1,6 @@
 ## Description =================================================================
 # Title:        Aggregate Plots Test Script
-# Authors:      Leila Orzag, Jake Peters
+# Authors:      Leila Orszag, Jake Peters
 # Date:         2024-09-26
 # Objective:    We'll use this script to improve the visualization of the
 #               Aggregate Recruitment Data. The goal will be to inform decision
@@ -35,7 +35,7 @@ source("./app/clean_data.R", local=TRUE)
 data <- get_data(project = project, dataset = dataset, table = table)
 data <- clean_data(data, type = "aggregate")
 
-# Visualize Data ===============================================================
+## Visualize Data ==============================================================
 source("./app/color_palette.R") # Rebecca's code to prescribe colors
 source("./app/aggregate_plots/HealthPartners/verified_by_sex.R")
 plot <- verified_by_sex_hp(data)
