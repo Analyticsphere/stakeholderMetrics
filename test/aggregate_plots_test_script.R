@@ -17,8 +17,8 @@
 
 
 ## Script parameters ===========================================================
-project <- "nih-nci-dceg-connect-bq2-prod"
-dataset <- "StakeHolderMetrics_RS"
+project <- "nih-nci-dceg-connect-prod-6d04"
+dataset <- "StakeholderMetrics"
 table   <- "aggregate_recruitment"
 
 ## Dependencies ================================================================
@@ -26,6 +26,8 @@ library(dplyr)
 library(DBI)
 library(bigrquery)
 library(glue)
+library(tidyr)
+library(plotly)
 
 ## Fetch data ==================================================================
 source("./app/get_data.R", local=TRUE)      # Rebecca already wrote these for us
