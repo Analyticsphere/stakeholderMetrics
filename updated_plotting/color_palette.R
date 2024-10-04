@@ -18,7 +18,9 @@ color_palette <- function(){
     grey = c("#565C65", "#797D83", "#9A9DA3", "#BBBEC1", "#DDDEE0"),
     brown = c("#CC7D15", "#CD995B", "#DAB384", "#E7CCAD", "#F3E6D6")
   )
+  return (c)
 }
+  color_palette2= color_palette()
 
 #' Select Colors from Palette
 #'

@@ -7,8 +7,8 @@
 #               makers about site-by-site recruitment challenges/successes.
 # Tasks:        
 #               - [x] Make test script.
-#               - [ ] Swap bar charts for line graphs for trends over time
-#               - [ ] Extension for HP sites
+#               - [x] Swap bar charts for line graphs for trends over time
+#               - [x] Extension for HP sites
 #               - [ ] Consolidate "verified" and "response_ratio" plots to 2
 #                     plotting functions where "site" and "filter" are functions
 #               - [ ] Improve overall readability
@@ -39,7 +39,7 @@ data <- clean_data(data, type = "aggregate")
 ## Visualize Data ==============================================================
 source("./app/color_palette.R") # Rebecca's code to prescribe colors
 source("./app/aggregate_plots/HealthPartners/verified_by_sex.R")
-plot <- verified_by_sex(data, "total_verified", "HealthPartners")
+plot <- response_ratio_by_sex_hp(data)
 print(plot)
 
 # Leila, I think the next step is to open this plotting function and modify it 
