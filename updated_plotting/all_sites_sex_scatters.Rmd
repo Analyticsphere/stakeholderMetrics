@@ -32,12 +32,14 @@ Write list of sites to be used
 items_list = c("KP-Hawaii", "KP-Colorado", "KP-Northwest", "KP-Georgia", "Marshfield", "Sanford Health", "Henry Ford", "University of Chicago")
 ```
 
-Call function for all sites
+Call by_sex_scatter function for all sites
 ```{r}
 sex_plots(data, items_list)
 ```
 
-
-`
+Call by_insurance_sccater for all sites
+```{r}
+ins_plots(data, items_list)
+```
 
 

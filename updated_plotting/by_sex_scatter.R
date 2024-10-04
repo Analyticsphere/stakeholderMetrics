@@ -1,11 +1,12 @@
 by_sex_scatter <- function(data, population_type, site_name) {
   # Write new dataframes to pull from
-  tv_data <- filter(data, population == population_type)
-  tv_data <- filter(tv_data, site == site_name)
-  relevant_columns <- grep("sex_", colnames(tv_data), value = TRUE)
+  data_sub <- filter(data, population == population_type)
+  data_sub <- filter(data_sub, site == site_name)
+  relevant_columns <- grep("sex_", colnames(data_sub), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
-  sex_data = tv_data[,relevant_columns]
+  sex_data = data_sub[,relevant_columns]
   
+  # Creating variable to use as Y in graphs
   value2 = ifelse(population_type =="total_verified", 'total_verified', 'rr')
   
   # Pivot table
