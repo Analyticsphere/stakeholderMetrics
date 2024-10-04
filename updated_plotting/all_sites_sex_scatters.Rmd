@@ -16,7 +16,6 @@ library(htmlwidgets)
 library(webshot2)
 library(tinytex)
 library(webshot)
-webshot::install_phantomjs()
 data = read.csv("/Users/orszagl2/Downloads/joined_data.csv")
 source('by_sex_scatter.R')
 ```
@@ -42,4 +41,7 @@ Call by_insurance_sccater for all sites
 ins_plots(data, items_list)
 ```
 
+```{r}
+by_race_scatter(data, "total_verified", "KP-Hawaii")
+```
 
