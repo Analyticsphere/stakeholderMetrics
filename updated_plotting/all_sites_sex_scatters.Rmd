@@ -17,79 +17,27 @@ library(webshot2)
 library(tinytex)
 library(webshot)
 webshot::install_phantomjs()
-data = read.csv("/Users/orszagl2/Downloads/joined_test.csv")
+data = read.csv("/Users/orszagl2/Downloads/joined_data.csv")
 source('by_sex_scatter.R')
 ```
 
+Refactor Site Names
 ```{r}
 data$site <- gsub("^Marshfield.*", "Marshfield", data$site)
 unique(data$site)
 ```
 
+Write list of sites to be used
 ```{r}
 items_list = c("KP-Hawaii", "KP-Colorado", "KP-Northwest", "KP-Georgia", "Marshfield", "Sanford Health", "Henry Ford", "University of Chicago")
 ```
 
+Call function for all sites
 ```{r}
 sex_plots(data, items_list)
 ```
 
 
+`
 
-
-# KP-Hawaii
-```{r}
-by_sex_scatter(data, "response_ratio", "KP-Hawaii")
-by_sex_scatter(data, "total_verified", "KP-Hawaii")
-```
-
-# KP-Colorado
-```{r}
-by_sex_scatter(data, "response_ratio", "KP-Colorado")
-by_sex_scatter(data, "total_verified", "KP-Colorado")
-```
-
-# KP-Northwest
-```{r}
-by_sex_scatter(data, "response_ratio", "KP-Northwest")
-by_sex_scatter(data, "total_verified", "KP-Northwest")
-```
-
-# KP-Georgia
-```{r}
-by_sex_scatter(data, "response_ratio", "KP-Georgia")
-by_sex_scatter(data, "total_verified", "KP-Georgia")
-```
-
-# Marshfield
-```{r}
-by_sex_scatter(data, "response_ratio", "Marshfield")
-by_sex_scatter(data, "total_verified", "Marshfield")
-```
-
-# Sanford
-```{r}
-by_sex_scatter(data, "response_ratio", "Sanford Health")
-by_sex_scatter(data, "total_verified", "Sanford Helath")
-```
-
-# Henry Ford
-```{r}
-by_sex_scatter(data, "response_ratio", "Henry Ford")
-by_sex_scatter(data, "total_verified", "Henry Ford")
-```
-
-# Chicago
-# Henry Ford
-```{r}
-by_sex_scatter(data, "response_ratio", "University of Chicago")
-by_sex_scatter(data, "total_verified", "University of Chicago")
-```
-```{r}
-uchicago = data[data$site == "University of Chicago", ]
-```
-
-```{r}
-uchicago$sex_female
-```
 

@@ -1,5 +1,5 @@
 by_sex_scatter <- function(data, population_type, site_name) {
-  
+  # Write new dataframes to pull from
   tv_data <- filter(data, population == population_type)
   tv_data <- filter(tv_data, site == site_name)
   relevant_columns <- grep("sex_", colnames(tv_data), value = TRUE)
@@ -8,6 +8,7 @@ by_sex_scatter <- function(data, population_type, site_name) {
   
   value2 = ifelse(population_type =="total_verified", 'total_verified', 'rr')
   
+  # Pivot table
   long_sex <- sex_data %>% pivot_longer(cols = sex_female:sex_unknown,
                                         names_to = "sex", 
                                         names_prefix = "sex_",
@@ -17,13 +18,14 @@ by_sex_scatter <- function(data, population_type, site_name) {
   
   long_sex$date <- as.Date(paste(long_sex$year, long_sex$month, "01", sep = "-"), format = "%Y-%m-%d")
   
-  
+  # Rewrite legend titles
   long_sex <- long_sex %>%
     mutate(sex = case_when(
       sex == "female" ~ "Female",
       sex == "male" ~ "Male",
       sex == "unknown" ~ "Unknown"))
   
+  # Order table so lines populate correctly
   long_sex = long_sex[order(long_sex$date), ]
   
   #identify number of colors to use  
@@ -36,6 +38,7 @@ by_sex_scatter <- function(data, population_type, site_name) {
   # Map colors to activities to ensure consistency
   color_mapping <- setNames(cols, unique_items)
   
+  # Create plot
   plot <- plot_ly(
     data = long_sex,
     x = ~date,
@@ -46,11 +49,13 @@ by_sex_scatter <- function(data, population_type, site_name) {
     mode = 'lines + markers',
     hoverinfo = 'x+y') # Specifies what info to display on hover
   
+  # Rewrite titles
   population_stylized = gsub("_", " ", population_type)
   population_stylized = str_to_title(population_stylized)
   population_title <- ifelse(population_stylized == "Total Verified",
                              paste(population_stylized, "Participants"),
                              population_stylized)
+  # Apply titles
   plot <- plot %>%
     layout(
       title = paste (population_title, "By Sex"),
