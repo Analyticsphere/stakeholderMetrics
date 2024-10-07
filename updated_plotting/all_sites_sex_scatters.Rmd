@@ -1,8 +1,8 @@
 ---
 title: "all_sites_sex_scatters"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 date: "2024-10-03"
 ---
 
@@ -16,9 +16,20 @@ library(htmlwidgets)
 library(webshot2)
 library(tinytex)
 library(webshot)
-data = read.csv("/Users/orszagl2/Downloads/joined_data.csv")
-source('by_sex_scatter.R')
+data = read.csv("/Users/orszagl2/Documents/siteRecruitAggMetrics/data-cleaning/joined_data3.csv")
+source('by_insurance_scatter.R')
+source('by_ruca_scatter.R')
+source('by_race_scatter.R')
+source('by_ses_scatter.R')
+source('sex_plots.R')
+source('ins_plots.R')
+source('race_plots.R')
+source('ruca_plots.R')
+source('ses_plots.R')
+source('color_palette.R')
+source('save_plot.R')
 ```
+
 
 Refactor Site Names
 ```{r}
@@ -31,17 +42,42 @@ Write list of sites to be used
 items_list = c("KP-Hawaii", "KP-Colorado", "KP-Northwest", "KP-Georgia", "Marshfield", "Sanford Health", "Henry Ford", "University of Chicago")
 ```
 
+
+
+
 Call by_sex_scatter function for all sites
-```{r}
-sex_plots(data, items_list)
+```{r, echo = FALSE}
+by_sex_scatter(data, "total_verified", "KP-Hawaii")
+by_sex_scatter(data, "response_ratio", "KP-Hawaii")
+by_sex_scatter(data, "total_verified", "Henry Ford")
+by_sex_scatter(data, "response_ratio", "Henry Ford")
+by_sex_scatter(data, "total_verified", "KP-Georgia")
+by_sex_scatter(data, "response_ratio", "KP-Georgia")
+by_sex_scatter(data, "total_verified", "KP-Colorado")
+by_sex_scatter(data, "response_ratio", "KP-Colorado")
+by_sex_scatter(data, "total_verified", "KP-Northwest")
+by_sex_scatter(data, "response_ratio", "KP-Northwest")
+by_sex_scatter(data, "total_verified", "Sanford")
+by_sex_scatter(data, "response_ratio", "Sanford")
+by_sex_scatter(data, "total_verified", "University of Chicago")
+by_sex_scatter(data, "response_ratio", "University of Chicago")
+by_sex_scatter(data, "total_verified", "Marshfield")
+by_sex_scatter(data, "response_ratio", "Marshfield")
 ```
 
-Call by_insurance_sccater for all sites
+
+```{r}
+race_plots(data, items_list)
+```
+
 ```{r}
 ins_plots(data, items_list)
 ```
 
 ```{r}
-by_race_scatter(data, "total_verified", "KP-Hawaii")
+ruca_plots(data, items_list)
+```
+```{r}
+ses_plots(data, items_list)
 ```
 

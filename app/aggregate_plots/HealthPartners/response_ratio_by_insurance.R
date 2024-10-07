@@ -57,7 +57,7 @@ response_ratio_by_insurance_hp <- function(data){
     hoverinfo = 'text+x+y'  # Specifies what info to display on hover
   ) %>%
     layout(
-      title = "Response Ratio by Insurance",
+      title = paste(site_name, "Response Ratio by Insurance"),
       xaxis = list(title = "Date"),
       yaxis = list(title = paste0("Response Ratio")),
       legend = list(title = list(text = "Insurance"))

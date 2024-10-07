@@ -1,0 +1,68 @@
+by_ruca_scatter <- function(data, population_type, site_name){
+  
+  # Clean/Arrange
+  tv_data <- filter(data, population == population_type)
+  tv_data <- filter(tv_data, site == site_name)
+  relevant_columns <- grep("urbanicity_", colnames(tv_data), value = TRUE)
+  relevant_columns <- c(relevant_columns, "year", "month", "overall_count")
+  ruca_data = tv_data[,relevant_columns]
+  
+  ## Pivot to Long
+  long_ruca <- ruca_data %>% pivot_longer(cols = urbanicity_ruca_code_1:urbanicity_missing,
+                                          names_to = "urbanicity_ruca_code", 
+                                          names_prefix = "socioeconomic_status_",
+                                          values_to = "total_verified")
+  
+  
+  #create date variable
+  long_ruca$date <- as.Date(paste(long_ruca$year, long_ruca$month, "01", sep = "-"), format = "%Y-%m-%d")
+  
+  
+  long_ruca <- long_ruca %>%
+    mutate(urbanicity_ruca_code = case_when(
+      urbanicity_ruca_code == "urbanicity_ruca_code_1" ~ "Code 1",
+      urbanicity_ruca_code == "urbanicity_ruca_code_2" ~ "Code 2",
+      urbanicity_ruca_code == "urbanicity_ruca_code_3" ~ "Code 3",
+      urbanicity_ruca_code == "urbanicity_ruca_code_4" ~ "Code 4",
+      urbanicity_ruca_code == "urbanicity_ruca_code_5" ~ "Code 5",
+      urbanicity_ruca_code == "urbanicity_ruca_code_6" ~ "Code 6",
+      urbanicity_ruca_code == "urbanicity_ruca_code_7" ~ "Code 7",
+      urbanicity_ruca_code == "urbanicity_ruca_code_8" ~ "Code 8",
+      urbanicity_ruca_code == "urbanicity_ruca_code_9" ~ "Code 9",
+      urbanicity_ruca_code == "urbanicity_ruca_code_10" ~ "Code 10",
+      urbanicity_ruca_code == "urbanicity_missing" ~ "Code Unknown",
+      TRUE ~ urbanicity_ruca_code  # Default case to handle any other values that do not match
+    ))
+
+  # Plot
+  #identify number of colors to use  
+  unique_items <- unique(long_ruca$urbanicity_ruca_code)
+  n_colors <- length(unique(unique_items))
+  
+  # Ensure you have a sufficient number of colors for your activities
+  cols <- select_colors(color_palette2, n_colors)
+  
+  # Map colors to activities to ensure consistency
+  color_mapping <- setNames(cols, unique_items)
+  
+  
+  plot <- plot_ly()
+  plot = plot %>% add_trace(data = long_ruca,
+                            x = ~date,
+                            y = ~total_verified,
+                            color = ~urbanicity_ruca_code,
+                            colors = color_mapping,
+                            type = 'scatter',
+                            mode = 'markers + lines',
+                            text = ~paste(urbanicity_ruca_code),  # Custom text for hover
+                            hoverinfo = 'text+x+y') # Specifies what info to display on hover
+  
+  plot <- plot %>%
+    layout(
+      title = paste (site_name, "By Urbanicity Code"),
+      xaxis = list(title = "Date"),
+      yaxis = list(title = paste (population_type)),
+      legend = list(title = list(text = "By Urbanicity Code")))
+  
+  plot
+}

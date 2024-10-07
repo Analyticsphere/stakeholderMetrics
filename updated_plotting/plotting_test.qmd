@@ -1,0 +1,117 @@
+---
+title: "My Quarto Document"
+format: 
+  html: 
+    embed-resources: true
+  pdf: 
+    documentclass: article
+---
+
+## Running Code
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(htmlwidgets)
+library(webshot2)
+library(tinytex)
+library(webshot)
+data = read.csv("/Users/orszagl2/Documents/siteRecruitAggMetrics/data-cleaning/joined_data3.csv")
+source('by_sex_scatter.R')
+source('by_insurance_scatter.R')
+source('by_ruca_scatter.R')
+source('by_race_scatter.R')
+source('by_ses_scatter.R')
+source('sex_plots.R')
+source('ins_plots.R')
+source('race_plots.R')
+source('ruca_plots.R')
+source('ses_plots.R')
+source('color_palette.R')
+source('save_plot.R')
+```
+
+```{r}
+data$site <- gsub("^Marshfield.*", "Marshfield", data$site)
+items_list = c("KP-Hawaii", "KP-Colorado", "KP-Northwest", "KP-Georgia", "Marshfield", "Sanford Health", "Henry Ford", "University of Chicago")
+data = data %>%filter(!(month == 4 & site == "University of Chicago"))
+```
+
+```{r, echo = FALSE}
+by_sex_scatter(data, "total_verified", "KP-Hawaii")
+by_sex_scatter(data, "response_ratio", "KP-Hawaii")
+by_sex_scatter(data, "total_verified", "Henry Ford")
+by_sex_scatter(data, "response_ratio", "Henry Ford")
+by_sex_scatter(data, "total_verified", "KP-Georgia")
+by_sex_scatter(data, "response_ratio", "KP-Georgia")
+by_sex_scatter(data, "total_verified", "KP-Colorado")
+by_sex_scatter(data, "response_ratio", "KP-Colorado")
+by_sex_scatter(data, "total_verified", "KP-Northwest")
+by_sex_scatter(data, "response_ratio", "KP-Northwest")
+by_sex_scatter(data, "total_verified", "Sanford Health")
+by_sex_scatter(data, "response_ratio", "Sanford Health")
+by_sex_scatter(data, "total_verified", "University of Chicago")
+by_sex_scatter(data, "response_ratio", "University of Chicago")
+by_sex_scatter(data, "total_verified", "Marshfield")
+by_sex_scatter(data, "response_ratio", "Marshfield")
+```
+
+```{r, echo = FALSE}
+by_ses_scatter(data, "total_verified", "KP-Hawaii")
+by_ses_scatter(data, "response_ratio", "KP-Hawaii")
+by_ses_scatter(data, "total_verified", "Henry Ford")
+by_ses_scatter(data, "response_ratio", "Henry Ford")
+by_ses_scatter(data, "total_verified", "KP-Georgia")
+by_ses_scatter(data, "response_ratio", "KP-Georgia")
+by_ses_scatter(data, "total_verified", "KP-Colorado")
+by_ses_scatter(data, "response_ratio", "KP-Colorado")
+by_ses_scatter(data, "total_verified", "KP-Northwest")
+by_ses_scatter(data, "response_ratio", "KP-Northwest")
+by_ses_scatter(data, "total_verified", "Sanford Health")
+by_ses_scatter(data, "response_ratio", "Sanford Health")
+by_ses_scatter(data, "total_verified", "University of Chicago")
+by_ses_scatter(data, "response_ratio", "University of Chicago")
+by_ses_scatter(data, "total_verified", "Marshfield")
+by_ses_scatter(data, "response_ratio", "Marshfield")
+```
+
+```{r, echo = FALSE}
+by_race_scatter(data, "total_verified", "KP-Hawaii")
+by_race_scatter(data, "response_ratio", "KP-Hawaii")
+by_race_scatter(data, "total_verified", "Henry Ford")
+by_race_scatter(data, "response_ratio", "Henry Ford")
+by_race_scatter(data, "total_verified", "KP-Georgia")
+by_race_scatter(data, "response_ratio", "KP-Georgia")
+by_race_scatter(data, "total_verified", "KP-Colorado")
+by_race_scatter(data, "response_ratio", "KP-Colorado")
+by_race_scatter(data, "total_verified", "KP-Northwest")
+by_race_scatter(data, "response_ratio", "KP-Northwest")
+by_race_scatter(data, "total_verified", "Sanford Health")
+by_race_scatter(data, "response_ratio", "Sanford Health")
+by_race_scatter(data, "total_verified", "University of Chicago")
+by_race_scatter(data, "response_ratio", "University of Chicago")
+by_race_scatter(data, "total_verified", "Marshfield")
+by_race_scatter(data, "response_ratio", "Marshfield")
+```
+
+```{r, echo = FALSE}
+by_insurance_scatter(data, "total_verified", "KP-Hawaii")
+by_insurance_scatter(data, "response_ratio", "KP-Hawaii")
+by_insurance_scatter(data, "total_verified", "Henry Ford")
+by_insurance_scatter(data, "response_ratio", "Henry Ford")
+by_insurance_scatter(data, "total_verified", "KP-Georgia")
+by_insurance_scatter(data, "response_ratio", "KP-Georgia")
+by_insurance_scatter(data, "total_verified", "KP-Colorado")
+by_insurance_scatter(data, "response_ratio", "KP-Colorado")
+by_insurance_scatter(data, "total_verified", "KP-Northwest")
+by_insurance_scatter(data, "response_ratio", "KP-Northwest")
+by_insurance_scatter(data, "total_verified", "Sanford Health")
+by_insurance_scatter(data, "response_ratio", "Sanford Health")
+by_insurance_scatter(data, "total_verified", "University of Chicago")
+by_insurance_scatter(data, "response_ratio", "University of Chicago")
+by_insurance_scatter(data, "total_verified", "Marshfield")
+by_insurance_scatter(data, "response_ratio", "Marshfield")
+```

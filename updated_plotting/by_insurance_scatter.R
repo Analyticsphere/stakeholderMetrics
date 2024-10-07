@@ -71,7 +71,7 @@ by_insurance_scatter <- function(data, population_type, site_name){
   # Apply titles
   plot <- plot %>%
     layout(
-      title = paste (population_title, "By Insurance"),
+      title = paste (site_name, population_title, "By Insurance"),
       xaxis = list(title = "Date"),
       yaxis = list(title = paste (site_name, population_title)),
       legend = list(title = list(text = "Insurance")))

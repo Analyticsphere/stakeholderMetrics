@@ -1,0 +1,42 @@
+---
+title: "graph_tests"
+format: html
+editor: visual
+---
+
+## Sex Graphs
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(htmlwidgets)
+library(webshot2)
+library(tinytex)
+library(webshot)
+data = read.csv("/Users/orszagl2/Documents/siteRecruitAggMetrics/data-cleaning/joined_data3.csv")
+source('by_ruca_scatter_double.R')
+source('by_ruca_scatter_stacked.R')
+source('by_sex_scatter_double.R')
+source('by_sex_scatter_stacked.R')
+source('color_palette.R')
+```
+
+```{r}
+by_ruca_scatter_double(data, "KP-Hawaii")
+```
+
+```{r}
+by_ruca_scatter_stacked(data, "KP-Hawaii")
+```
+
+```{r}
+by_sex_scatter_double(data, "KP-Hawaii")
+```
+
+```{r}
+by_sex_scatter_stacked(data, "KP-Hawaii")
+```
+

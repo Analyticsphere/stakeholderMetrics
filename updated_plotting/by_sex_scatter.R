@@ -59,7 +59,7 @@ by_sex_scatter <- function(data, population_type, site_name) {
   # Apply titles
   plot <- plot %>%
     layout(
-      title = paste (population_title, "By Sex"),
+      title = paste (site_name, population_title, "By Sex"),
       xaxis = list(title = "Date"),
       yaxis = list(title = paste (site_name, population_title)),
       legend = list(title = list(text = "Sex")))

@@ -1,11 +1,11 @@
 sex_plots = function(data, items_list){
   for (item in items_list) {
-    # Create total_verified scatter plot and save it
+    # Create total_verified scatter plot
     tv_scatter = by_sex_scatter(data, "total_verified", item)
-    save_plot(paste0(item, "_total_verified_by_sex"), tv_scatter)
+    print(tv_scatter)  # Render the plot without print()
     
-    # Create response_ratio scatter plot and save it
+    # Create response_ratio scatter plot
     rr_scatter = by_sex_scatter(data, "response_ratio", item)
-    save_plot(paste0(item, "_response_ratio_by_sex"), rr_scatter)
+    print(rr_scatter)  # Render the plot without print()
   }
 }
