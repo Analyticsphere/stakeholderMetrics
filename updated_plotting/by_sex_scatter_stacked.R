@@ -23,8 +23,8 @@ by_sex_scatter_stacked <- function(data, site_name) {
   
   # Order TV data and normalize `n` by `overall_count`
   long_sex_tv <- long_sex_tv[order(long_sex_tv$date), ]
-  long_sex_tv$n <- (long_sex_tv$n / long_sex_tv$overall_count) * 100
-  long_sex_tv$n <- trunc(long_sex_tv$n)
+  long_sex_tv$n <- (long_sex_tv$n / long_sex_tv$overall_count)*100
+  # long_sex_tv$n <- trunc(long_sex_tv$n)
   
   
   # Filter and prepare Response Ratio (RR) data
@@ -51,7 +51,8 @@ by_sex_scatter_stacked <- function(data, site_name) {
   
   # Order RR data
   long_sex_rr <- long_sex_rr[order(long_sex_rr$date), ]
-  long_sex_rr$n = trunc(long_sex_rr$n)
+  long_sex_rr$n = long_sex_rr$n * 100
+  # long_sex_rr$n = trunc(long_sex_rr$n)
   
   # Identify the number of unique sex values for color mapping
   unique_items <- unique(long_sex_tv$sex)
@@ -77,12 +78,10 @@ by_sex_scatter_stacked <- function(data, site_name) {
       legendgroup = ~sex  # Group legends by sex
     ) %>%
     layout(
-      yaxis = list(title = "Total Verified Proportion"),
+      yaxis = list(title = "% of Total Verified", range = c(0, 100)),
       xaxis = list(title = "Date"),
       showlegend = TRUE
     )
-  
-  plot1 = plot1 %>% layout(xaxis = list(title = 'Total Verified'))
   
   # Create plot for RR Data (Plot 2)
   plot2 <- plot_ly() %>%
@@ -100,17 +99,16 @@ by_sex_scatter_stacked <- function(data, site_name) {
       legendgroup = ~sex  # Group legends by sex
     ) %>%
     layout(
-      yaxis = list(title = "Response Ratio"),
+      yaxis = list(title = "Response Ratio(%)"),
       xaxis = list(title = "Date"),
       showlegend = TRUE
     )
-  
-  plot2 = plot2 %>% layout(xaxis = list(title = 'Response Ratio'))
+
   
   # Combine both plots in a stacked layout
   plot <- subplot(plot1, plot2, nrows = 2, shareX = TRUE, titleX = TRUE, titleY = TRUE) %>%
     layout(
-      title = paste(site_name, "By Sex - Stacked"),
+      title = paste(site_name, "Total % Of Verified Participants & Response Ratio By Sex"),
       legend = list(title = list(text = "Sex"))
     )
   

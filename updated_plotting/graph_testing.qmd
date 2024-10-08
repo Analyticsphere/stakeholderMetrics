@@ -1,7 +1,10 @@
 ---
-title: "graph_tests"
-format: html
-editor: visual
+title: "graph_testing"
+format: 
+  html: 
+    embed-resources: true
+  pdf: 
+    documentclass: article
 ---
 
 ## Sex Graphs
@@ -24,19 +27,9 @@ source('by_sex_scatter_stacked.R')
 source('color_palette.R')
 ```
 
-```{r}
-by_ruca_scatter_double(data, "KP-Hawaii")
-```
 
 ```{r}
-by_ruca_scatter_stacked(data, "KP-Hawaii")
+by_ruca_scatter_stacked(data, "KP-Georgia")
 ```
 
-```{r}
-by_sex_scatter_double(data, "KP-Hawaii")
-```
-
-```{r}
-by_sex_scatter_stacked(data, "KP-Hawaii")
-```
 

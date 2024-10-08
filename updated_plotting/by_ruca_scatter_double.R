@@ -19,23 +19,23 @@ by_ruca_scatter_double <- function(data, site_name) {
   # Rewrite urbanicity labels
   long_ruca_tv <- long_ruca_tv %>%
     mutate(urbanicity_ruca_code = case_when(
-      urbanicity_ruca_code == "ruca_code_1" ~ "Code 1",
-      urbanicity_ruca_code == "ruca_code_2" ~ "Code 2",
-      urbanicity_ruca_code == "ruca_code_3" ~ "Code 3",
-      urbanicity_ruca_code == "ruca_code_4" ~ "Code 4",
-      urbanicity_ruca_code == "ruca_code_5" ~ "Code 5",
-      urbanicity_ruca_code == "ruca_code_6" ~ "Code 6",
-      urbanicity_ruca_code == "ruca_code_7" ~ "Code 7",
-      urbanicity_ruca_code == "ruca_code_8" ~ "Code 8",
-      urbanicity_ruca_code == "ruca_code_9" ~ "Code 9",
-      urbanicity_ruca_code == "ruca_code_10" ~ "Code 10",
-      urbanicity_ruca_code == "missing" ~ "Code Unknown",
+      urbanicity_ruca_code == "ruca_code_1" ~ "1",
+      urbanicity_ruca_code == "ruca_code_2" ~ "2",
+      urbanicity_ruca_code == "ruca_code_3" ~ "3",
+      urbanicity_ruca_code == "ruca_code_4" ~ "4",
+      urbanicity_ruca_code == "ruca_code_5" ~ "5",
+      urbanicity_ruca_code == "ruca_code_6" ~ "6",
+      urbanicity_ruca_code == "ruca_code_7" ~ "7",
+      urbanicity_ruca_code == "ruca_code_8" ~ "8",
+      urbanicity_ruca_code == "ruca_code_9" ~ "9",
+      urbanicity_ruca_code == "ruca_code_10" ~ "10",
+      urbanicity_ruca_code == "missing" ~ "Unk.",
       TRUE ~ urbanicity_ruca_code
     ))
   
   # Order and normalize by overall count
   long_ruca_tv <- long_ruca_tv[order(long_ruca_tv$date), ]
-  long_ruca_tv$n <- long_ruca_tv$n / long_ruca_tv$overall_count
+  long_ruca_tv$n <- long_ruca_tv$n / long_ruca_tv$overall_count *100
   
   # Response Ratio Clean/Arrange
   data_sub_rr <- filter(data, population == "response_ratio", site == site_name)
@@ -56,22 +56,23 @@ by_ruca_scatter_double <- function(data, site_name) {
   # Rewrite urbanicity labels for RR data
   long_ruca_rr <- long_ruca_rr %>%
     mutate(urbanicity_ruca_code = case_when(
-      urbanicity_ruca_code == "ruca_code_1" ~ "Code 1",
-      urbanicity_ruca_code == "ruca_code_2" ~ "Code 2",
-      urbanicity_ruca_code == "ruca_code_3" ~ "Code 3",
-      urbanicity_ruca_code == "ruca_code_4" ~ "Code 4",
-      urbanicity_ruca_code == "ruca_code_5" ~ "Code 5",
-      urbanicity_ruca_code == "ruca_code_6" ~ "Code 6",
-      urbanicity_ruca_code == "ruca_code_7" ~ "Code 7",
-      urbanicity_ruca_code == "ruca_code_8" ~ "Code 8",
-      urbanicity_ruca_code == "ruca_code_9" ~ "Code 9",
-      urbanicity_ruca_code == "ruca_code_10" ~ "Code 10",
-      urbanicity_ruca_code == "missing" ~ "Code Unknown",
+      urbanicity_ruca_code == "ruca_code_1" ~ "1",
+      urbanicity_ruca_code == "ruca_code_2" ~ "2",
+      urbanicity_ruca_code == "ruca_code_3" ~ "3",
+      urbanicity_ruca_code == "ruca_code_4" ~ "4",
+      urbanicity_ruca_code == "ruca_code_5" ~ "5",
+      urbanicity_ruca_code == "ruca_code_6" ~ "6",
+      urbanicity_ruca_code == "ruca_code_7" ~ "7",
+      urbanicity_ruca_code == "ruca_code_8" ~ "8",
+      urbanicity_ruca_code == "ruca_code_9" ~ "9",
+      urbanicity_ruca_code == "ruca_code_10" ~ "10",
+      urbanicity_ruca_code == "missing" ~ "Unk.",
       TRUE ~ urbanicity_ruca_code
     ))
   
   # Order and normalize by overall count for RR data
   long_ruca_rr <- long_ruca_rr[order(long_ruca_rr$date), ]
+  long_ruca_rr$n = long_ruca_rr$n * 100
   
   # Identify the number of unique urbanicity codes for color mapping
   unique_items <- unique(long_ruca_tv$urbanicity_ruca_code)
@@ -118,15 +119,20 @@ by_ruca_scatter_double <- function(data, site_name) {
   ay <- list(
     overlaying = "y",
     side = "right",
-    title = "<b>Response Ratio</b>"
+    title = "Response Ratio (%)",
+    standoff = 150
   )
   plot <- plot %>%
     layout(
       yaxis2 = ay,
-      title = paste(site_name, "By Urbanicity Code"),
+      title = paste("Total % of Verified Participants & Response Ratio by RUCA Code"),
       xaxis = list(title = "Date"),
-      yaxis = list(title = "Total Verified"),
-      legend = list(title = list(text = "Urbanicity Code"))
+      yaxis = list(title = "% of Total Verified", range = c (0, 100)),
+      legend = list(
+        title = list(text = "RUCA Code"),
+        x = 1.1,  # Position the legend further to the right
+        y = 1      # Top of the plot
+      )
     )
   
   return(plot)

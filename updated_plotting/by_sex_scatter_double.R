@@ -23,7 +23,7 @@ by_sex_scatter_double <- function(data, site_name) {
   
   # Order table so lines populate correctly
   long_sex_tv = long_sex_tv[order(long_sex_tv$date), ]
-  long_sex_tv$n = long_sex_tv$n/long_sex_tv$overall_count
+  long_sex_tv$n = long_sex_tv$n/long_sex_tv$overall_count*100
   
   # Write new dataframes to pull from
   data_sub_rr <- filter(data, population == "response_ratio")
@@ -49,6 +49,7 @@ by_sex_scatter_double <- function(data, site_name) {
   
   # Order table so lines populate correctly
   long_sex_rr = long_sex_rr[order(long_sex_rr$date), ]
+  long_sex_rr$n = long_sex_rr$n*100
   
   
   #identify number of colors to use  
@@ -92,13 +93,13 @@ by_sex_scatter_double <- function(data, site_name) {
     ay <- list(
     overlaying = "y",
     side = "right",
-    title = "<b>Response Ratio</b>")
+    title = "Response Ratio (%)")
   plot <- plot %>%
     layout(
       yaxis2 = ay,
-      title = paste (site_name, "By Sex"),
+      title = paste (site_name, "Total % Of Verified Participants & Response Ratio By Sex"),
       xaxis = list(title = "Date"),
-      yaxis = list(title = paste ("Total Verified")), 
+      yaxis = list(title = paste ("% of Total Verified"), range = c(0, 100)), 
       legend = list(title = list(text = "Sex")))
 
   plot
