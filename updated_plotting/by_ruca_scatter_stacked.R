@@ -137,7 +137,7 @@ by_ruca_scatter_stacked <- function(data, site_name) {
     layout(
       title = paste(site_name, "Total % of Verified Participants & Response Ratio by RUCA Code"),
       legend = list(title = list(text = "RUCA Code")),
-      hovermode = "x unified")
+      hovermode = "x all unified")
 
   
   return(plot)
