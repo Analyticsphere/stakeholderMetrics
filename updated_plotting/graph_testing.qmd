@@ -29,6 +29,10 @@ source('color_palette.R')
 
 
 ```{r}
+by_ruca_scatter_double(data, "KP-Georgia")
+```
+
+```{r}
 by_ruca_scatter_stacked(data, "KP-Georgia")
 ```
 

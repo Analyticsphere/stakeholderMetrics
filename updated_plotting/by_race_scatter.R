@@ -26,8 +26,9 @@ by_race_scatter <- function(data, population_type, site_name){
     "Asian" = c("asian_hispanic", "asian_non_hispanic", "asian_unknown_ethnicity"),
     "Native_American" = c("native_american_hispanic", "native_american_non_hispanic", "native_american_unknown_ethnicity"),
     "Native_Hawaiian" = c("native_hawaiian_hispanic", "native_hawaiian_non_hispanic", "native_hawaiian_unknown_ethnicity"),
-    "Other" = c("other_hispanic", "other_non_hispanic", "other_ethnicity_unknown"),
-    "Unknown" = c("unknown_hispanic", "unknown_non_hispanic", "unknown_unknown_ethnicity")
+    "Other" = c("other_hispanic", "other_non_hispanic", "other_unknown_ethinicity"),
+    "Unknown" = c("unknown_hispanic", "unknown_non_hispanic", "unknown_unknown_ethnicity"),
+    "Multiracial" = c("more_than_one_race_hispanic", "more_than_one_race_non_hispanic", "more_than_one_race_unknown")
   )
   
   # Filter, map, and summarize the data
