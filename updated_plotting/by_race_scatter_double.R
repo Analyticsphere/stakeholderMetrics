@@ -48,7 +48,7 @@ by_race_scatter_double <- function(data, site_name){
   filtered_data_tv$hover_date <- format(filtered_data_tv$date, "%B %Y")
   
   # Total Verified Clean/Arrange
-  data_sub_rr <- filter(data, population == "total_verified", site == site_name)
+  data_sub_rr <- filter(data, population == "response_ratio", site == site_name)
   relevant_columns <- grep("urbanicity_", colnames(data_sub_rr), value = TRUE)
   relevant_columns <- grep("race_ethnicity_", colnames(data_sub_rr), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
@@ -81,6 +81,7 @@ by_race_scatter_double <- function(data, site_name){
   
   #Fix date
   filtered_data_rr$hover_date <- format(filtered_data_rr$date, "%B %Y")
+  filtered_data_rr$n = filtered_data_rr$n*100
   
   #identify number of colors to use  
   unique_items <- unique(filtered_data_tv$race_ethnicity)
@@ -130,7 +131,9 @@ by_race_scatter_double <- function(data, site_name){
       title = paste (site_name, "Total % Of Verified Participants & Response Ratio By Race"),
       xaxis = list(title = "Date"),
       yaxis = list(title = paste ("% of Total Verified"), range = c(0, 100)), 
-      legend = list(title = list(text = "Sex")))
+      legend = list(title = list(text = "Sex"),
+                    x = 1.1,  # Position the legend further to the right
+                    y = 1 ))
   
   plot
 }

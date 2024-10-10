@@ -16,7 +16,7 @@ by_ruca_scatter_stacked <- function(data, site_name) {
   # Create date variable
   long_ruca_tv$date <- as.Date(paste(long_ruca_tv$year, long_ruca_tv$month, "01", sep = "-"), format = "%Y-%m-%d")
   
-  # Rewrite urbanicity labels
+  # Rewrite urbanicity labels, and coerce to factor with proper levels
   long_ruca_tv <- long_ruca_tv %>%
     mutate(urbanicity_ruca_code = case_when(
       urbanicity_ruca_code == "ruca_code_1" ~ "1",
@@ -29,14 +29,16 @@ by_ruca_scatter_stacked <- function(data, site_name) {
       urbanicity_ruca_code == "ruca_code_8" ~ "8",
       urbanicity_ruca_code == "ruca_code_9" ~ "9",
       urbanicity_ruca_code == "ruca_code_10" ~ "10",
-      urbanicity_ruca_code == "missing" ~ "Unk.",
+      urbanicity_ruca_code == "missing" ~ "Unknown",
       TRUE ~ urbanicity_ruca_code
-    ))
+    )) %>%
+    mutate(urbanicity_ruca_code = factor(urbanicity_ruca_code, 
+                                         levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Unknown")))
   
   # Order and normalize by overall count
   long_ruca_tv <- long_ruca_tv[order(long_ruca_tv$date), ]
   long_ruca_tv$hover_date <- format(long_ruca_tv$date, "%B %Y")
-  long_ruca_tv$n <- long_ruca_tv$n / long_ruca_tv$overall_count * 100
+  long_ruca_tv$n <- pmin((long_ruca_tv$n / long_ruca_tv$overall_count * 100), 100)
   
   # Response Ratio Clean/Arrange
   data_sub_rr <- filter(data, population == "response_ratio", site == site_name)
@@ -55,7 +57,7 @@ by_ruca_scatter_stacked <- function(data, site_name) {
   long_ruca_rr$date <- as.Date(paste(long_ruca_rr$year, long_ruca_rr$month, "01", sep = "-"), format = "%Y-%m-%d")
   long_ruca_rr$hover_date <- format(long_ruca_rr$date, "%B %Y")
   
-  # Rewrite urbanicity labels for RR data
+  # Rewrite urbanicity labels and coerce to factor with proper levels for RR data
   long_ruca_rr <- long_ruca_rr %>%
     mutate(urbanicity_ruca_code = case_when(
       urbanicity_ruca_code == "ruca_code_1" ~ "1",
@@ -68,13 +70,15 @@ by_ruca_scatter_stacked <- function(data, site_name) {
       urbanicity_ruca_code == "ruca_code_8" ~ "8",
       urbanicity_ruca_code == "ruca_code_9" ~ "9",
       urbanicity_ruca_code == "ruca_code_10" ~ "10",
-      urbanicity_ruca_code == "missing" ~ "Unk.",
+      urbanicity_ruca_code == "missing" ~ "Unknown",
       TRUE ~ urbanicity_ruca_code
-    ))
+    )) %>%
+    mutate(urbanicity_ruca_code = factor(urbanicity_ruca_code, 
+                                         levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Unknown")))
   
   # Order and normalize by overall count for RR data
   long_ruca_rr <- long_ruca_rr[order(long_ruca_rr$date), ]
-  long_ruca_rr$n = long_ruca_rr$n * 100
+  long_ruca_rr$n = pmin(long_ruca_rr$n * 100, 100)
   
   # Identify the number of unique urbanicity codes for color mapping
   unique_items <- unique(long_ruca_tv$urbanicity_ruca_code)
@@ -84,7 +88,7 @@ by_ruca_scatter_stacked <- function(data, site_name) {
   cols <- select_colors(color_palette2, n_colors)
   
   # Map colors to urbanicity codes
-  color_mapping <- setNames(cols, unique_items)
+  color_mapping <- setNames(cols, levels(long_ruca_tv$urbanicity_ruca_code))
   
   # Create plot for TV Data (Plot 1)
   plot1 <- plot_ly() %>%
@@ -106,7 +110,11 @@ by_ruca_scatter_stacked <- function(data, site_name) {
     layout(
       yaxis = list(title = "% of Total Verified", range = c(0, 100)),
       xaxis = list(title = "Date"),
-      showlegend = TRUE  # Ensure hovermode is x unified for plot1
+      showlegend = TRUE,  # Ensure hovermode is x unified for plot1
+      legend = list(
+        title = list(text = "RUCA Code"),
+        traceorder = "normal"
+      )
     )
   
   # Create plot for RR Data (Plot 2)
@@ -126,20 +134,20 @@ by_ruca_scatter_stacked <- function(data, site_name) {
       legendgroup = ~urbanicity_ruca_code  # Group legends by urbanicity
     ) %>%
     layout(
-      yaxis = list(title = "Response Ratio (%)"),
+      yaxis = list(title = "Response Ratio (%)", range = c(0, 10)),
       xaxis = list(title = "Date"),
       showlegend = TRUE
-        # Ensure hovermode is x unified for plot2
     )
   
   # Combine both plots in a stacked layout
   plot <- subplot(plot1, plot2, nrows = 2, shareX = TRUE, titleX = TRUE, titleY = TRUE) %>%
     layout(
       title = paste(site_name, "Total % of Verified Participants & Response Ratio by RUCA Code"),
-      legend = list(title = list(text = "RUCA Code")),
-      hovermode = "x all unified")
-
+      legend = list(
+        title = list(text = "RUCA Code"),
+        traceorder = "normal"
+      )
+    )
   
   return(plot)
 }
-

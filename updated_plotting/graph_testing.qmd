@@ -20,20 +20,71 @@ library(webshot2)
 library(tinytex)
 library(webshot)
 data = read.csv("/Users/orszagl2/Documents/siteRecruitAggMetrics/data-cleaning/joined_data3.csv")
-source('by_ruca_scatter_double.R')
 source('by_ruca_scatter_stacked.R')
-source('by_sex_scatter_double.R')
 source('by_sex_scatter_stacked.R')
+source('by_race_scatter_stacked.R')
+source('by_insurance_scatter_stacked.R')
+source('by_ses_scatter_stacked.R')
 source('color_palette.R')
 ```
 
+```{r}
+data$site = gsub("Marshfield.*", "Marshfield", data$site)
+unique(data$site)
+```
+
 
 ```{r}
-by_ruca_scatter_double(data, "KP-Georgia")
+by_race_scatter_stacked(data, "KP-Hawaii")
+by_race_scatter_stacked(data, "KP-Colorado")
+by_race_scatter_stacked(data, "KP-Northwest")
+by_race_scatter_stacked(data, "KP-Georgia")
+by_race_scatter_stacked(data, "Marshfield")
+by_race_scatter_stacked(data, "Sanford Health")
+by_race_scatter_stacked(data, "Henry Ford")
+by_race_scatter_stacked(data, "University of Chicago")
 ```
 
 ```{r}
+by_sex_scatter_stacked(data, "KP-Hawaii")
+by_sex_scatter_stacked(data, "KP-Colorado")
+by_sex_scatter_stacked(data, "KP-Northwest")
+by_sex_scatter_stacked(data, "KP-Georgia")
+by_sex_scatter_stacked(data, "Marshfield")
+by_sex_scatter_stacked(data, "Sanford Health")
+by_sex_scatter_stacked(data, "Henry Ford")
+by_sex_scatter_stacked(data, "University of Chicago")
+```
+
+```{r}
+by_ruca_scatter_stacked(data, "KP-Hawaii")
+by_ruca_scatter_stacked(data, "KP-Colorado")
+by_ruca_scatter_stacked(data, "KP-Northwest")
 by_ruca_scatter_stacked(data, "KP-Georgia")
+by_ruca_scatter_stacked(data, "Marshfield")
+by_ruca_scatter_stacked(data, "Sanford Health")
+by_ruca_scatter_stacked(data, "Henry Ford")
+by_ruca_scatter_stacked(data, "University of Chicago")
 ```
 
+```{r}
+by_insurance_scatter_stacked(data, "KP-Hawaii")
+by_insurance_scatter_stacked(data, "KP-Colorado")
+by_insurance_scatter_stacked(data, "KP-Northwest")
+by_insurance_scatter_stacked(data, "KP-Georgia")
+by_insurance_scatter_stacked(data, "Marshfield")
+by_insurance_scatter_stacked(data, "Sanford Health")
+by_insurance_scatter_stacked(data, "Henry Ford")
+by_insurance_scatter_stacked(data, "University of Chicago")
+```
 
+```{r}
+by_ses_scatter_stacked(data, "KP-Hawaii")
+by_ses_scatter_stacked(data, "KP-Colorado")
+by_ses_scatter_stacked(data, "KP-Northwest")
+by_ses_scatter_stacked(data, "KP-Georgia")
+by_ses_scatter_stacked(data, "Marshfield")
+by_ses_scatter_stacked(data, "Sanford Health")
+by_ses_scatter_stacked(data, "Henry Ford")
+by_ses_scatter_stacked(data, "University of Chicago")
+```

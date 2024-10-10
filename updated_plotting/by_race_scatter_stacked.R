@@ -15,7 +15,7 @@ by_race_scatter_stacked <- function(data, site_name){
   
   #create date variable
   long_race_tv$date <- as.Date(paste(long_race_tv$year, long_race_tv$month, "01", sep = "-"), format = "%Y-%m-%d")
-  long_race_tv$n <- long_race_tv$n / long_race_tv$overall_count * 100
+  long_race_tv$n <- pmin((long_race_tv$n / long_race_tv$overall_count * 100),100)
 
   
   race_mapping <- list(
@@ -48,7 +48,7 @@ by_race_scatter_stacked <- function(data, site_name){
   filtered_data_tv$hover_date <- format(filtered_data_tv$date, "%B %Y")
   
   # Total Verified Clean/Arrange
-  data_sub_rr <- filter(data, population == "total_verified", site == site_name)
+  data_sub_rr <- filter(data, population == "response_ratio", site == site_name)
   relevant_columns <- grep("urbanicity_", colnames(data_sub_rr), value = TRUE)
   relevant_columns <- grep("race_ethnicity_", colnames(data_sub_rr), value = TRUE)
   relevant_columns <- c(relevant_columns, "year", "month")
@@ -81,6 +81,8 @@ by_race_scatter_stacked <- function(data, site_name){
   
   #Fix date
   filtered_data_rr$hover_date <- format(filtered_data_rr$date, "%B %Y")
+  filtered_data_rr$n = pmin(filtered_data_rr$n*100,100)
+  
   
   #identify number of colors to use  
   unique_items <- unique(filtered_data_tv$race_ethnicity)
@@ -132,7 +134,7 @@ by_race_scatter_stacked <- function(data, site_name){
       legendgroup = ~race_ethnicity  # Group legends by urbanicity
     ) %>%
     layout(
-      yaxis = list(title = "Response Ratio (%)"),
+      yaxis = list(title = "Response Ratio (%)", range = c(0,25)),
       xaxis = list(title = "Date"),
       showlegend = TRUE
       # Ensure hovermode is x unified for plot2
@@ -142,8 +144,8 @@ by_race_scatter_stacked <- function(data, site_name){
   plot <- subplot(plot1, plot2, nrows = 2, shareX = TRUE, titleX = TRUE, titleY = TRUE) %>%
     layout(
       title = paste(site_name, "Total % of Verified Participants & Response Ratio by Race"),
-      legend = list(title = list(text = "Race")),
-      hovermode = "x unified")
+      legend = list(title = list(text = "Race")))
+      # hovermode = "x unified"
   
   
   return(plot)

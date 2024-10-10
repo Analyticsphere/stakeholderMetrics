@@ -23,7 +23,7 @@ by_sex_scatter_stacked <- function(data, site_name) {
   
   # Order TV data and normalize `n` by `overall_count`
   long_sex_tv <- long_sex_tv[order(long_sex_tv$date), ]
-  long_sex_tv$n <- (long_sex_tv$n / long_sex_tv$overall_count)*100
+  long_sex_tv$n <- pmin((long_sex_tv$n / long_sex_tv$overall_count)*100,100)
   # long_sex_tv$n <- trunc(long_sex_tv$n)
   
   
@@ -51,7 +51,7 @@ by_sex_scatter_stacked <- function(data, site_name) {
   
   # Order RR data
   long_sex_rr <- long_sex_rr[order(long_sex_rr$date), ]
-  long_sex_rr$n = long_sex_rr$n * 100
+  long_sex_rr$n = pmin(long_sex_rr$n * 100, 100)
   # long_sex_rr$n = trunc(long_sex_rr$n)
   
   # Identify the number of unique sex values for color mapping
@@ -73,6 +73,7 @@ by_sex_scatter_stacked <- function(data, site_name) {
       type = 'scatter',
       mode = 'lines+markers',
       hoverinfo = 'x+y',
+      hovertemplate = '%{x|%B %Y}<br>%{y:.2f}%',
       name = ~sex,  # Set name for the legend
       showlegend = TRUE,
       legendgroup = ~sex  # Group legends by sex
@@ -94,12 +95,13 @@ by_sex_scatter_stacked <- function(data, site_name) {
       type = 'scatter',
       mode = 'lines+markers',
       hoverinfo = 'x+y',
+      hovertemplate = '%{x|%B %Y}<br>%{y:.2f}%',
       name = ~sex,  # Set name for the legend
       showlegend = FALSE,
       legendgroup = ~sex  # Group legends by sex
     ) %>%
     layout(
-      yaxis = list(title = "Response Ratio(%)"),
+      yaxis = list(title = "Response Ratio(%)", range = c(0,10)),
       xaxis = list(title = "Date"),
       showlegend = TRUE
     )
