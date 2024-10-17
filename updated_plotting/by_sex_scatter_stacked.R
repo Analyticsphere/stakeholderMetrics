@@ -23,14 +23,16 @@ by_sex_scatter_stacked <- function(data, site_name) {
   
   # Order TV data and normalize `n` by `overall_count`
   long_sex_tv <- long_sex_tv[order(long_sex_tv$date), ]
-  long_sex_tv$n <- pmin((long_sex_tv$n / long_sex_tv$overall_count)*100,100)
-  # long_sex_tv$n <- trunc(long_sex_tv$n)
+  long_sex_tv$n <- (long_sex_tv$n / long_sex_tv$overall_count)*100
+  
+  #Filter out extra data
+  long_sex_tv = filter_extra_months_sex(long_sex_tv)
   
   
   # Filter and prepare Response Ratio (RR) data
   data_sub_rr <- filter(data, population == "response_ratio", site == site_name)
   relevant_columns <- grep("sex_", colnames(data_sub_rr), value = TRUE)
-  relevant_columns <- c(relevant_columns, "year", "month")
+  relevant_columns <- c(relevant_columns, "year", "month", "overall_count")
   sex_data_rr <- data_sub_rr[, relevant_columns]
   
   # Pivot table for Response Ratio
@@ -42,6 +44,9 @@ by_sex_scatter_stacked <- function(data, site_name) {
   
   long_sex_rr$date <- as.Date(paste(long_sex_rr$year, long_sex_rr$month, "01", sep = "-"), format = "%Y-%m-%d")
   
+  #Filter out extra data
+  long_sex_rr = filter_extra_months_sex(long_sex_rr)
+  
   # Update legend titles for RR data
   long_sex_rr <- long_sex_rr %>%
     mutate(sex = case_when(
@@ -51,7 +56,7 @@ by_sex_scatter_stacked <- function(data, site_name) {
   
   # Order RR data
   long_sex_rr <- long_sex_rr[order(long_sex_rr$date), ]
-  long_sex_rr$n = pmin(long_sex_rr$n * 100, 100)
+  long_sex_rr$n = long_sex_rr$n * 100
   # long_sex_rr$n = trunc(long_sex_rr$n)
   
   # Identify the number of unique sex values for color mapping

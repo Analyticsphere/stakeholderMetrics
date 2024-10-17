@@ -26,15 +26,24 @@ source('by_race_scatter_stacked.R')
 source('by_insurance_scatter_stacked.R')
 source('by_ses_scatter_stacked.R')
 source('color_palette.R')
+source("filter_extra_months_ins.R")
+source("filter_extra_months_race.R")
+source("filter_extra_months_ruca.R")
+source("filter_extra_months_ses.R")
+source("filter_extra_months_sex.R")
 ```
 
 ```{r}
 data$site = gsub("Marshfield.*", "Marshfield", data$site)
 unique(data$site)
+data <- data %>%
+  filter(!(site == "University of Chicago" & month == 4 & year == 2023)) %>%
+  filter(!(site == "University of Chicago" & month == 11 & year == 2020))
+
 ```
 
 
-```{r}
+```{r, echo = FALSE, warning = FALSE}
 by_race_scatter_stacked(data, "KP-Hawaii")
 by_race_scatter_stacked(data, "KP-Colorado")
 by_race_scatter_stacked(data, "KP-Northwest")

@@ -15,7 +15,7 @@ by_race_scatter_stacked <- function(data, site_name){
   
   #create date variable
   long_race_tv$date <- as.Date(paste(long_race_tv$year, long_race_tv$month, "01", sep = "-"), format = "%Y-%m-%d")
-  long_race_tv$n <- pmin((long_race_tv$n / long_race_tv$overall_count * 100),100)
+  long_race_tv$n <- (long_race_tv$n / long_race_tv$overall_count) * 100
 
   
   race_mapping <- list(
@@ -44,6 +44,7 @@ by_race_scatter_stacked <- function(data, site_name){
     group_by(race_ethnicity, date) %>%
     summarize(n = sum(n, na.rm = TRUE)) 
 
+  filtered_data_tv = filter_extra_months_race(filtered_data_tv)
   # Format Date
   filtered_data_tv$hover_date <- format(filtered_data_tv$date, "%B %Y")
   
@@ -79,9 +80,10 @@ by_race_scatter_stacked <- function(data, site_name){
     group_by(race_ethnicity, date) %>%
     summarize(n = sum(n, na.rm = TRUE)) 
   
+  filtered_data_rr = filter_extra_months_race(filtered_data_rr)
   #Fix date
   filtered_data_rr$hover_date <- format(filtered_data_rr$date, "%B %Y")
-  filtered_data_rr$n = pmin(filtered_data_rr$n*100,100)
+  filtered_data_rr$n = filtered_data_rr$n*100
   
   
   #identify number of colors to use  
@@ -101,6 +103,7 @@ by_race_scatter_stacked <- function(data, site_name){
       x = ~date,
       y = ~n,
       color = ~race_ethnicity,
+      symbol = ~race_ethnicity,
       colors = color_mapping,
       type = 'scatter',
       mode = 'lines+markers',
@@ -124,6 +127,7 @@ by_race_scatter_stacked <- function(data, site_name){
       x = ~date,
       y = ~n,
       color = ~race_ethnicity,
+      symbol = ~race_ethnicity,
       colors = color_mapping,
       type = 'scatter',
       mode = 'lines+markers',

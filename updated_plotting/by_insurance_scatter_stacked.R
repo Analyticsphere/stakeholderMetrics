@@ -32,14 +32,15 @@ by_insurance_scatter_stacked = function(data, site_name) {
   
   # Order TV data and normalize `n` by `overall_count`
   long_ins_tv <- long_ins_tv[order(long_ins_tv$date), ]
-  long_ins_tv$n <- pmin((long_ins_tv$n / long_ins_tv$overall_count)*100, 100)
-  # long_sex_tv$n <- trunc(long_sex_tv$n)
+  long_ins_tv$n <- (long_ins_tv$n / long_ins_tv$overall_count)*100
+  
+  long_ins_tv = filter_extra_months_ins(long_ins_tv)
   
   
   # Filter and prepare Response Ratio (RR) data
   data_sub_rr <- filter(data, population == "response_ratio", site == site_name)
   relevant_columns <- grep("insurance_", colnames(data_sub_rr), value = TRUE)
-  relevant_columns <- c(relevant_columns, "year", "month")
+  relevant_columns <- c(relevant_columns, "year", "month", "overall_count")
   ins_data_rr <- data_sub_rr[, relevant_columns]
   
   # Pivot table for Response Ratio
@@ -70,8 +71,9 @@ by_insurance_scatter_stacked = function(data, site_name) {
   
   # Order RR data
   long_ins_rr <- long_ins_rr[order(long_ins_rr$date), ]
-  long_ins_rr$n = pmin(long_ins_rr$n * 100, 100)
-  # long_sex_rr$n = trunc(long_sex_rr$n)
+  long_ins_rr$n = long_ins_rr$n * 100
+
+  long_ins_rr = filter_extra_months_ins(long_ins_rr)
   
   # Identify the number of unique sex values for color mapping
   unique_items <- unique(long_ins_tv$insurance_type)

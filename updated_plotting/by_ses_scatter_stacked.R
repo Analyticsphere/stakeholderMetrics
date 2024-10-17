@@ -30,10 +30,12 @@ by_ses_scatter_stacked <- function(data, site_name) {
   long_ses_tv <- long_ses_tv[order(long_ses_tv$date), ]
   long_ses_tv$n <- pmin((long_ses_tv$n / long_ses_tv$overall_count) * 100, 100)
   
+  long_ses_tv = filter_extra_months_ses(long_ses_tv)
+  
   # Filter and prepare Response Ratio (RR) data
   data_sub_rr <- filter(data, population == "response_ratio", site == site_name)
   relevant_columns <- grep("socioeconomic_status_", colnames(data_sub_rr), value = TRUE)
-  relevant_columns <- c(relevant_columns, "year", "month")
+  relevant_columns <- c(relevant_columns, "year", "month", "overall_count")
   ses_data_rr <- data_sub_rr[, relevant_columns]
   
   # Pivot table for Response Ratio
@@ -59,7 +61,10 @@ by_ses_scatter_stacked <- function(data, site_name) {
   
   # Order RR data
   long_ses_rr <- long_ses_rr[order(long_ses_rr$date), ]
-  long_ses_rr$n = pmin(long_ses_rr$n * 100, 100)
+  long_ses_rr$n = long_ses_rr$n * 100
+  
+  long_ses_rr = filter_extra_months_ses(long_ses_rr)
+  
   
   # Identify the number of unique SES quartiles for color mapping
   unique_items <- unique(long_ses_tv$ses_quartile)
